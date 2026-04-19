@@ -156,7 +156,7 @@ function LoginPage() {
               search={{ mode: "signup" }}
               className={`flex-1 rounded-md px-4 py-2 text-center text-sm font-medium transition ${mode === "signup" ? "bg-card shadow-card" : "text-muted-foreground hover:text-foreground"}`}
             >
-              Join
+              Admission
             </Link>
           </div>
 
@@ -178,10 +178,6 @@ function LoginPage() {
                 {submitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 Sign in
               </Button>
-
-              <p className="text-xs text-muted-foreground text-center pt-2">
-                Admin? Use <code className="text-foreground">arunkumar@dsquare.local</code> / <code className="text-foreground">Arun2708</code>
-              </p>
             </form>
           ) : (
             <form onSubmit={handleSignUp} className="space-y-4">
