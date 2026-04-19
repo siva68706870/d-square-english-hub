@@ -56,7 +56,7 @@ export function AppHeader() {
             <Link to="/login"><Button variant="ghost" size="sm">Sign in</Button></Link>
             <Link to="/login" search={{ mode: "signup" }}>
               <Button size="sm" className="bg-hero text-primary-foreground hover:opacity-90">
-                Join now
+                Admission
               </Button>
             </Link>
           </div>
