@@ -224,6 +224,29 @@ function LoginPage() {
                 </div>
               </div>
 
+              <div className="space-y-2">
+                <Label>Payment plan</Label>
+                <RadioGroup name="payment_plan" defaultValue="full" className="grid grid-cols-2 gap-2">
+                  <label htmlFor="pp-full" className="flex items-center gap-2 rounded-lg border border-border bg-card px-3 py-2.5 cursor-pointer hover:border-primary/50 transition has-[:checked]:border-primary has-[:checked]:bg-primary/5">
+                    <RadioGroupItem value="full" id="pp-full" />
+                    <div className="text-sm">
+                      <div className="font-medium">Full payment</div>
+                      <div className="text-xs text-muted-foreground">Pay course fee at once</div>
+                    </div>
+                  </label>
+                  <label htmlFor="pp-monthly" className="flex items-center gap-2 rounded-lg border border-border bg-card px-3 py-2.5 cursor-pointer hover:border-primary/50 transition has-[:checked]:border-primary has-[:checked]:bg-primary/5">
+                    <RadioGroupItem value="monthly" id="pp-monthly" />
+                    <div className="text-sm">
+                      <div className="font-medium">Monthly</div>
+                      <div className="text-xs text-muted-foreground">Pay each month</div>
+                    </div>
+                  </label>
+                </RadioGroup>
+                <p className="text-[11px] text-muted-foreground">
+                  Payment status will be confirmed by admin after verifying your payment screenshot.
+                </p>
+              </div>
+
               <div className="rounded-xl border border-border bg-muted/40 p-4">
                 <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3 text-center">
                   Pay course fee
