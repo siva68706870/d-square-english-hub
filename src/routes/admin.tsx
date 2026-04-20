@@ -182,6 +182,7 @@ function StudentsTab() {
       mobile_number: String(fd.get("mobile_number") ?? ""),
       parent_name: String(fd.get("parent_name") ?? ""),
       course: fd.get("course") as Profile["course"],
+      payment_plan: (fd.get("payment_plan") || null) as Profile["payment_plan"],
     };
     const { error } = await supabase.from("profiles").update(update).eq("id", editing.id);
     if (error) return toast.error(error.message);
