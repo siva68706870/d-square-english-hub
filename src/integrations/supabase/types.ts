@@ -41,6 +41,39 @@ export type Database = {
         }
         Relationships: []
       }
+      monthly_payments: {
+        Row: {
+          amount: number
+          created_at: string
+          id: string
+          month: string
+          notes: string | null
+          status: Database["public"]["Enums"]["payment_status"]
+          student_id: string
+          updated_at: string
+        }
+        Insert: {
+          amount?: number
+          created_at?: string
+          id?: string
+          month: string
+          notes?: string | null
+          status?: Database["public"]["Enums"]["payment_status"]
+          student_id: string
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          id?: string
+          month?: string
+          notes?: string | null
+          status?: Database["public"]["Enums"]["payment_status"]
+          student_id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           course: Database["public"]["Enums"]["course_type"] | null
@@ -50,6 +83,8 @@ export type Database = {
           id: string
           mobile_number: string | null
           parent_name: string | null
+          payment_plan: Database["public"]["Enums"]["payment_plan"] | null
+          payment_status: Database["public"]["Enums"]["payment_status"]
           status: Database["public"]["Enums"]["approval_status"]
           updated_at: string
           user_id: string
@@ -62,6 +97,8 @@ export type Database = {
           id?: string
           mobile_number?: string | null
           parent_name?: string | null
+          payment_plan?: Database["public"]["Enums"]["payment_plan"] | null
+          payment_status?: Database["public"]["Enums"]["payment_status"]
           status?: Database["public"]["Enums"]["approval_status"]
           updated_at?: string
           user_id: string
@@ -74,6 +111,8 @@ export type Database = {
           id?: string
           mobile_number?: string | null
           parent_name?: string | null
+          payment_plan?: Database["public"]["Enums"]["payment_plan"] | null
+          payment_status?: Database["public"]["Enums"]["payment_status"]
           status?: Database["public"]["Enums"]["approval_status"]
           updated_at?: string
           user_id?: string
@@ -193,6 +232,8 @@ export type Database = {
       approval_status: "pending" | "approved" | "rejected"
       attendance_status: "present" | "absent" | "late"
       course_type: "IELTS" | "English Communication"
+      payment_plan: "monthly" | "full"
+      payment_status: "paid" | "not_paid"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -324,6 +365,8 @@ export const Constants = {
       approval_status: ["pending", "approved", "rejected"],
       attendance_status: ["present", "absent", "late"],
       course_type: ["IELTS", "English Communication"],
+      payment_plan: ["monthly", "full"],
+      payment_status: ["paid", "not_paid"],
     },
   },
 } as const
