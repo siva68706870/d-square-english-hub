@@ -147,7 +147,16 @@ function StudentsTab() {
   const qc = useQueryClient();
   const { data: students, isLoading } = useStudents();
   const [editing, setEditing] = useState<Profile | null>(null);
+  const [paymentsFor, setPaymentsFor] = useState<Profile | null>(null);
   const [courseFilter, setCourseFilter] = useState<"all" | "IELTS" | "English Communication">("all");
+
+  const togglePaid = async (s: Profile) => {
+    const next: Profile["payment_status"] = s.payment_status === "paid" ? "not_paid" : "paid";
+    const { error } = await supabase.from("profiles").update({ payment_status: next }).eq("id", s.id);
+    if (error) return toast.error(error.message);
+    toast.success(`Marked ${next === "paid" ? "Paid" : "Not paid"}`);
+    qc.invalidateQueries({ queryKey: ["students"] });
+  };
 
   const updateStatus = async (id: string, status: Profile["status"]) => {
     const { error } = await supabase.from("profiles").update({ status }).eq("id", id);
