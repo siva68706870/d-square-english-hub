@@ -681,23 +681,33 @@ function AgencyTab() {
 }
 
 // ---------- Analytics Tab ----------
+type CompareMetric = "attendance" | "marks";
+
 function AnalyticsTab() {
   const { data: students } = useStudents();
   const { data: attendance } = useAttendance();
   const { data: marks } = useMarks();
+  const { data: tests } = useTests();
   const approved = students?.filter((s) => s.status === "approved") ?? [];
   const [studentId, setStudentId] = useState<string>("");
+  const [metric, setMetric] = useState<CompareMetric>("marks");
+  const [testId, setTestId] = useState<string>("all");
 
-  // Overall: avg score per student
-  const overallData = approved.map((s) => {
-    const sMarks = (marks ?? []).filter((m) => m.student_id === s.user_id);
-    const avg = sMarks.length
+  // Compare students by chosen metric
+  const compareData = approved.map((s) => {
+    const sAtt = (attendance ?? []).filter((a) => a.student_id === s.user_id);
+    const sMarksAll = (marks ?? []).filter((m) => m.student_id === s.user_id);
+    const sMarks = testId === "all" ? sMarksAll : sMarksAll.filter((m) => m.test_id === testId);
+    const attPct = sAtt.length ? Math.round((sAtt.filter((a) => a.status === "present").length / sAtt.length) * 100) : 0;
+    const avgPct = sMarks.length
       ? Math.round(sMarks.reduce((sum, m) => sum + (Number(m.score) / Number(m.max_score)) * 100, 0) / sMarks.length)
       : 0;
-    const sAtt = (attendance ?? []).filter((a) => a.student_id === s.user_id);
-    const att = sAtt.length ? Math.round((sAtt.filter((a) => a.status === "present").length / sAtt.length) * 100) : 0;
-    return { name: s.full_name.split(" ")[0], avg, att };
+    return { name: s.full_name.split(" ")[0], value: metric === "attendance" ? attPct : avgPct };
   });
+
+  const metricLabel = metric === "attendance"
+    ? "Attendance %"
+    : testId === "all" ? "Avg Test Score %" : `Score % — ${tests?.find((t) => t.id === testId)?.title ?? "Test"}`;
 
   const personal = (marks ?? [])
     .filter((m) => m.student_id === studentId)
@@ -708,20 +718,46 @@ function AnalyticsTab() {
     <div className="grid gap-6">
       <Card>
         <CardHeader>
-          <CardTitle>Overall — All students</CardTitle>
-          <CardDescription>Average test score vs attendance per student</CardDescription>
+          <div className="flex items-start justify-between flex-wrap gap-3">
+            <div>
+              <CardTitle>Compare students</CardTitle>
+              <CardDescription>Pick an activity to rank approved students.</CardDescription>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <Select value={metric} onValueChange={(v) => setMetric(v as CompareMetric)}>
+                <SelectTrigger className="w-[180px]"><SelectValue placeholder="Activity" /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="attendance">Attendance</SelectItem>
+                  <SelectItem value="marks">Test marks</SelectItem>
+                </SelectContent>
+              </Select>
+              {metric === "marks" && (
+                <Select value={testId} onValueChange={setTestId}>
+                  <SelectTrigger className="w-[240px]"><SelectValue placeholder="All tests (avg)" /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All tests (average)</SelectItem>
+                    {(tests ?? []).map((t) => <SelectItem key={t.id} value={t.id}>{t.title}</SelectItem>)}
+                  </SelectContent>
+                </Select>
+              )}
+            </div>
+          </div>
         </CardHeader>
-        <CardContent className="h-[340px]">
-          {overallData.length ? (
+        <CardContent className="h-[360px]">
+          {compareData.length ? (
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={overallData}>
+              <BarChart data={compareData}>
                 <CartesianGrid strokeDasharray="3 3" stroke="oklch(0.88 0.02 95)" />
                 <XAxis dataKey="name" tick={{ fontSize: 12 }} />
                 <YAxis domain={[0, 100]} tick={{ fontSize: 12 }} />
                 <Tooltip />
                 <Legend />
-                <Bar dataKey="avg" name="Avg Score %" fill="oklch(0.34 0.085 160)" radius={[6, 6, 0, 0]} />
-                <Bar dataKey="att" name="Attendance %" fill="oklch(0.78 0.13 75)" radius={[6, 6, 0, 0]} />
+                <Bar
+                  dataKey="value"
+                  name={metricLabel}
+                  fill={metric === "attendance" ? "oklch(0.78 0.13 75)" : "oklch(0.34 0.085 160)"}
+                  radius={[6, 6, 0, 0]}
+                />
               </BarChart>
             </ResponsiveContainer>
           ) : <EmptyState />}
