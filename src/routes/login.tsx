@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/select";
 import { GraduationCap, Loader2 } from "lucide-react";
 import { PaymentQR } from "@/components/PaymentQR";
+import upiQr from "@/assets/upi-qr.png";
 
 const searchSchema = z.object({
   mode: z.enum(["signin", "signup"]).optional(),
@@ -224,7 +225,11 @@ function LoginPage() {
                   Pay course fee (sample)
                 </p>
                 <div className="flex justify-center">
-                  <PaymentQR size={140} caption="Show payment screenshot to admin to get approved." />
+                  <PaymentQR
+                    imageSrc={upiQr}
+                    size={160}
+                    caption="Show payment screenshot to admin to get approved."
+                  />
                 </div>
               </div>
 
