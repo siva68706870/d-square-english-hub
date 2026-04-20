@@ -380,24 +380,57 @@ function MarksTab() {
   const qc = useQueryClient();
   const { data: students } = useStudents();
   const { data: marks } = useMarks();
+  const { data: tests } = useTests();
   const approved = students?.filter((s) => s.status === "approved") ?? [];
+  const [selectedTestId, setSelectedTestId] = useState<string>("");
 
-  const addMark = async (e: React.FormEvent<HTMLFormElement>) => {
+  const selectedTest = tests?.find((t) => t.id === selectedTestId);
+
+  const addTest = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const fd = new FormData(e.currentTarget);
     const payload = {
-      student_id: String(fd.get("student_id")),
-      test_name: String(fd.get("test_name")).trim(),
-      score: Number(fd.get("score")),
+      title: String(fd.get("title") ?? "").trim(),
+      course: (fd.get("course") as Test["course"]) || null,
       max_score: Number(fd.get("max_score") || 100),
       test_date: String(fd.get("test_date") || new Date().toISOString().slice(0, 10)),
     };
-    if (!payload.student_id || !payload.test_name || isNaN(payload.score)) {
-      return toast.error("Fill all required fields");
-    }
-    const { error } = await supabase.from("test_marks").insert(payload);
+    if (!payload.title) return toast.error("Test title is required");
+    const { error } = await supabase.from("tests").insert(payload);
     if (error) return toast.error(error.message);
-    toast.success("Mark added");
+    toast.success("Test created");
+    (e.currentTarget as HTMLFormElement).reset();
+    qc.invalidateQueries({ queryKey: ["tests"] });
+  };
+
+  const deleteTest = async (id: string) => {
+    const { error } = await supabase.from("tests").delete().eq("id", id);
+    if (error) return toast.error(error.message);
+    if (selectedTestId === id) setSelectedTestId("");
+    qc.invalidateQueries({ queryKey: ["tests"] });
+    qc.invalidateQueries({ queryKey: ["marks"] });
+  };
+
+  const addMark = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!selectedTest) return toast.error("Select a test first");
+    const fd = new FormData(e.currentTarget);
+    const payload = {
+      student_id: String(fd.get("student_id")),
+      test_id: selectedTest.id,
+      test_name: selectedTest.title,
+      score: Number(fd.get("score")),
+      max_score: Number(selectedTest.max_score),
+      test_date: selectedTest.test_date,
+    };
+    if (!payload.student_id || isNaN(payload.score)) return toast.error("Pick a student and enter a score");
+    const { error } = await supabase.from("test_marks").upsert(payload, { onConflict: "student_id,test_id" } as never).select();
+    // Fallback: if upsert constraint not present, just insert
+    if (error) {
+      const { error: e2 } = await supabase.from("test_marks").insert(payload);
+      if (e2) return toast.error(e2.message);
+    }
+    toast.success("Mark saved");
     (e.currentTarget as HTMLFormElement).reset();
     qc.invalidateQueries({ queryKey: ["marks"] });
   };
@@ -409,82 +442,164 @@ function MarksTab() {
   };
 
   const nameOf = (uid: string) => approved.find((s) => s.user_id === uid)?.full_name ?? "Unknown";
+  const marksForSelected = (marks ?? []).filter((m) => m.test_id === selectedTestId);
 
   return (
-    <div className="grid lg:grid-cols-2 gap-6">
+    <div className="space-y-6">
+      {/* Step 1: Create / pick a test */}
       <Card>
-        <CardHeader><CardTitle>Add test mark</CardTitle></CardHeader>
+        <CardHeader>
+          <CardTitle>Step 1 — Tests</CardTitle>
+          <CardDescription>Create a test first, then enter marks for students against it.</CardDescription>
+        </CardHeader>
         <CardContent>
-          <form onSubmit={addMark} className="space-y-4">
+          <form onSubmit={addTest} className="grid md:grid-cols-5 gap-3 mb-6">
+            <div className="md:col-span-2 space-y-1.5">
+              <Label htmlFor="t-title">Test title</Label>
+              <Input id="t-title" name="title" placeholder="e.g. IELTS Reading Mock 4" required />
+            </div>
             <div className="space-y-1.5">
-              <Label htmlFor="m-student">Student</Label>
-              <Select name="student_id" required>
-                <SelectTrigger id="m-student"><SelectValue placeholder="Choose student" /></SelectTrigger>
+              <Label htmlFor="t-course">Course</Label>
+              <Select name="course">
+                <SelectTrigger id="t-course"><SelectValue placeholder="Any" /></SelectTrigger>
                 <SelectContent>
-                  {approved.map((s) => <SelectItem key={s.user_id} value={s.user_id}>{s.full_name}</SelectItem>)}
+                  <SelectItem value="IELTS">IELTS</SelectItem>
+                  <SelectItem value="English Communication">English Communication</SelectItem>
                 </SelectContent>
               </Select>
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="m-test">Test name</Label>
-              <Input id="m-test" name="test_name" placeholder="e.g. IELTS Reading Mock 4" required />
+              <Label htmlFor="t-max">Out of</Label>
+              <Input id="t-max" name="max_score" type="number" step="0.5" defaultValue={100} />
             </div>
-            <div className="grid grid-cols-3 gap-3">
-              <div className="space-y-1.5">
-                <Label htmlFor="m-score">Score</Label>
-                <Input id="m-score" name="score" type="number" step="0.5" required />
-              </div>
-              <div className="space-y-1.5">
-                <Label htmlFor="m-max">Out of</Label>
-                <Input id="m-max" name="max_score" type="number" step="0.5" defaultValue={100} />
-              </div>
-              <div className="space-y-1.5">
-                <Label htmlFor="m-date">Date</Label>
-                <Input id="m-date" name="test_date" type="date" defaultValue={new Date().toISOString().slice(0, 10)} />
-              </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="t-date">Date</Label>
+              <Input id="t-date" name="test_date" type="date" defaultValue={new Date().toISOString().slice(0, 10)} />
             </div>
-            <Button type="submit" className="w-full bg-hero text-primary-foreground hover:opacity-90">Add mark</Button>
+            <div className="md:col-span-5">
+              <Button type="submit" className="bg-hero text-primary-foreground hover:opacity-90">Create test</Button>
+            </div>
           </form>
+
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Title</TableHead>
+                <TableHead>Course</TableHead>
+                <TableHead>Date</TableHead>
+                <TableHead>Out of</TableHead>
+                <TableHead className="text-right">Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {(tests ?? []).map((t) => (
+                <TableRow key={t.id} className={selectedTestId === t.id ? "bg-muted/50" : ""}>
+                  <TableCell className="font-medium">{t.title}</TableCell>
+                  <TableCell>{t.course ?? "—"}</TableCell>
+                  <TableCell>{t.test_date}</TableCell>
+                  <TableCell className="font-mono">{t.max_score}</TableCell>
+                  <TableCell className="text-right">
+                    <div className="flex justify-end gap-1">
+                      <Button size="sm" variant={selectedTestId === t.id ? "default" : "outline"} onClick={() => setSelectedTestId(t.id)}>
+                        {selectedTestId === t.id ? "Selected" : "Enter marks"}
+                      </Button>
+                      <Button size="sm" variant="ghost" onClick={() => deleteTest(t.id)}>
+                        <Trash2 className="h-4 w-4 text-destructive" />
+                      </Button>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+              {!tests?.length && (
+                <TableRow><TableCell colSpan={5} className="text-center text-muted-foreground py-6">No tests yet — create one above.</TableCell></TableRow>
+              )}
+            </TableBody>
+          </Table>
         </CardContent>
       </Card>
 
-      <Card>
-        <CardHeader><CardTitle>Recent marks</CardTitle></CardHeader>
-        <CardContent>
-          <div className="max-h-[480px] overflow-y-auto">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Student</TableHead>
-                  <TableHead>Test</TableHead>
-                  <TableHead>Score</TableHead>
-                  <TableHead></TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {(marks ?? []).slice(0, 50).map((m) => (
-                  <TableRow key={m.id}>
-                    <TableCell>{nameOf(m.student_id)}</TableCell>
-                    <TableCell>
-                      <div>{m.test_name}</div>
-                      <div className="text-xs text-muted-foreground">{m.test_date}</div>
-                    </TableCell>
-                    <TableCell className="font-mono">{m.score}/{m.max_score}</TableCell>
-                    <TableCell>
-                      <Button size="sm" variant="ghost" onClick={() => deleteMark(m.id)}>
-                        <Trash2 className="h-4 w-4 text-destructive" />
-                      </Button>
-                    </TableCell>
+      {/* Step 2: Enter marks */}
+      <div className="grid lg:grid-cols-2 gap-6">
+        <Card>
+          <CardHeader>
+            <CardTitle>Step 2 — Enter marks</CardTitle>
+            <CardDescription>
+              {selectedTest
+                ? <>For test: <span className="font-semibold text-foreground">{selectedTest.title}</span> ({selectedTest.test_date}, out of {selectedTest.max_score})</>
+                : "Pick a test from the table above to start entering marks."}
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={addMark} className="space-y-4">
+              <div className="space-y-1.5">
+                <Label htmlFor="m-test-pick">Test</Label>
+                <Select value={selectedTestId} onValueChange={setSelectedTestId}>
+                  <SelectTrigger id="m-test-pick"><SelectValue placeholder="Choose test" /></SelectTrigger>
+                  <SelectContent>
+                    {(tests ?? []).map((t) => <SelectItem key={t.id} value={t.id}>{t.title} — {t.test_date}</SelectItem>)}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="m-student">Student</Label>
+                <Select name="student_id" required>
+                  <SelectTrigger id="m-student"><SelectValue placeholder="Choose student" /></SelectTrigger>
+                  <SelectContent>
+                    {approved.map((s) => <SelectItem key={s.user_id} value={s.user_id}>{s.full_name}</SelectItem>)}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="m-score">Score {selectedTest ? `(out of ${selectedTest.max_score})` : ""}</Label>
+                <Input id="m-score" name="score" type="number" step="0.5" required disabled={!selectedTest} />
+              </div>
+              <Button type="submit" disabled={!selectedTest} className="w-full bg-hero text-primary-foreground hover:opacity-90">Save mark</Button>
+            </form>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>{selectedTest ? `Marks for ${selectedTest.title}` : "Recent marks (all tests)"}</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="max-h-[480px] overflow-y-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Student</TableHead>
+                    {!selectedTest && <TableHead>Test</TableHead>}
+                    <TableHead>Score</TableHead>
+                    <TableHead></TableHead>
                   </TableRow>
-                ))}
-                {!marks?.length && (
-                  <TableRow><TableCell colSpan={4} className="text-center text-muted-foreground py-6">No marks yet.</TableCell></TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </div>
-        </CardContent>
-      </Card>
+                </TableHeader>
+                <TableBody>
+                  {(selectedTest ? marksForSelected : (marks ?? []).slice(0, 50)).map((m) => (
+                    <TableRow key={m.id}>
+                      <TableCell>{nameOf(m.student_id)}</TableCell>
+                      {!selectedTest && (
+                        <TableCell>
+                          <div>{m.test_name}</div>
+                          <div className="text-xs text-muted-foreground">{m.test_date}</div>
+                        </TableCell>
+                      )}
+                      <TableCell className="font-mono">{m.score}/{m.max_score}</TableCell>
+                      <TableCell>
+                        <Button size="sm" variant="ghost" onClick={() => deleteMark(m.id)}>
+                          <Trash2 className="h-4 w-4 text-destructive" />
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                  {(selectedTest ? marksForSelected : marks)?.length === 0 && (
+                    <TableRow><TableCell colSpan={selectedTest ? 3 : 4} className="text-center text-muted-foreground py-6">No marks yet.</TableCell></TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }
