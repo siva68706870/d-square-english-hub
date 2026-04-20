@@ -83,6 +83,7 @@ function LoginPage() {
       course: fd.get("course"),
       mobile_number: fd.get("mobile_number"),
       parent_name: fd.get("parent_name"),
+      payment_plan: fd.get("payment_plan"),
     });
     if (!parsed.success) {
       toast.error(parsed.error.issues[0].message);
@@ -99,6 +100,7 @@ function LoginPage() {
           course: parsed.data.course,
           mobile_number: parsed.data.mobile_number,
           parent_name: parsed.data.parent_name,
+          payment_plan: parsed.data.payment_plan,
         },
       },
     });
