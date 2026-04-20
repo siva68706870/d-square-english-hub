@@ -217,13 +217,19 @@ function StudentsTab() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {students?.map((s) => (
+                {filtered.map((s) => (
                   <TableRow key={s.id}>
                     <TableCell>
                       <div className="font-medium">{s.full_name}</div>
                       <div className="text-xs text-muted-foreground">{s.email}</div>
                     </TableCell>
-                    <TableCell>{s.course ?? "—"}</TableCell>
+                    <TableCell>
+                      {s.course ? (
+                        <Badge variant="outline" className={s.course === "IELTS" ? "border-primary/40 text-primary" : "border-gold/40 text-gold-foreground"}>
+                          {s.course}
+                        </Badge>
+                      ) : "—"}
+                    </TableCell>
                     <TableCell>{s.mobile_number ?? "—"}</TableCell>
                     <TableCell>{s.parent_name ?? "—"}</TableCell>
                     <TableCell><StatusBadge status={s.status} /></TableCell>
@@ -265,8 +271,8 @@ function StudentsTab() {
                     </TableCell>
                   </TableRow>
                 ))}
-                {!students?.length && (
-                  <TableRow><TableCell colSpan={6} className="text-center text-muted-foreground py-8">No students yet.</TableCell></TableRow>
+                {!filtered.length && (
+                  <TableRow><TableCell colSpan={6} className="text-center text-muted-foreground py-8">No students in this course.</TableCell></TableRow>
                 )}
               </TableBody>
             </Table>
