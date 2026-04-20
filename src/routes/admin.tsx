@@ -37,10 +37,13 @@ type Profile = {
   id: string; user_id: string; full_name: string; email: string;
   course: "IELTS" | "English Communication" | null; mobile_number: string | null;
   parent_name: string | null; status: "pending" | "approved" | "rejected"; created_at: string;
+  payment_plan: "monthly" | "full" | null;
+  payment_status: "paid" | "not_paid";
 };
 type Attendance = { id: string; student_id: string; date: string; status: "present" | "absent" | "late" };
 type Mark = { id: string; student_id: string; test_name: string; test_date: string; score: number; max_score: number; test_id: string | null };
 type Test = { id: string; title: string; course: "IELTS" | "English Communication" | null; max_score: number; test_date: string };
+type MonthlyPayment = { id: string; student_id: string; month: string; amount: number; status: "paid" | "not_paid"; notes: string | null };
 
 export const Route = createFileRoute("/admin")({
   component: AdminPage,
