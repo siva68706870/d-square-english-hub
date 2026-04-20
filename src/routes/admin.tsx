@@ -734,7 +734,8 @@ function AnalyticsTab() {
   const { data: attendance } = useAttendance();
   const { data: marks } = useMarks();
   const { data: tests } = useTests();
-  const approved = students?.filter((s) => s.status === "approved") ?? [];
+  const [courseFilter, setCourseFilter] = useState<"all" | "IELTS" | "English Communication">("all");
+  const approved = (students ?? []).filter((s) => s.status === "approved" && (courseFilter === "all" || s.course === courseFilter));
   const [studentId, setStudentId] = useState<string>("");
   const [metric, setMetric] = useState<CompareMetric>("marks");
   const [testId, setTestId] = useState<string>("all");
