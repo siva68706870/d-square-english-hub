@@ -89,6 +89,7 @@ export type Database = {
           score: number
           student_id: string
           test_date: string
+          test_id: string | null
           test_name: string
         }
         Insert: {
@@ -99,6 +100,7 @@ export type Database = {
           score: number
           student_id: string
           test_date?: string
+          test_id?: string | null
           test_name: string
         }
         Update: {
@@ -109,7 +111,46 @@ export type Database = {
           score?: number
           student_id?: string
           test_date?: string
+          test_id?: string | null
           test_name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "test_marks_test_id_fkey"
+            columns: ["test_id"]
+            isOneToOne: false
+            referencedRelation: "tests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tests: {
+        Row: {
+          course: Database["public"]["Enums"]["course_type"] | null
+          created_at: string
+          id: string
+          max_score: number
+          test_date: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          course?: Database["public"]["Enums"]["course_type"] | null
+          created_at?: string
+          id?: string
+          max_score?: number
+          test_date?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          course?: Database["public"]["Enums"]["course_type"] | null
+          created_at?: string
+          id?: string
+          max_score?: number
+          test_date?: string
+          title?: string
+          updated_at?: string
         }
         Relationships: []
       }
