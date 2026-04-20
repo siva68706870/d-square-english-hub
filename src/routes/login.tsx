@@ -31,6 +31,7 @@ const signupSchema = z.object({
   course: z.enum(["IELTS", "English Communication"]),
   mobile_number: z.string().trim().min(7, "Enter a valid mobile").max(20),
   parent_name: z.string().trim().min(2).max(100),
+  payment_plan: z.enum(["monthly", "full"], { required_error: "Choose a payment plan" }),
 });
 
 const signinSchema = z.object({
