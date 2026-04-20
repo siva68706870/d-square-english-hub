@@ -354,11 +354,20 @@ function AttendanceTab() {
         <div className="flex items-center justify-between flex-wrap gap-3">
           <div>
             <CardTitle>Mark attendance</CardTitle>
-            <CardDescription>Pick a date and tap status for each student.</CardDescription>
+            <CardDescription>Pick a course and date, then tap status for each student.</CardDescription>
           </div>
-          <div className="flex items-center gap-2">
-            <Label htmlFor="att-date">Date</Label>
-            <Input id="att-date" type="date" value={date} onChange={(e) => setDate(e.target.value)} className="w-auto" />
+          <div className="flex items-center gap-3 flex-wrap">
+            <Tabs value={courseFilter} onValueChange={(v) => setCourseFilter(v as typeof courseFilter)}>
+              <TabsList>
+                <TabsTrigger value="all">All</TabsTrigger>
+                <TabsTrigger value="IELTS">IELTS</TabsTrigger>
+                <TabsTrigger value="English Communication">English Comm.</TabsTrigger>
+              </TabsList>
+            </Tabs>
+            <div className="flex items-center gap-2">
+              <Label htmlFor="att-date">Date</Label>
+              <Input id="att-date" type="date" value={date} onChange={(e) => setDate(e.target.value)} className="w-auto" />
+            </div>
           </div>
         </div>
       </CardHeader>
