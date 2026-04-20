@@ -39,7 +39,8 @@ type Profile = {
   parent_name: string | null; status: "pending" | "approved" | "rejected"; created_at: string;
 };
 type Attendance = { id: string; student_id: string; date: string; status: "present" | "absent" | "late" };
-type Mark = { id: string; student_id: string; test_name: string; test_date: string; score: number; max_score: number };
+type Mark = { id: string; student_id: string; test_name: string; test_date: string; score: number; max_score: number; test_id: string | null };
+type Test = { id: string; title: string; course: "IELTS" | "English Communication" | null; max_score: number; test_date: string };
 
 export const Route = createFileRoute("/admin")({
   component: AdminPage,
@@ -122,6 +123,17 @@ function useMarks() {
       const { data, error } = await supabase.from("test_marks").select("*").order("test_date", { ascending: false });
       if (error) throw error;
       return (data ?? []) as Mark[];
+    },
+  });
+}
+
+function useTests() {
+  return useQuery({
+    queryKey: ["tests"],
+    queryFn: async (): Promise<Test[]> => {
+      const { data, error } = await supabase.from("tests").select("*").order("test_date", { ascending: false });
+      if (error) throw error;
+      return (data ?? []) as Test[];
     },
   });
 }
