@@ -224,8 +224,9 @@ function StudentsTab() {
                 <TableRow>
                   <TableHead>Name</TableHead>
                   <TableHead>Course</TableHead>
+                  <TableHead>Plan</TableHead>
+                  <TableHead>Payment</TableHead>
                   <TableHead>Mobile</TableHead>
-                  <TableHead>Parent</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
@@ -244,8 +245,30 @@ function StudentsTab() {
                         </Badge>
                       ) : "—"}
                     </TableCell>
+                    <TableCell>
+                      {s.payment_plan ? (
+                        <Badge variant="outline" className="capitalize">{s.payment_plan}</Badge>
+                      ) : <span className="text-muted-foreground">—</span>}
+                    </TableCell>
+                    <TableCell>
+                      <button
+                        type="button"
+                        onClick={() => togglePaid(s)}
+                        title="Click to toggle"
+                        className="focus:outline-none"
+                      >
+                        {s.payment_status === "paid" ? (
+                          <Badge className="bg-success text-success-foreground hover:opacity-90 cursor-pointer">
+                            <CheckCircle2 className="h-3 w-3 mr-1" />Paid
+                          </Badge>
+                        ) : (
+                          <Badge variant="destructive" className="hover:opacity-90 cursor-pointer">
+                            <XCircle className="h-3 w-3 mr-1" />Not paid
+                          </Badge>
+                        )}
+                      </button>
+                    </TableCell>
                     <TableCell>{s.mobile_number ?? "—"}</TableCell>
-                    <TableCell>{s.parent_name ?? "—"}</TableCell>
                     <TableCell><StatusBadge status={s.status} /></TableCell>
                     <TableCell className="text-right">
                       <div className="flex justify-end gap-1">
@@ -257,6 +280,11 @@ function StudentsTab() {
                         {s.status !== "rejected" && (
                           <Button size="sm" variant="ghost" onClick={() => updateStatus(s.id, "rejected")} title="Reject">
                             <XCircle className="h-4 w-4 text-destructive" />
+                          </Button>
+                        )}
+                        {s.payment_plan === "monthly" && (
+                          <Button size="sm" variant="ghost" onClick={() => setPaymentsFor(s)} title="Monthly payments">
+                            <Wallet className="h-4 w-4 text-primary" />
                           </Button>
                         )}
                         <Button size="sm" variant="ghost" onClick={() => setEditing(s)} title="Edit">
@@ -286,7 +314,7 @@ function StudentsTab() {
                   </TableRow>
                 ))}
                 {!filtered.length && (
-                  <TableRow><TableCell colSpan={6} className="text-center text-muted-foreground py-8">No students in this course.</TableCell></TableRow>
+                  <TableRow><TableCell colSpan={8} className="text-center text-muted-foreground py-8">No students in this course.</TableCell></TableRow>
                 )}
               </TableBody>
             </Table>
