@@ -3,6 +3,7 @@ import { AppHeader } from "@/components/AppHeader";
 import { PaymentQR } from "@/components/PaymentQR";
 import { Card, CardContent } from "@/components/ui/card";
 import { ScanLine, Youtube } from "lucide-react";
+import channelQr from "@/assets/channel-qr.png";
 
 export const Route = createFileRoute("/mocktest")({
   head: () => ({
@@ -33,7 +34,7 @@ function MockTestPage() {
           <CardContent className="p-8 md:p-10 grid md:grid-cols-2 gap-10 items-center">
             <div className="flex justify-center">
               <PaymentQR
-                value="https://example.com/dsquare-mock-channel"
+                imageSrc={channelQr}
                 caption="Join our mock test channel"
                 size={220}
               />
