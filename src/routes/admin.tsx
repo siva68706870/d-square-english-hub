@@ -643,9 +643,10 @@ function AgencyTab() {
   const { data: students } = useStudents();
   const { data: attendance } = useAttendance();
   const { data: marks } = useMarks();
+  const [courseFilter, setCourseFilter] = useState<"all" | "IELTS" | "English Communication">("all");
 
   const rows = (students ?? [])
-    .filter((s) => s.status === "approved")
+    .filter((s) => s.status === "approved" && (courseFilter === "all" || s.course === courseFilter))
     .map((s) => {
       const sAtt = (attendance ?? []).filter((a) => a.student_id === s.user_id);
       const sMarks = (marks ?? []).filter((m) => m.student_id === s.user_id);
@@ -667,10 +668,21 @@ function AgencyTab() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Agency-readiness ranking</CardTitle>
-        <CardDescription>
-          Based on overall performance (60%) + attendance (40%). Students need at least 2 recorded tests to be marked Ready.
-        </CardDescription>
+        <div className="flex items-start justify-between flex-wrap gap-3">
+          <div>
+            <CardTitle>Agency-readiness ranking</CardTitle>
+            <CardDescription>
+              Based on overall performance (60%) + attendance (40%). Students need at least 2 recorded tests to be marked Ready.
+            </CardDescription>
+          </div>
+          <Tabs value={courseFilter} onValueChange={(v) => setCourseFilter(v as typeof courseFilter)}>
+            <TabsList>
+              <TabsTrigger value="all">All</TabsTrigger>
+              <TabsTrigger value="IELTS">IELTS</TabsTrigger>
+              <TabsTrigger value="English Communication">English Comm.</TabsTrigger>
+            </TabsList>
+          </Tabs>
+        </div>
       </CardHeader>
       <CardContent>
         <Table>
