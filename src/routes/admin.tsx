@@ -32,7 +32,6 @@ import {
   LineChart, Line, Legend,
 } from "recharts";
 import { Loader2, Pencil, Trash2, CheckCircle2, XCircle, ClockIcon, TrendingUp, Users, BookOpen, Wallet, Plus } from "lucide-react";
-import { Textarea } from "@/components/ui/textarea";
 
 type Profile = {
   id: string; user_id: string; full_name: string; email: string;
