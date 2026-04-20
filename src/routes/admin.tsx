@@ -771,6 +771,14 @@ function AnalyticsTab() {
               <CardDescription>Pick an activity to rank approved students.</CardDescription>
             </div>
             <div className="flex flex-wrap gap-2">
+              <Select value={courseFilter} onValueChange={(v) => setCourseFilter(v as typeof courseFilter)}>
+                <SelectTrigger className="w-[180px]"><SelectValue placeholder="Course" /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All courses</SelectItem>
+                  <SelectItem value="IELTS">IELTS</SelectItem>
+                  <SelectItem value="English Communication">English Communication</SelectItem>
+                </SelectContent>
+              </Select>
               <Select value={metric} onValueChange={(v) => setMetric(v as CompareMetric)}>
                 <SelectTrigger className="w-[180px]"><SelectValue placeholder="Activity" /></SelectTrigger>
                 <SelectContent>
