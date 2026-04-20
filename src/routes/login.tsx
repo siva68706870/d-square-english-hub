@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { GraduationCap, Loader2 } from "lucide-react";
 import { PaymentQR } from "@/components/PaymentQR";
 import upiQr from "@/assets/upi-qr.png";
@@ -30,6 +31,7 @@ const signupSchema = z.object({
   course: z.enum(["IELTS", "English Communication"]),
   mobile_number: z.string().trim().min(7, "Enter a valid mobile").max(20),
   parent_name: z.string().trim().min(2).max(100),
+  payment_plan: z.enum(["monthly", "full"], { required_error: "Choose a payment plan" }),
 });
 
 const signinSchema = z.object({
@@ -81,6 +83,7 @@ function LoginPage() {
       course: fd.get("course"),
       mobile_number: fd.get("mobile_number"),
       parent_name: fd.get("parent_name"),
+      payment_plan: fd.get("payment_plan"),
     });
     if (!parsed.success) {
       toast.error(parsed.error.issues[0].message);
@@ -97,6 +100,7 @@ function LoginPage() {
           course: parsed.data.course,
           mobile_number: parsed.data.mobile_number,
           parent_name: parsed.data.parent_name,
+          payment_plan: parsed.data.payment_plan,
         },
       },
     });
@@ -218,6 +222,29 @@ function LoginPage() {
                   <Label htmlFor="parent_name">Parent's name</Label>
                   <Input id="parent_name" name="parent_name" required />
                 </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label>Payment plan</Label>
+                <RadioGroup name="payment_plan" defaultValue="full" className="grid grid-cols-2 gap-2">
+                  <label htmlFor="pp-full" className="flex items-center gap-2 rounded-lg border border-border bg-card px-3 py-2.5 cursor-pointer hover:border-primary/50 transition has-[:checked]:border-primary has-[:checked]:bg-primary/5">
+                    <RadioGroupItem value="full" id="pp-full" />
+                    <div className="text-sm">
+                      <div className="font-medium">Full payment</div>
+                      <div className="text-xs text-muted-foreground">Pay course fee at once</div>
+                    </div>
+                  </label>
+                  <label htmlFor="pp-monthly" className="flex items-center gap-2 rounded-lg border border-border bg-card px-3 py-2.5 cursor-pointer hover:border-primary/50 transition has-[:checked]:border-primary has-[:checked]:bg-primary/5">
+                    <RadioGroupItem value="monthly" id="pp-monthly" />
+                    <div className="text-sm">
+                      <div className="font-medium">Monthly</div>
+                      <div className="text-xs text-muted-foreground">Pay each month</div>
+                    </div>
+                  </label>
+                </RadioGroup>
+                <p className="text-[11px] text-muted-foreground">
+                  Payment status will be confirmed by admin after verifying your payment screenshot.
+                </p>
               </div>
 
               <div className="rounded-xl border border-border bg-muted/40 p-4">
