@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { GraduationCap, Loader2 } from "lucide-react";
 import { PaymentQR } from "@/components/PaymentQR";
 import upiQr from "@/assets/upi-qr.png";
