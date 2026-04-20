@@ -177,11 +177,28 @@ function StudentsTab() {
     qc.invalidateQueries({ queryKey: ["students"] });
   };
 
+  const filtered = (students ?? []).filter((s) => courseFilter === "all" || s.course === courseFilter);
+  const ieltsCount = (students ?? []).filter((s) => s.course === "IELTS").length;
+  const ecCount = (students ?? []).filter((s) => s.course === "English Communication").length;
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Members</CardTitle>
-        <CardDescription>{students?.length ?? 0} registered students</CardDescription>
+        <div className="flex items-start justify-between flex-wrap gap-3">
+          <div>
+            <CardTitle>Members</CardTitle>
+            <CardDescription>
+              {students?.length ?? 0} total · {ieltsCount} IELTS · {ecCount} English Communication
+            </CardDescription>
+          </div>
+          <Tabs value={courseFilter} onValueChange={(v) => setCourseFilter(v as typeof courseFilter)}>
+            <TabsList>
+              <TabsTrigger value="all">All</TabsTrigger>
+              <TabsTrigger value="IELTS">IELTS</TabsTrigger>
+              <TabsTrigger value="English Communication">English Comm.</TabsTrigger>
+            </TabsList>
+          </Tabs>
+        </div>
       </CardHeader>
       <CardContent>
         {isLoading ? (
