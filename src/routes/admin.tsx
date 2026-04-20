@@ -333,7 +333,8 @@ function AttendanceTab() {
   const { data: students } = useStudents();
   const { data: attendance } = useAttendance();
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
-  const approved = students?.filter((s) => s.status === "approved") ?? [];
+  const [courseFilter, setCourseFilter] = useState<"all" | "IELTS" | "English Communication">("all");
+  const approved = (students ?? []).filter((s) => s.status === "approved" && (courseFilter === "all" || s.course === courseFilter));
 
   const setStatus = async (studentId: string, status: Attendance["status"]) => {
     const { error } = await supabase
