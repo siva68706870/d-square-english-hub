@@ -143,6 +143,7 @@ function StudentsTab() {
   const qc = useQueryClient();
   const { data: students, isLoading } = useStudents();
   const [editing, setEditing] = useState<Profile | null>(null);
+  const [courseFilter, setCourseFilter] = useState<"all" | "IELTS" | "English Communication">("all");
 
   const updateStatus = async (id: string, status: Profile["status"]) => {
     const { error } = await supabase.from("profiles").update({ status }).eq("id", id);
