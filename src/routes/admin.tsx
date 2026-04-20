@@ -143,6 +143,7 @@ function StudentsTab() {
   const qc = useQueryClient();
   const { data: students, isLoading } = useStudents();
   const [editing, setEditing] = useState<Profile | null>(null);
+  const [courseFilter, setCourseFilter] = useState<"all" | "IELTS" | "English Communication">("all");
 
   const updateStatus = async (id: string, status: Profile["status"]) => {
     const { error } = await supabase.from("profiles").update({ status }).eq("id", id);
@@ -176,11 +177,28 @@ function StudentsTab() {
     qc.invalidateQueries({ queryKey: ["students"] });
   };
 
+  const filtered = (students ?? []).filter((s) => courseFilter === "all" || s.course === courseFilter);
+  const ieltsCount = (students ?? []).filter((s) => s.course === "IELTS").length;
+  const ecCount = (students ?? []).filter((s) => s.course === "English Communication").length;
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Members</CardTitle>
-        <CardDescription>{students?.length ?? 0} registered students</CardDescription>
+        <div className="flex items-start justify-between flex-wrap gap-3">
+          <div>
+            <CardTitle>Members</CardTitle>
+            <CardDescription>
+              {students?.length ?? 0} total · {ieltsCount} IELTS · {ecCount} English Communication
+            </CardDescription>
+          </div>
+          <Tabs value={courseFilter} onValueChange={(v) => setCourseFilter(v as typeof courseFilter)}>
+            <TabsList>
+              <TabsTrigger value="all">All</TabsTrigger>
+              <TabsTrigger value="IELTS">IELTS</TabsTrigger>
+              <TabsTrigger value="English Communication">English Comm.</TabsTrigger>
+            </TabsList>
+          </Tabs>
+        </div>
       </CardHeader>
       <CardContent>
         {isLoading ? (
@@ -199,13 +217,19 @@ function StudentsTab() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {students?.map((s) => (
+                {filtered.map((s) => (
                   <TableRow key={s.id}>
                     <TableCell>
                       <div className="font-medium">{s.full_name}</div>
                       <div className="text-xs text-muted-foreground">{s.email}</div>
                     </TableCell>
-                    <TableCell>{s.course ?? "—"}</TableCell>
+                    <TableCell>
+                      {s.course ? (
+                        <Badge variant="outline" className={s.course === "IELTS" ? "border-primary/40 text-primary" : "border-gold/40 text-gold-foreground"}>
+                          {s.course}
+                        </Badge>
+                      ) : "—"}
+                    </TableCell>
                     <TableCell>{s.mobile_number ?? "—"}</TableCell>
                     <TableCell>{s.parent_name ?? "—"}</TableCell>
                     <TableCell><StatusBadge status={s.status} /></TableCell>
@@ -247,8 +271,8 @@ function StudentsTab() {
                     </TableCell>
                   </TableRow>
                 ))}
-                {!students?.length && (
-                  <TableRow><TableCell colSpan={6} className="text-center text-muted-foreground py-8">No students yet.</TableCell></TableRow>
+                {!filtered.length && (
+                  <TableRow><TableCell colSpan={6} className="text-center text-muted-foreground py-8">No students in this course.</TableCell></TableRow>
                 )}
               </TableBody>
             </Table>
@@ -309,7 +333,8 @@ function AttendanceTab() {
   const { data: students } = useStudents();
   const { data: attendance } = useAttendance();
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
-  const approved = students?.filter((s) => s.status === "approved") ?? [];
+  const [courseFilter, setCourseFilter] = useState<"all" | "IELTS" | "English Communication">("all");
+  const approved = (students ?? []).filter((s) => s.status === "approved" && (courseFilter === "all" || s.course === courseFilter));
 
   const setStatus = async (studentId: string, status: Attendance["status"]) => {
     const { error } = await supabase
@@ -329,11 +354,20 @@ function AttendanceTab() {
         <div className="flex items-center justify-between flex-wrap gap-3">
           <div>
             <CardTitle>Mark attendance</CardTitle>
-            <CardDescription>Pick a date and tap status for each student.</CardDescription>
+            <CardDescription>Pick a course and date, then tap status for each student.</CardDescription>
           </div>
-          <div className="flex items-center gap-2">
-            <Label htmlFor="att-date">Date</Label>
-            <Input id="att-date" type="date" value={date} onChange={(e) => setDate(e.target.value)} className="w-auto" />
+          <div className="flex items-center gap-3 flex-wrap">
+            <Tabs value={courseFilter} onValueChange={(v) => setCourseFilter(v as typeof courseFilter)}>
+              <TabsList>
+                <TabsTrigger value="all">All</TabsTrigger>
+                <TabsTrigger value="IELTS">IELTS</TabsTrigger>
+                <TabsTrigger value="English Communication">English Comm.</TabsTrigger>
+              </TabsList>
+            </Tabs>
+            <div className="flex items-center gap-2">
+              <Label htmlFor="att-date">Date</Label>
+              <Input id="att-date" type="date" value={date} onChange={(e) => setDate(e.target.value)} className="w-auto" />
+            </div>
           </div>
         </div>
       </CardHeader>
@@ -609,9 +643,10 @@ function AgencyTab() {
   const { data: students } = useStudents();
   const { data: attendance } = useAttendance();
   const { data: marks } = useMarks();
+  const [courseFilter, setCourseFilter] = useState<"all" | "IELTS" | "English Communication">("all");
 
   const rows = (students ?? [])
-    .filter((s) => s.status === "approved")
+    .filter((s) => s.status === "approved" && (courseFilter === "all" || s.course === courseFilter))
     .map((s) => {
       const sAtt = (attendance ?? []).filter((a) => a.student_id === s.user_id);
       const sMarks = (marks ?? []).filter((m) => m.student_id === s.user_id);
@@ -633,10 +668,21 @@ function AgencyTab() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Agency-readiness ranking</CardTitle>
-        <CardDescription>
-          Based on overall performance (60%) + attendance (40%). Students need at least 2 recorded tests to be marked Ready.
-        </CardDescription>
+        <div className="flex items-start justify-between flex-wrap gap-3">
+          <div>
+            <CardTitle>Agency-readiness ranking</CardTitle>
+            <CardDescription>
+              Based on overall performance (60%) + attendance (40%). Students need at least 2 recorded tests to be marked Ready.
+            </CardDescription>
+          </div>
+          <Tabs value={courseFilter} onValueChange={(v) => setCourseFilter(v as typeof courseFilter)}>
+            <TabsList>
+              <TabsTrigger value="all">All</TabsTrigger>
+              <TabsTrigger value="IELTS">IELTS</TabsTrigger>
+              <TabsTrigger value="English Communication">English Comm.</TabsTrigger>
+            </TabsList>
+          </Tabs>
+        </div>
       </CardHeader>
       <CardContent>
         <Table>
@@ -688,7 +734,8 @@ function AnalyticsTab() {
   const { data: attendance } = useAttendance();
   const { data: marks } = useMarks();
   const { data: tests } = useTests();
-  const approved = students?.filter((s) => s.status === "approved") ?? [];
+  const [courseFilter, setCourseFilter] = useState<"all" | "IELTS" | "English Communication">("all");
+  const approved = (students ?? []).filter((s) => s.status === "approved" && (courseFilter === "all" || s.course === courseFilter));
   const [studentId, setStudentId] = useState<string>("");
   const [metric, setMetric] = useState<CompareMetric>("marks");
   const [testId, setTestId] = useState<string>("all");
@@ -724,6 +771,14 @@ function AnalyticsTab() {
               <CardDescription>Pick an activity to rank approved students.</CardDescription>
             </div>
             <div className="flex flex-wrap gap-2">
+              <Select value={courseFilter} onValueChange={(v) => setCourseFilter(v as typeof courseFilter)}>
+                <SelectTrigger className="w-[180px]"><SelectValue placeholder="Course" /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All courses</SelectItem>
+                  <SelectItem value="IELTS">IELTS</SelectItem>
+                  <SelectItem value="English Communication">English Communication</SelectItem>
+                </SelectContent>
+              </Select>
               <Select value={metric} onValueChange={(v) => setMetric(v as CompareMetric)}>
                 <SelectTrigger className="w-[180px]"><SelectValue placeholder="Activity" /></SelectTrigger>
                 <SelectContent>
