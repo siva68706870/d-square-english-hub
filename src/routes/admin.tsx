@@ -351,6 +351,16 @@ function StudentsTab() {
                   <Input id="ef-parent" name="parent_name" defaultValue={editing.parent_name ?? ""} />
                 </div>
               </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="ef-plan">Payment plan</Label>
+                <Select name="payment_plan" defaultValue={editing.payment_plan ?? undefined}>
+                  <SelectTrigger id="ef-plan"><SelectValue placeholder="Choose a plan" /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="full">Full payment</SelectItem>
+                    <SelectItem value="monthly">Monthly</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
               <DialogFooter>
                 <Button type="button" variant="outline" onClick={() => setEditing(null)}>Cancel</Button>
                 <Button type="submit">Save</Button>
@@ -359,7 +369,157 @@ function StudentsTab() {
           )}
         </DialogContent>
       </Dialog>
+
+      <MonthlyPaymentsDialog student={paymentsFor} onClose={() => setPaymentsFor(null)} />
     </Card>
+  );
+}
+
+// ---------- Monthly Payments Dialog ----------
+function MonthlyPaymentsDialog({ student, onClose }: { student: Profile | null; onClose: () => void }) {
+  const qc = useQueryClient();
+  const open = !!student;
+  const studentId = student?.user_id ?? "";
+
+  const { data: payments, isLoading } = useQuery({
+    queryKey: ["monthly_payments", studentId],
+    enabled: open,
+    queryFn: async (): Promise<MonthlyPayment[]> => {
+      const { data, error } = await supabase
+        .from("monthly_payments")
+        .select("*")
+        .eq("student_id", studentId)
+        .order("month", { ascending: false });
+      if (error) throw error;
+      return (data ?? []) as MonthlyPayment[];
+    },
+  });
+
+  const addPayment = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!student) return;
+    const fd = new FormData(e.currentTarget);
+    const month = String(fd.get("month") ?? "").trim();
+    const amount = Number(fd.get("amount") ?? 0);
+    const status = (fd.get("status") || "not_paid") as MonthlyPayment["status"];
+    const notes = String(fd.get("notes") ?? "").trim() || null;
+    if (!month) return toast.error("Pick a month");
+    const { error } = await supabase.from("monthly_payments").upsert(
+      { student_id: student.user_id, month, amount, status, notes },
+      { onConflict: "student_id,month" },
+    );
+    if (error) return toast.error(error.message);
+    toast.success("Saved");
+    (e.currentTarget as HTMLFormElement).reset();
+    qc.invalidateQueries({ queryKey: ["monthly_payments", studentId] });
+  };
+
+  const togglePay = async (p: MonthlyPayment) => {
+    const next: MonthlyPayment["status"] = p.status === "paid" ? "not_paid" : "paid";
+    const { error } = await supabase.from("monthly_payments").update({ status: next }).eq("id", p.id);
+    if (error) return toast.error(error.message);
+    qc.invalidateQueries({ queryKey: ["monthly_payments", studentId] });
+  };
+
+  const removePay = async (p: MonthlyPayment) => {
+    const { error } = await supabase.from("monthly_payments").delete().eq("id", p.id);
+    if (error) return toast.error(error.message);
+    toast.success("Removed");
+    qc.invalidateQueries({ queryKey: ["monthly_payments", studentId] });
+  };
+
+  const totalPaid = (payments ?? []).filter((p) => p.status === "paid").reduce((sum, p) => sum + Number(p.amount || 0), 0);
+  const totalDue = (payments ?? []).filter((p) => p.status === "not_paid").reduce((sum, p) => sum + Number(p.amount || 0), 0);
+
+  const currentMonth = new Date().toISOString().slice(0, 7);
+
+  return (
+    <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
+      <DialogContent className="max-w-2xl">
+        <DialogHeader>
+          <DialogTitle>Monthly payments — {student?.full_name}</DialogTitle>
+          <CardDescription>
+            Track each month's installment. Total paid: ₹{totalPaid.toLocaleString()} · Due: ₹{totalDue.toLocaleString()}
+          </CardDescription>
+        </DialogHeader>
+
+        <form onSubmit={addPayment} className="grid grid-cols-1 sm:grid-cols-5 gap-2 items-end border border-border rounded-lg p-3 bg-muted/30">
+          <div className="space-y-1 sm:col-span-1">
+            <Label htmlFor="mp-month" className="text-xs">Month</Label>
+            <Input id="mp-month" name="month" type="month" defaultValue={currentMonth} required />
+          </div>
+          <div className="space-y-1 sm:col-span-1">
+            <Label htmlFor="mp-amount" className="text-xs">Amount (₹)</Label>
+            <Input id="mp-amount" name="amount" type="number" min="0" step="1" defaultValue={0} required />
+          </div>
+          <div className="space-y-1 sm:col-span-1">
+            <Label htmlFor="mp-status" className="text-xs">Status</Label>
+            <Select name="status" defaultValue="not_paid">
+              <SelectTrigger id="mp-status"><SelectValue /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="paid">Paid</SelectItem>
+                <SelectItem value="not_paid">Not paid</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="space-y-1 sm:col-span-1">
+            <Label htmlFor="mp-notes" className="text-xs">Notes</Label>
+            <Input id="mp-notes" name="notes" placeholder="optional" />
+          </div>
+          <Button type="submit" className="sm:col-span-1">
+            <Plus className="h-4 w-4 mr-1" /> Save
+          </Button>
+        </form>
+
+        <div className="max-h-[40vh] overflow-y-auto border border-border rounded-lg">
+          {isLoading ? (
+            <div className="p-6 flex justify-center"><Loader2 className="h-5 w-5 animate-spin" /></div>
+          ) : (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Month</TableHead>
+                  <TableHead>Amount</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Notes</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {(payments ?? []).map((p) => (
+                  <TableRow key={p.id}>
+                    <TableCell className="font-medium">{p.month}</TableCell>
+                    <TableCell>₹{Number(p.amount).toLocaleString()}</TableCell>
+                    <TableCell>
+                      <button type="button" onClick={() => togglePay(p)}>
+                        {p.status === "paid" ? (
+                          <Badge className="bg-success text-success-foreground cursor-pointer"><CheckCircle2 className="h-3 w-3 mr-1" />Paid</Badge>
+                        ) : (
+                          <Badge variant="destructive" className="cursor-pointer"><XCircle className="h-3 w-3 mr-1" />Not paid</Badge>
+                        )}
+                      </button>
+                    </TableCell>
+                    <TableCell className="text-xs text-muted-foreground max-w-[200px] truncate">{p.notes ?? "—"}</TableCell>
+                    <TableCell className="text-right">
+                      <Button size="sm" variant="ghost" onClick={() => removePay(p)} title="Delete">
+                        <Trash2 className="h-4 w-4 text-destructive" />
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+                {!payments?.length && (
+                  <TableRow><TableCell colSpan={5} className="text-center text-muted-foreground py-6">No monthly entries yet.</TableCell></TableRow>
+                )}
+              </TableBody>
+            </Table>
+          )}
+        </div>
+
+        <DialogFooter>
+          <Button variant="outline" onClick={onClose}>Close</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }
 
