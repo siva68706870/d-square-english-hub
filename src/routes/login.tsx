@@ -221,15 +221,21 @@ function LoginPage() {
               </div>
 
               <div className="rounded-xl border border-border bg-muted/40 p-4">
-                <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">
-                  Pay course fee (sample)
+                <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3 text-center">
+                  Pay course fee
                 </p>
                 <div className="flex justify-center">
                   <PaymentQR
                     imageSrc={upiQr}
-                    size={160}
-                    caption="Show payment screenshot to admin to get approved."
+                    size={220}
+                    caption="Scan with any UPI app to pay. Show payment screenshot to admin to get approved."
                   />
+                </div>
+                <div className="mt-3 rounded-lg border border-border bg-card px-3 py-2 text-center">
+                  <p className="text-[10px] uppercase tracking-widest text-muted-foreground">UPI ID</p>
+                  <p className="font-mono text-sm font-semibold text-foreground select-all">
+                    preciousarun-1@okicici
+                  </p>
                 </div>
               </div>
 
