@@ -28,9 +28,10 @@ function DashboardPage() {
     queryKey: ["student-stats", user?.id],
     enabled: !!user?.id && profile?.status === "approved",
     queryFn: async () => {
-      const [att, marks] = await Promise.all([
+      const [att, marks, payRes] = await Promise.all([
         supabase.from("attendance").select("status").eq("student_id", user!.id),
         supabase.from("test_marks").select("score, max_score, test_name, test_date").eq("student_id", user!.id).order("test_date", { ascending: false }),
+        supabase.from("monthly_payments").select("amount, status").eq("student_id", user!.id),
       ]);
       const total = att.data?.length ?? 0;
       const present = att.data?.filter((a) => a.status === "present").length ?? 0;
@@ -38,7 +39,8 @@ function DashboardPage() {
       const avgPct = marks.data?.length
         ? Math.round((marks.data.reduce((s, m) => s + (Number(m.score) / Number(m.max_score)) * 100, 0) / marks.data.length))
         : 0;
-      return { attendancePct, avgPct, total, present, marks: marks.data ?? [] };
+      const totalPaid = (payRes.data ?? []).filter((p) => p.status === "paid").reduce((s, p) => s + Number(p.amount || 0), 0);
+      return { attendancePct, avgPct, total, present, marks: marks.data ?? [], totalPaid };
     },
   });
 
