@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Loader2, CheckCircle2, Clock, BookOpen, GraduationCap } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
+import upiQr from "@/assets/upi-qr.png";
 
 export const Route = createFileRoute("/dashboard")({
   component: DashboardPage,
