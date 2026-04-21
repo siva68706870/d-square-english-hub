@@ -65,7 +65,22 @@ function Home() {
           </div>
         </section>
 
-        {/* Features */}
+        {/* Stats */}
+        <section className="container mx-auto px-4 py-14">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+            {[
+              { value: "15+", label: "Years of Experience & TEFL Certified" },
+              { value: "10,000+", label: "Students Trained" },
+              { value: "100+", label: "Targeted Band in IELTS" },
+            ].map((stat, i) => (
+              <div key={i} className="rounded-2xl border border-border bg-card p-8 shadow-card">
+                <div className="font-display text-4xl md:text-5xl font-bold text-gold">{stat.value}</div>
+                <p className="mt-2 text-muted-foreground text-sm">{stat.label}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
         <section className="container mx-auto px-4 py-20">
           <div className="grid gap-6 md:grid-cols-3">
             {[
