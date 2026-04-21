@@ -1236,10 +1236,6 @@ function CommissionTab() {
     </Card>
   );
 }
-      <CardContent className="space-y-6">
-        {/* Simple cities */}
-        <div className="space-y-4">
-          {simpleCities.map((city) => (
             <div key={city.key} className="flex items-center gap-4">
               <Label className="w-32 text-base font-semibold shrink-0">{city.label}</Label>
               <Input
