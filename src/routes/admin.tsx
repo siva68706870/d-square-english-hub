@@ -1151,6 +1151,28 @@ function CommissionTab() {
     }
   };
 
+  // History query
+  const { data: allCommissions } = useQuery({
+    queryKey: ["commissions_history"],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("commissions")
+        .select("*")
+        .order("date", { ascending: false });
+      return data || [];
+    },
+  });
+
+  const [showHistory, setShowHistory] = useState(false);
+
+  // Group history by date
+  const historyByDate = (allCommissions || []).reduce<Record<string, any[]>>((acc, row) => {
+    if (!acc[row.date]) acc[row.date] = [];
+    acc[row.date].push(row);
+    return acc;
+  }, {});
+  const historyDates = Object.keys(historyByDate).sort((a, b) => b.localeCompare(a));
+
   return (
     <Card>
       <CardHeader>
@@ -1159,79 +1181,129 @@ function CommissionTab() {
             <CardTitle>Commission Tracker</CardTitle>
             <CardDescription>Select a date and enter amounts for each location</CardDescription>
           </div>
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button variant="outline" className="w-[200px] justify-start text-left font-normal">
-                <CalendarIcon className="mr-2 h-4 w-4" />
-                {format(selectedDate, "dd MMM yyyy")}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0" align="end">
-              <Calendar
-                mode="single"
-                selected={selectedDate}
-                onSelect={(d) => d && setSelectedDate(d)}
-                className="p-3 pointer-events-auto"
-              />
-            </PopoverContent>
-          </Popover>
+          <div className="flex gap-2">
+            <Button variant={showHistory ? "default" : "outline"} onClick={() => setShowHistory(!showHistory)}>
+              <History className="h-4 w-4 mr-2" />
+              {showHistory ? "Hide History" : "History"}
+            </Button>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button variant="outline" className="w-[200px] justify-start text-left font-normal">
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {format(selectedDate, "dd MMM yyyy")}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="end">
+                <Calendar
+                  mode="single"
+                  selected={selectedDate}
+                  onSelect={(d) => d && setSelectedDate(d)}
+                  className="p-3 pointer-events-auto"
+                />
+              </PopoverContent>
+            </Popover>
+          </div>
         </div>
       </CardHeader>
       <CardContent className="space-y-6">
-        <div className="space-y-4">
-          {simpleCities.map((city) => (
-            <div key={city.key} className="flex items-center gap-4">
-              <Label className="w-32 text-base font-semibold shrink-0">{city.label}</Label>
-              <Input
-                type="number"
-                placeholder="Enter amount"
-                className="max-w-xs"
-                value={values[city.key]}
-                onChange={(e) => handleChange(city.key, e.target.value)}
-              />
-            </div>
-          ))}
-        </div>
-
-        <div className="border-t pt-6">
-          <h3 className="text-lg font-semibold mb-4">Dindigul</h3>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div className="space-y-1.5">
-              <Label>Total Amount</Label>
-              <Input
-                type="number"
-                placeholder="Enter total"
-                value={values.dindigul_total}
-                onChange={(e) => handleChange("dindigul_total", e.target.value)}
-              />
-            </div>
-            <div className="space-y-1.5">
-              <Label>Commission for Me (50%)</Label>
-              <Input
-                type="number"
-                value={dindigulMyCommission.toFixed(2)}
-                readOnly
-                className="bg-muted"
-              />
-            </div>
-            <div className="space-y-1.5">
-              <Label>Commission for Them (50%)</Label>
-              <Input
-                type="number"
-                value={dindigulTheirCommission.toFixed(2)}
-                readOnly
-                className="bg-muted"
-              />
-            </div>
+        {showHistory ? (
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold">Commission History</h3>
+            {historyDates.length === 0 ? (
+              <p className="text-muted-foreground text-sm">No commission records yet.</p>
+            ) : (
+              <div className="overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Date</TableHead>
+                      <TableHead>City</TableHead>
+                      <TableHead className="text-right">Amount</TableHead>
+                      <TableHead className="text-right">Total Amt</TableHead>
+                      <TableHead className="text-right">My Commission</TableHead>
+                      <TableHead className="text-right">Their Commission</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {historyDates.map((date) =>
+                      historyByDate[date].map((row: any, idx: number) => (
+                        <TableRow key={row.id}>
+                          {idx === 0 && (
+                            <TableCell rowSpan={historyByDate[date].length} className="font-medium align-top">
+                              {format(new Date(date + "T00:00:00"), "dd MMM yyyy")}
+                            </TableCell>
+                          )}
+                          <TableCell>{row.city}</TableCell>
+                          <TableCell className="text-right">{Number(row.amount) > 0 ? `₹${Number(row.amount).toLocaleString()}` : "—"}</TableCell>
+                          <TableCell className="text-right">{Number(row.total_amount) > 0 ? `₹${Number(row.total_amount).toLocaleString()}` : "—"}</TableCell>
+                          <TableCell className="text-right">{Number(row.commission_me) > 0 ? `₹${Number(row.commission_me).toLocaleString()}` : "—"}</TableCell>
+                          <TableCell className="text-right">{Number(row.commission_them) > 0 ? `₹${Number(row.commission_them).toLocaleString()}` : "—"}</TableCell>
+                        </TableRow>
+                      ))
+                    )}
+                  </TableBody>
+                </Table>
+              </div>
+            )}
           </div>
-        </div>
+        ) : (
+          <>
+            <div className="space-y-4">
+              {simpleCities.map((city) => (
+                <div key={city.key} className="flex items-center gap-4">
+                  <Label className="w-32 text-base font-semibold shrink-0">{city.label}</Label>
+                  <Input
+                    type="number"
+                    placeholder="Enter amount"
+                    className="max-w-xs"
+                    value={values[city.key]}
+                    onChange={(e) => handleChange(city.key, e.target.value)}
+                  />
+                </div>
+              ))}
+            </div>
 
-        <div className="border-t pt-4 flex justify-end">
-          <Button onClick={handleSave} disabled={saving}>
-            {saving ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Save className="h-4 w-4 mr-2" />}
-            Save for {format(selectedDate, "dd MMM yyyy")}
-          </Button>
-        </div>
+            <div className="border-t pt-6">
+              <h3 className="text-lg font-semibold mb-4">Dindigul</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className="space-y-1.5">
+                  <Label>Total Amount</Label>
+                  <Input
+                    type="number"
+                    placeholder="Enter total"
+                    value={values.dindigul_total}
+                    onChange={(e) => handleChange("dindigul_total", e.target.value)}
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <Label>Commission for Me (50%)</Label>
+                  <Input
+                    type="number"
+                    value={dindigulMyCommission.toFixed(2)}
+                    readOnly
+                    className="bg-muted"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <Label>Commission for Them (50%)</Label>
+                  <Input
+                    type="number"
+                    value={dindigulTheirCommission.toFixed(2)}
+                    readOnly
+                    className="bg-muted"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="border-t pt-4 flex justify-end">
+              <Button onClick={handleSave} disabled={saving}>
+                {saving ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Save className="h-4 w-4 mr-2" />}
+                Save for {format(selectedDate, "dd MMM yyyy")}
+              </Button>
+            </div>
+          </>
+        )}
       </CardContent>
     </Card>
   );
