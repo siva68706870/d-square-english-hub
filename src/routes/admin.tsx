@@ -1226,22 +1226,6 @@ function CommissionTab() {
         </div>
       </CardHeader>
       <CardContent className="space-y-6">
-        {/* Current day "My Commission" total */}
-        <div className="rounded-lg bg-primary/10 p-4 flex items-center justify-between">
-          <div>
-            <p className="text-sm text-muted-foreground">My Commission Today</p>
-            <p className="text-2xl font-bold text-primary">
-              ₹{(
-                simpleCities.reduce((s, c) => s + (parseFloat(values[c.key]) || 0), 0) + dindigulMyCommission
-              ).toLocaleString()}
-            </p>
-          </div>
-          <div>
-            <p className="text-sm text-muted-foreground">All-Time Total</p>
-            <p className="text-2xl font-bold text-primary">₹{totalMyCommission.toLocaleString()}</p>
-          </div>
-        </div>
-
         {showSummary ? (
           <div className="space-y-4">
             <h3 className="text-lg font-semibold">Commission Summary</h3>
@@ -1280,10 +1264,7 @@ function CommissionTab() {
                     <TableRow>
                       <TableHead>Date</TableHead>
                       <TableHead>City</TableHead>
-                      <TableHead className="text-right">Amount</TableHead>
-                      <TableHead className="text-right">Total Amt</TableHead>
                       <TableHead className="text-right font-bold text-primary">My Commission</TableHead>
-                      <TableHead className="text-right">Their Commission</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -1298,16 +1279,12 @@ function CommissionTab() {
                             </TableCell>
                           )}
                           <TableCell>{row.city}</TableCell>
-                          <TableCell className="text-right">{Number(row.amount) > 0 ? `₹${Number(row.amount).toLocaleString()}` : "—"}</TableCell>
-                          <TableCell className="text-right">{Number(row.total_amount) > 0 ? `₹${Number(row.total_amount).toLocaleString()}` : "—"}</TableCell>
                           <TableCell className="text-right font-semibold text-primary">₹{getMyCommission(row).toLocaleString()}</TableCell>
-                          <TableCell className="text-right">{Number(row.commission_them) > 0 ? `₹${Number(row.commission_them).toLocaleString()}` : "—"}</TableCell>
                         </TableRow>
                       )).concat(
                         <TableRow key={date + "-total"} className="bg-muted/50">
-                          <TableCell colSpan={3} className="text-right font-semibold">Day Total →</TableCell>
+                          <TableCell className="text-right font-semibold">Day Total →</TableCell>
                           <TableCell className="text-right font-bold text-primary">₹{dateTotal.toLocaleString()}</TableCell>
-                          <TableCell />
                         </TableRow>
                       );
                     })}
