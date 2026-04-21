@@ -433,7 +433,8 @@ function MonthlyPaymentsDialog({ student, onClose }: { student: Profile | null; 
   };
 
   const totalPaid = (payments ?? []).filter((p) => p.status === "paid").reduce((sum, p) => sum + Number(p.amount || 0), 0);
-  const totalDue = (payments ?? []).filter((p) => p.status === "not_paid").reduce((sum, p) => sum + Number(p.amount || 0), 0);
+  const courseTotal = Number((student as any)?.total_amount ?? 0);
+  const remaining = Math.max(courseTotal - totalPaid, 0);
 
   const currentMonth = new Date().toISOString().slice(0, 7);
 
@@ -443,7 +444,7 @@ function MonthlyPaymentsDialog({ student, onClose }: { student: Profile | null; 
         <DialogHeader>
           <DialogTitle>Monthly payments — {student?.full_name}</DialogTitle>
           <CardDescription>
-            Track each month's installment. Total paid: ₹{totalPaid.toLocaleString()} · Due: ₹{totalDue.toLocaleString()}
+            Course fee: ₹{courseTotal.toLocaleString()} · Paid: ₹{totalPaid.toLocaleString()} · <span className="font-semibold text-foreground">Remaining: ₹{remaining.toLocaleString()}</span>
           </CardDescription>
         </DialogHeader>
 

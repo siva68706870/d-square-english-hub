@@ -6,7 +6,7 @@ import { PaymentQR } from "@/components/PaymentQR";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, CheckCircle2, Clock, BookOpen, GraduationCap } from "lucide-react";
+import { Loader2, CheckCircle2, Clock, BookOpen, GraduationCap, IndianRupee } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 import upiQr from "@/assets/upi-qr.png";
@@ -28,9 +28,10 @@ function DashboardPage() {
     queryKey: ["student-stats", user?.id],
     enabled: !!user?.id && profile?.status === "approved",
     queryFn: async () => {
-      const [att, marks] = await Promise.all([
+      const [att, marks, payRes] = await Promise.all([
         supabase.from("attendance").select("status").eq("student_id", user!.id),
         supabase.from("test_marks").select("score, max_score, test_name, test_date").eq("student_id", user!.id).order("test_date", { ascending: false }),
+        supabase.from("monthly_payments").select("amount, status").eq("student_id", user!.id),
       ]);
       const total = att.data?.length ?? 0;
       const present = att.data?.filter((a) => a.status === "present").length ?? 0;
@@ -38,7 +39,8 @@ function DashboardPage() {
       const avgPct = marks.data?.length
         ? Math.round((marks.data.reduce((s, m) => s + (Number(m.score) / Number(m.max_score)) * 100, 0) / marks.data.length))
         : 0;
-      return { attendancePct, avgPct, total, present, marks: marks.data ?? [] };
+      const totalPaid = (payRes.data ?? []).filter((p) => p.status === "paid").reduce((s, p) => s + Number(p.amount || 0), 0);
+      return { attendancePct, avgPct, total, present, marks: marks.data ?? [], totalPaid };
     },
   });
 
@@ -94,10 +96,16 @@ function DashboardPage() {
 
         {profile.status === "approved" && (
           <>
-            <div className="grid sm:grid-cols-3 gap-4 mb-8">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
               <StatCard label="Attendance" value={`${stats?.attendancePct ?? 0}%`} sub={`${stats?.present ?? 0}/${stats?.total ?? 0} sessions`} icon={CheckCircle2} />
               <StatCard label="Average Score" value={`${stats?.avgPct ?? 0}%`} sub={`${stats?.marks.length ?? 0} tests`} icon={GraduationCap} />
               <StatCard label="Course" value={profile.course ?? "—"} sub="Enrolled" icon={BookOpen} />
+              <StatCard
+                label="Fee Remaining"
+                value={`₹${Math.max(Number((profile as any).total_amount ?? 0) - (stats?.totalPaid ?? 0), 0).toLocaleString()}`}
+                sub={`Paid ₹${(stats?.totalPaid ?? 0).toLocaleString()} of ₹${Number((profile as any).total_amount ?? 0).toLocaleString()}`}
+                icon={IndianRupee}
+              />
             </div>
 
             <Card>
