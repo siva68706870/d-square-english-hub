@@ -1236,8 +1236,6 @@ function CommissionTab() {
     </Card>
   );
 }
-            <div key={city.key} className="flex items-center gap-4">
-              <Label className="w-32 text-base font-semibold shrink-0">{city.label}</Label>
               <Input
                 type="number"
                 placeholder="Enter amount"
