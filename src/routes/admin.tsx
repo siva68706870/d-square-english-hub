@@ -1197,8 +1197,12 @@ function CommissionTab() {
             <CardTitle>Commission Tracker</CardTitle>
             <CardDescription>Select a date and enter amounts for each location</CardDescription>
           </div>
-          <div className="flex gap-2">
-            <Button variant={showHistory ? "default" : "outline"} onClick={() => setShowHistory(!showHistory)}>
+          <div className="flex gap-2 flex-wrap">
+            <Button variant={showSummary ? "default" : "outline"} onClick={() => { setShowSummary(!showSummary); setShowHistory(false); }}>
+              <TrendingUp className="h-4 w-4 mr-2" />
+              {showSummary ? "Hide Summary" : "Summary"}
+            </Button>
+            <Button variant={showHistory ? "default" : "outline"} onClick={() => { setShowHistory(!showHistory); setShowSummary(false); }}>
               <History className="h-4 w-4 mr-2" />
               {showHistory ? "Hide History" : "History"}
             </Button>
