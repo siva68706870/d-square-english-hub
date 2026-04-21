@@ -96,10 +96,16 @@ function DashboardPage() {
 
         {profile.status === "approved" && (
           <>
-            <div className="grid sm:grid-cols-3 gap-4 mb-8">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
               <StatCard label="Attendance" value={`${stats?.attendancePct ?? 0}%`} sub={`${stats?.present ?? 0}/${stats?.total ?? 0} sessions`} icon={CheckCircle2} />
               <StatCard label="Average Score" value={`${stats?.avgPct ?? 0}%`} sub={`${stats?.marks.length ?? 0} tests`} icon={GraduationCap} />
               <StatCard label="Course" value={profile.course ?? "—"} sub="Enrolled" icon={BookOpen} />
+              <StatCard
+                label="Fee Remaining"
+                value={`₹${Math.max(Number((profile as any).total_amount ?? 0) - (stats?.totalPaid ?? 0), 0).toLocaleString()}`}
+                sub={`Paid ₹${(stats?.totalPaid ?? 0).toLocaleString()} of ₹${Number((profile as any).total_amount ?? 0).toLocaleString()}`}
+                icon={IndianRupee}
+              />
             </div>
 
             <Card>
