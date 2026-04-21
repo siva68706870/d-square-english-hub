@@ -32,6 +32,7 @@ const signupSchema = z.object({
   mobile_number: z.string().trim().min(7, "Enter a valid mobile").max(20),
   parent_name: z.string().trim().min(2).max(100),
   payment_plan: z.enum(["monthly", "full"], { required_error: "Choose a payment plan" }),
+  total_amount: z.coerce.number().min(0, "Enter a valid amount"),
 });
 
 const signinSchema = z.object({
@@ -84,6 +85,7 @@ function LoginPage() {
       mobile_number: fd.get("mobile_number"),
       parent_name: fd.get("parent_name"),
       payment_plan: fd.get("payment_plan"),
+      total_amount: fd.get("total_amount"),
     });
     if (!parsed.success) {
       toast.error(parsed.error.issues[0].message);
@@ -95,12 +97,13 @@ function LoginPage() {
       password: parsed.data.password,
       options: {
         emailRedirectTo: `${window.location.origin}/`,
-        data: {
+          data: {
           full_name: parsed.data.full_name,
           course: parsed.data.course,
           mobile_number: parsed.data.mobile_number,
           parent_name: parsed.data.parent_name,
           payment_plan: parsed.data.payment_plan,
+          total_amount: parsed.data.total_amount,
         },
       },
     });
