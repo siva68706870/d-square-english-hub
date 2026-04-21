@@ -31,7 +31,10 @@ import {
   ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid,
   LineChart, Line, Legend,
 } from "recharts";
-import { Loader2, Pencil, Trash2, CheckCircle2, XCircle, ClockIcon, TrendingUp, Users, BookOpen, Wallet, Plus } from "lucide-react";
+import { Loader2, Pencil, Trash2, CheckCircle2, XCircle, ClockIcon, TrendingUp, Users, BookOpen, Wallet, Plus, CalendarIcon, Save } from "lucide-react";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { format } from "date-fns";
 
 type Profile = {
   id: string; user_id: string; full_name: string; email: string;
