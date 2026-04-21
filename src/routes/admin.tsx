@@ -1164,6 +1164,7 @@ function CommissionTab() {
   });
 
   const [showHistory, setShowHistory] = useState(false);
+  const [showSummary, setShowSummary] = useState(false);
 
   // Group history by date
   const historyByDate = (allCommissions || []).reduce<Record<string, any[]>>((acc, row) => {
@@ -1173,6 +1174,21 @@ function CommissionTab() {
   }, {});
   const historyDates = Object.keys(historyByDate).sort((a, b) => b.localeCompare(a));
 
+  // Calculate my commission per row: for simple cities it's 'amount', for Dindigul it's 'commission_me'
+  const getMyCommission = (row: any) => {
+    if (row.city === "Dindigul") return Number(row.commission_me) || 0;
+    return Number(row.amount) || 0;
+  };
+
+  // Total commission across all records
+  const totalMyCommission = (allCommissions || []).reduce((sum, row) => sum + getMyCommission(row), 0);
+
+  // Summary by city
+  const summaryByCity = (allCommissions || []).reduce<Record<string, number>>((acc, row) => {
+    acc[row.city] = (acc[row.city] || 0) + getMyCommission(row);
+    return acc;
+  }, {});
+
   return (
     <Card>
       <CardHeader>
@@ -1181,8 +1197,12 @@ function CommissionTab() {
             <CardTitle>Commission Tracker</CardTitle>
             <CardDescription>Select a date and enter amounts for each location</CardDescription>
           </div>
-          <div className="flex gap-2">
-            <Button variant={showHistory ? "default" : "outline"} onClick={() => setShowHistory(!showHistory)}>
+          <div className="flex gap-2 flex-wrap">
+            <Button variant={showSummary ? "default" : "outline"} onClick={() => { setShowSummary(!showSummary); setShowHistory(false); }}>
+              <TrendingUp className="h-4 w-4 mr-2" />
+              {showSummary ? "Hide Summary" : "Summary"}
+            </Button>
+            <Button variant={showHistory ? "default" : "outline"} onClick={() => { setShowHistory(!showHistory); setShowSummary(false); }}>
               <History className="h-4 w-4 mr-2" />
               {showHistory ? "Hide History" : "History"}
             </Button>
@@ -1206,7 +1226,49 @@ function CommissionTab() {
         </div>
       </CardHeader>
       <CardContent className="space-y-6">
-        {showHistory ? (
+        {/* Current day "My Commission" total */}
+        <div className="rounded-lg bg-primary/10 p-4 flex items-center justify-between">
+          <div>
+            <p className="text-sm text-muted-foreground">My Commission Today</p>
+            <p className="text-2xl font-bold text-primary">
+              ₹{(
+                simpleCities.reduce((s, c) => s + (parseFloat(values[c.key]) || 0), 0) + dindigulMyCommission
+              ).toLocaleString()}
+            </p>
+          </div>
+          <div>
+            <p className="text-sm text-muted-foreground">All-Time Total</p>
+            <p className="text-2xl font-bold text-primary">₹{totalMyCommission.toLocaleString()}</p>
+          </div>
+        </div>
+
+        {showSummary ? (
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold">Commission Summary</h3>
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>City</TableHead>
+                    <TableHead className="text-right">Total Earned (My Commission)</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {Object.entries(summaryByCity).map(([city, total]) => (
+                    <TableRow key={city}>
+                      <TableCell className="font-medium">{city}</TableCell>
+                      <TableCell className="text-right">₹{total.toLocaleString()}</TableCell>
+                    </TableRow>
+                  ))}
+                  <TableRow className="border-t-2 font-bold">
+                    <TableCell>Grand Total</TableCell>
+                    <TableCell className="text-right text-primary">₹{totalMyCommission.toLocaleString()}</TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </div>
+          </div>
+        ) : showHistory ? (
           <div className="space-y-4">
             <h3 className="text-lg font-semibold">Commission History</h3>
             {historyDates.length === 0 ? (
@@ -1220,27 +1282,35 @@ function CommissionTab() {
                       <TableHead>City</TableHead>
                       <TableHead className="text-right">Amount</TableHead>
                       <TableHead className="text-right">Total Amt</TableHead>
-                      <TableHead className="text-right">My Commission</TableHead>
+                      <TableHead className="text-right font-bold text-primary">My Commission</TableHead>
                       <TableHead className="text-right">Their Commission</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {historyDates.map((date) =>
-                      historyByDate[date].map((row: any, idx: number) => (
+                    {historyDates.map((date) => {
+                      const rows = historyByDate[date];
+                      const dateTotal = rows.reduce((s: number, r: any) => s + getMyCommission(r), 0);
+                      return rows.map((row: any, idx: number) => (
                         <TableRow key={row.id}>
                           {idx === 0 && (
-                            <TableCell rowSpan={historyByDate[date].length} className="font-medium align-top">
+                            <TableCell rowSpan={rows.length + 1} className="font-medium align-top">
                               {format(new Date(date + "T00:00:00"), "dd MMM yyyy")}
                             </TableCell>
                           )}
                           <TableCell>{row.city}</TableCell>
                           <TableCell className="text-right">{Number(row.amount) > 0 ? `₹${Number(row.amount).toLocaleString()}` : "—"}</TableCell>
                           <TableCell className="text-right">{Number(row.total_amount) > 0 ? `₹${Number(row.total_amount).toLocaleString()}` : "—"}</TableCell>
-                          <TableCell className="text-right">{Number(row.commission_me) > 0 ? `₹${Number(row.commission_me).toLocaleString()}` : "—"}</TableCell>
+                          <TableCell className="text-right font-semibold text-primary">₹{getMyCommission(row).toLocaleString()}</TableCell>
                           <TableCell className="text-right">{Number(row.commission_them) > 0 ? `₹${Number(row.commission_them).toLocaleString()}` : "—"}</TableCell>
                         </TableRow>
-                      ))
-                    )}
+                      )).concat(
+                        <TableRow key={date + "-total"} className="bg-muted/50">
+                          <TableCell colSpan={3} className="text-right font-semibold">Day Total →</TableCell>
+                          <TableCell className="text-right font-bold text-primary">₹{dateTotal.toLocaleString()}</TableCell>
+                          <TableCell />
+                        </TableRow>
+                      );
+                    })}
                   </TableBody>
                 </Table>
               </div>
