@@ -1058,3 +1058,87 @@ function AnalyticsTab() {
 function EmptyState({ text = "Not enough data yet." }: { text?: string }) {
   return <div className="h-full flex items-center justify-center text-sm text-muted-foreground">{text}</div>;
 }
+
+// ---------- Commission Tab ----------
+function CommissionTab() {
+  const [values, setValues] = useState<Record<string, string>>({
+    coimbatore: "",
+    pollachi: "",
+    andipatti: "",
+    dindigul_total: "",
+  });
+
+  const handleChange = (key: string, val: string) => {
+    setValues((prev) => ({ ...prev, [key]: val }));
+  };
+
+  const dindigulTotal = parseFloat(values.dindigul_total) || 0;
+  const dindigulMyCommission = dindigulTotal * 0.5;
+  const dindigulTheirCommission = dindigulTotal * 0.5;
+
+  const simpleCities = [
+    { key: "coimbatore", label: "Coimbatore" },
+    { key: "pollachi", label: "Pollachi" },
+    { key: "andipatti", label: "Andipatti" },
+  ];
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Commission Tracker</CardTitle>
+        <CardDescription>Enter amounts manually for each location</CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-6">
+        {/* Simple cities */}
+        <div className="space-y-4">
+          {simpleCities.map((city) => (
+            <div key={city.key} className="flex items-center gap-4">
+              <Label className="w-32 text-base font-semibold shrink-0">{city.label}</Label>
+              <Input
+                type="number"
+                placeholder="Enter amount"
+                className="max-w-xs"
+                value={values[city.key]}
+                onChange={(e) => handleChange(city.key, e.target.value)}
+              />
+            </div>
+          ))}
+        </div>
+
+        {/* Dindigul with 3 boxes */}
+        <div className="border-t pt-6">
+          <h3 className="text-lg font-semibold mb-4">Dindigul</h3>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="space-y-1.5">
+              <Label>Total Amount</Label>
+              <Input
+                type="number"
+                placeholder="Enter total"
+                value={values.dindigul_total}
+                onChange={(e) => handleChange("dindigul_total", e.target.value)}
+              />
+            </div>
+            <div className="space-y-1.5">
+              <Label>Commission for Me (50%)</Label>
+              <Input
+                type="number"
+                value={dindigulMyCommission.toFixed(2)}
+                readOnly
+                className="bg-muted"
+              />
+            </div>
+            <div className="space-y-1.5">
+              <Label>Commission for Them (50%)</Label>
+              <Input
+                type="number"
+                value={dindigulTheirCommission.toFixed(2)}
+                readOnly
+                className="bg-muted"
+              />
+            </div>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
