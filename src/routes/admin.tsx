@@ -77,6 +77,7 @@ function AdminPage() {
             <TabsTrigger value="marks"><BookOpen className="h-4 w-4 mr-2" />Test Marks</TabsTrigger>
             <TabsTrigger value="agency"><TrendingUp className="h-4 w-4 mr-2" />Agency Ready</TabsTrigger>
             <TabsTrigger value="analytics">Analytics</TabsTrigger>
+            <TabsTrigger value="commission"><Wallet className="h-4 w-4 mr-2" />Commission</TabsTrigger>
           </TabsList>
 
           <TabsContent value="students"><StudentsTab /></TabsContent>
@@ -84,6 +85,7 @@ function AdminPage() {
           <TabsContent value="marks"><MarksTab /></TabsContent>
           <TabsContent value="agency"><AgencyTab /></TabsContent>
           <TabsContent value="analytics"><AnalyticsTab /></TabsContent>
+          <TabsContent value="commission"><CommissionTab /></TabsContent>
         </Tabs>
       </main>
     </div>
