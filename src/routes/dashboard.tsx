@@ -72,7 +72,13 @@ function DashboardPage() {
                 Your account has been created. Please complete payment using the QR below and an admin will approve you shortly.
                 Course content will unlock after approval.
               </p>
-              <div className="flex justify-center"><PaymentQR /></div>
+              <div className="flex justify-center">
+                <PaymentQR
+                  imageSrc={upiQr}
+                  size={220}
+                  caption="Scan with any UPI app to pay. Show payment screenshot to admin to get approved."
+                />
+              </div>
             </CardContent>
           </Card>
         )}
