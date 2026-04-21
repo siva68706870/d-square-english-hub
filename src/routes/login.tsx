@@ -224,6 +224,7 @@ function LoginPage() {
                 <div className="space-y-1.5">
                   <Label htmlFor="parent_name">Parent's name</Label>
                   <Input id="parent_name" name="parent_name" required />
+                </div>
               </div>
               <div className="space-y-1.5">
                 <Label htmlFor="total_amount">Total course fee (₹)</Label>
