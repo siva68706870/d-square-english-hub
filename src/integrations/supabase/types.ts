@@ -41,6 +41,45 @@ export type Database = {
         }
         Relationships: []
       }
+      commissions: {
+        Row: {
+          amount: number | null
+          city: string
+          commission_me: number | null
+          commission_them: number | null
+          created_at: string
+          date: string
+          id: string
+          total_amount: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          amount?: number | null
+          city: string
+          commission_me?: number | null
+          commission_them?: number | null
+          created_at?: string
+          date?: string
+          id?: string
+          total_amount?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          amount?: number | null
+          city?: string
+          commission_me?: number | null
+          commission_them?: number | null
+          created_at?: string
+          date?: string
+          id?: string
+          total_amount?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       monthly_payments: {
         Row: {
           amount: number
