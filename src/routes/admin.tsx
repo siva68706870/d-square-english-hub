@@ -1265,6 +1265,7 @@ function CommissionTab() {
                       <TableHead>Date</TableHead>
                       <TableHead>City</TableHead>
                       <TableHead className="text-right font-bold text-primary">My Commission</TableHead>
+                      <TableHead className="text-right">Action</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -1280,11 +1281,43 @@ function CommissionTab() {
                           )}
                           <TableCell>{row.city}</TableCell>
                           <TableCell className="text-right font-semibold text-primary">₹{getMyCommission(row).toLocaleString()}</TableCell>
+                          <TableCell className="text-right">
+                            <AlertDialog>
+                              <AlertDialogTrigger asChild>
+                                <Button variant="ghost" size="icon" className="text-destructive hover:text-destructive">
+                                  <Trash2 className="h-4 w-4" />
+                                </Button>
+                              </AlertDialogTrigger>
+                              <AlertDialogContent>
+                                <AlertDialogHeader>
+                                  <AlertDialogTitle>Delete Commission Entry</AlertDialogTitle>
+                                  <AlertDialogDescription>
+                                    Delete {row.city} commission of ₹{getMyCommission(row).toLocaleString()} on {format(new Date(date + "T00:00:00"), "dd MMM yyyy")}?
+                                  </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                  <AlertDialogAction
+                                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                                    onClick={async () => {
+                                      const { error } = await supabase.from("commissions").delete().eq("id", row.id);
+                                      if (error) { toast.error("Failed to delete"); return; }
+                                      toast.success("Commission entry deleted");
+                                      queryClient.invalidateQueries({ queryKey: ["commissions_history"] });
+                                    }}
+                                  >
+                                    Delete
+                                  </AlertDialogAction>
+                                </AlertDialogFooter>
+                              </AlertDialogContent>
+                            </AlertDialog>
+                          </TableCell>
                         </TableRow>
                       )).concat(
                         <TableRow key={date + "-total"} className="bg-muted/50">
                           <TableCell className="text-right font-semibold">Day Total →</TableCell>
                           <TableCell className="text-right font-bold text-primary">₹{dateTotal.toLocaleString()}</TableCell>
+                          <TableCell />
                         </TableRow>
                       );
                     })}
