@@ -1164,6 +1164,7 @@ function CommissionTab() {
   });
 
   const [showHistory, setShowHistory] = useState(false);
+  const [showSummary, setShowSummary] = useState(false);
 
   // Group history by date
   const historyByDate = (allCommissions || []).reduce<Record<string, any[]>>((acc, row) => {
@@ -1172,6 +1173,21 @@ function CommissionTab() {
     return acc;
   }, {});
   const historyDates = Object.keys(historyByDate).sort((a, b) => b.localeCompare(a));
+
+  // Calculate my commission per row: for simple cities it's 'amount', for Dindigul it's 'commission_me'
+  const getMyCommission = (row: any) => {
+    if (row.city === "Dindigul") return Number(row.commission_me) || 0;
+    return Number(row.amount) || 0;
+  };
+
+  // Total commission across all records
+  const totalMyCommission = (allCommissions || []).reduce((sum, row) => sum + getMyCommission(row), 0);
+
+  // Summary by city
+  const summaryByCity = (allCommissions || []).reduce<Record<string, number>>((acc, row) => {
+    acc[row.city] = (acc[row.city] || 0) + getMyCommission(row);
+    return acc;
+  }, {});
 
   return (
     <Card>
