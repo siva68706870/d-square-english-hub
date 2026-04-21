@@ -1064,12 +1064,46 @@ function EmptyState({ text = "Not enough data yet." }: { text?: string }) {
 
 // ---------- Commission Tab ----------
 function CommissionTab() {
+  const { user } = useAuth();
+  const queryClient = useQueryClient();
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const [saving, setSaving] = useState(false);
   const [values, setValues] = useState<Record<string, string>>({
     coimbatore: "",
     pollachi: "",
     andipatti: "",
     dindigul_total: "",
   });
+
+  const dateStr = format(selectedDate, "yyyy-MM-dd");
+
+  const { data: existing } = useQuery({
+    queryKey: ["commissions", dateStr],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("commissions")
+        .select("*")
+        .eq("date", dateStr);
+      return data || [];
+    },
+  });
+
+  useEffect(() => {
+    if (existing && existing.length > 0) {
+      const vals: Record<string, string> = { coimbatore: "", pollachi: "", andipatti: "", dindigul_total: "" };
+      existing.forEach((r: any) => {
+        const city = r.city.toLowerCase();
+        if (city === "dindigul") {
+          vals.dindigul_total = r.total_amount ? String(r.total_amount) : "";
+        } else if (["coimbatore", "pollachi", "andipatti"].includes(city)) {
+          vals[city] = r.amount ? String(r.amount) : "";
+        }
+      });
+      setValues(vals);
+    } else {
+      setValues({ coimbatore: "", pollachi: "", andipatti: "", dindigul_total: "" });
+    }
+  }, [existing]);
 
   const handleChange = (key: string, val: string) => {
     setValues((prev) => ({ ...prev, [key]: val }));
@@ -1085,12 +1119,123 @@ function CommissionTab() {
     { key: "andipatti", label: "Andipatti" },
   ];
 
+  const handleSave = async () => {
+    if (!user) return;
+    setSaving(true);
+    try {
+      await supabase.from("commissions").delete().eq("date", dateStr).eq("user_id", user.id);
+      const rows: any[] = [];
+      simpleCities.forEach((city) => {
+        const amt = parseFloat(values[city.key]) || 0;
+        if (amt > 0) {
+          rows.push({ user_id: user.id, city: city.label, amount: amt, date: dateStr });
+        }
+      });
+      if (dindigulTotal > 0) {
+        rows.push({
+          user_id: user.id, city: "Dindigul", total_amount: dindigulTotal,
+          commission_me: dindigulMyCommission, commission_them: dindigulTheirCommission,
+          amount: 0, date: dateStr,
+        });
+      }
+      if (rows.length > 0) {
+        const { error } = await supabase.from("commissions").insert(rows);
+        if (error) throw error;
+      }
+      toast.success(`Commission saved for ${format(selectedDate, "dd MMM yyyy")}`);
+      queryClient.invalidateQueries({ queryKey: ["commissions", dateStr] });
+    } catch (e: any) {
+      toast.error(e.message || "Failed to save");
+    } finally {
+      setSaving(false);
+    }
+  };
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Commission Tracker</CardTitle>
-        <CardDescription>Enter amounts manually for each location</CardDescription>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div>
+            <CardTitle>Commission Tracker</CardTitle>
+            <CardDescription>Select a date and enter amounts for each location</CardDescription>
+          </div>
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button variant="outline" className="w-[200px] justify-start text-left font-normal">
+                <CalendarIcon className="mr-2 h-4 w-4" />
+                {format(selectedDate, "dd MMM yyyy")}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0" align="end">
+              <Calendar
+                mode="single"
+                selected={selectedDate}
+                onSelect={(d) => d && setSelectedDate(d)}
+                className="p-3 pointer-events-auto"
+              />
+            </PopoverContent>
+          </Popover>
+        </div>
       </CardHeader>
+      <CardContent className="space-y-6">
+        <div className="space-y-4">
+          {simpleCities.map((city) => (
+            <div key={city.key} className="flex items-center gap-4">
+              <Label className="w-32 text-base font-semibold shrink-0">{city.label}</Label>
+              <Input
+                type="number"
+                placeholder="Enter amount"
+                className="max-w-xs"
+                value={values[city.key]}
+                onChange={(e) => handleChange(city.key, e.target.value)}
+              />
+            </div>
+          ))}
+        </div>
+
+        <div className="border-t pt-6">
+          <h3 className="text-lg font-semibold mb-4">Dindigul</h3>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="space-y-1.5">
+              <Label>Total Amount</Label>
+              <Input
+                type="number"
+                placeholder="Enter total"
+                value={values.dindigul_total}
+                onChange={(e) => handleChange("dindigul_total", e.target.value)}
+              />
+            </div>
+            <div className="space-y-1.5">
+              <Label>Commission for Me (50%)</Label>
+              <Input
+                type="number"
+                value={dindigulMyCommission.toFixed(2)}
+                readOnly
+                className="bg-muted"
+              />
+            </div>
+            <div className="space-y-1.5">
+              <Label>Commission for Them (50%)</Label>
+              <Input
+                type="number"
+                value={dindigulTheirCommission.toFixed(2)}
+                readOnly
+                className="bg-muted"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="border-t pt-4 flex justify-end">
+          <Button onClick={handleSave} disabled={saving}>
+            {saving ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Save className="h-4 w-4 mr-2" />}
+            Save for {format(selectedDate, "dd MMM yyyy")}
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
       <CardContent className="space-y-6">
         {/* Simple cities */}
         <div className="space-y-4">
