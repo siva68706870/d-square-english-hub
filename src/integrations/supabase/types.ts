@@ -125,6 +125,7 @@ export type Database = {
           payment_plan: Database["public"]["Enums"]["payment_plan"] | null
           payment_status: Database["public"]["Enums"]["payment_status"]
           status: Database["public"]["Enums"]["approval_status"]
+          total_amount: number
           updated_at: string
           user_id: string
         }
@@ -139,6 +140,7 @@ export type Database = {
           payment_plan?: Database["public"]["Enums"]["payment_plan"] | null
           payment_status?: Database["public"]["Enums"]["payment_status"]
           status?: Database["public"]["Enums"]["approval_status"]
+          total_amount?: number
           updated_at?: string
           user_id: string
         }
@@ -153,6 +155,7 @@ export type Database = {
           payment_plan?: Database["public"]["Enums"]["payment_plan"] | null
           payment_status?: Database["public"]["Enums"]["payment_status"]
           status?: Database["public"]["Enums"]["approval_status"]
+          total_amount?: number
           updated_at?: string
           user_id?: string
         }
