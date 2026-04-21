@@ -1236,7 +1236,7 @@ function CommissionTab() {
     </Card>
   );
 }
-              <Input
+
                 type="number"
                 placeholder="Enter amount"
                 className="max-w-xs"
