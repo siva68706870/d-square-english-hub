@@ -38,14 +38,14 @@ import { format } from "date-fns";
 
 type Profile = {
   id: string; user_id: string; full_name: string; email: string;
-  course: "IELTS" | "English Communication" | null; mobile_number: string | null;
+  course: "IELTS" | "English Communication" | "AI App Development & Digital Marketing" | null; mobile_number: string | null;
   parent_name: string | null; status: "pending" | "approved" | "rejected"; created_at: string;
   payment_plan: "monthly" | "full" | null;
   payment_status: "paid" | "not_paid";
 };
 type Attendance = { id: string; student_id: string; date: string; status: "present" | "absent" | "late" };
 type Mark = { id: string; student_id: string; test_name: string; test_date: string; score: number; max_score: number; test_id: string | null };
-type Test = { id: string; title: string; course: "IELTS" | "English Communication" | null; max_score: number; test_date: string };
+type Test = { id: string; title: string; course: "IELTS" | "English Communication" | "AI App Development & Digital Marketing" | null; max_score: number; test_date: string };
 type MonthlyPayment = { id: string; student_id: string; month: string; amount: number; status: "paid" | "not_paid"; notes: string | null };
 
 export const Route = createFileRoute("/admin")({
@@ -152,7 +152,7 @@ function StudentsTab() {
   const { data: students, isLoading } = useStudents();
   const [editing, setEditing] = useState<Profile | null>(null);
   const [paymentsFor, setPaymentsFor] = useState<Profile | null>(null);
-  const [courseFilter, setCourseFilter] = useState<"all" | "IELTS" | "English Communication">("all");
+  const [courseFilter, setCourseFilter] = useState<"all" | "IELTS" | "English Communication" | "AI App Development & Digital Marketing">("all");
 
   const togglePaid = async (s: Profile) => {
     const next: Profile["payment_status"] = s.payment_status === "paid" ? "not_paid" : "paid";
@@ -198,6 +198,7 @@ function StudentsTab() {
   const filtered = (students ?? []).filter((s) => courseFilter === "all" || s.course === courseFilter);
   const ieltsCount = (students ?? []).filter((s) => s.course === "IELTS").length;
   const ecCount = (students ?? []).filter((s) => s.course === "English Communication").length;
+  const aiCount = (students ?? []).filter((s) => s.course === "AI App Development & Digital Marketing").length;
 
   return (
     <Card>
@@ -206,7 +207,7 @@ function StudentsTab() {
           <div>
             <CardTitle>Members</CardTitle>
             <CardDescription>
-              {students?.length ?? 0} total · {ieltsCount} IELTS · {ecCount} English Communication
+              {students?.length ?? 0} total · {ieltsCount} IELTS · {ecCount} English Comm. · {aiCount} AI & DM
             </CardDescription>
           </div>
           <Tabs value={courseFilter} onValueChange={(v) => setCourseFilter(v as typeof courseFilter)}>
@@ -214,6 +215,7 @@ function StudentsTab() {
               <TabsTrigger value="all">All</TabsTrigger>
               <TabsTrigger value="IELTS">IELTS</TabsTrigger>
               <TabsTrigger value="English Communication">English Comm.</TabsTrigger>
+              <TabsTrigger value="AI App Development & Digital Marketing">AI & DM</TabsTrigger>
             </TabsList>
           </Tabs>
         </div>
@@ -342,6 +344,7 @@ function StudentsTab() {
                   <SelectContent>
                     <SelectItem value="IELTS">IELTS</SelectItem>
                     <SelectItem value="English Communication">English Communication</SelectItem>
+                    <SelectItem value="AI App Development & Digital Marketing">AI App Development & Digital Marketing</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
