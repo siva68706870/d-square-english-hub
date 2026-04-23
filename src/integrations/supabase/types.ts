@@ -278,6 +278,7 @@ export type Database = {
         | "English Communication"
         | "AI App Development"
         | "Digital Marketing"
+        | "AI App Development & Digital Marketing"
       payment_plan: "monthly" | "full"
       payment_status: "paid" | "not_paid"
     }
@@ -415,6 +416,7 @@ export const Constants = {
         "English Communication",
         "AI App Development",
         "Digital Marketing",
+        "AI App Development & Digital Marketing",
       ],
       payment_plan: ["monthly", "full"],
       payment_status: ["paid", "not_paid"],

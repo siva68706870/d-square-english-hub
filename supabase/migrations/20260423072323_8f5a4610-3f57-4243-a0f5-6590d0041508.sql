@@ -1,0 +1,1 @@
+ALTER TYPE public.course_type ADD VALUE IF NOT EXISTS 'AI App Development & Digital Marketing';
