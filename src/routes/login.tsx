@@ -28,7 +28,7 @@ const signupSchema = z.object({
   full_name: z.string().trim().min(2, "Name is too short").max(100),
   email: z.string().trim().email("Enter a valid email").max(255),
   password: z.string().min(6, "Min 6 characters").max(72),
-  course: z.enum(["IELTS", "English Communication"]),
+  course: z.enum(["IELTS", "English Communication", "AI App Development", "Digital Marketing"]),
   mobile_number: z.string().trim().min(7, "Enter a valid mobile").max(20),
   parent_name: z.string().trim().min(2).max(100),
   payment_plan: z.enum(["monthly", "full"], { required_error: "Choose a payment plan" }),
@@ -213,6 +213,8 @@ function LoginPage() {
                   <SelectContent>
                     <SelectItem value="IELTS">IELTS</SelectItem>
                     <SelectItem value="English Communication">English Communication</SelectItem>
+                    <SelectItem value="AI App Development">AI App Development</SelectItem>
+                    <SelectItem value="Digital Marketing">Digital Marketing</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

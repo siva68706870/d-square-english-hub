@@ -273,7 +273,11 @@ export type Database = {
       app_role: "admin" | "student"
       approval_status: "pending" | "approved" | "rejected"
       attendance_status: "present" | "absent" | "late"
-      course_type: "IELTS" | "English Communication"
+      course_type:
+        | "IELTS"
+        | "English Communication"
+        | "AI App Development"
+        | "Digital Marketing"
       payment_plan: "monthly" | "full"
       payment_status: "paid" | "not_paid"
     }
@@ -406,7 +410,12 @@ export const Constants = {
       app_role: ["admin", "student"],
       approval_status: ["pending", "approved", "rejected"],
       attendance_status: ["present", "absent", "late"],
-      course_type: ["IELTS", "English Communication"],
+      course_type: [
+        "IELTS",
+        "English Communication",
+        "AI App Development",
+        "Digital Marketing",
+      ],
       payment_plan: ["monthly", "full"],
       payment_status: ["paid", "not_paid"],
     },
