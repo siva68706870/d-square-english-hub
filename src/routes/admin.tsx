@@ -543,7 +543,7 @@ function AttendanceTab() {
   const { data: students } = useStudents();
   const { data: attendance } = useAttendance();
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
-  const [courseFilter, setCourseFilter] = useState<"all" | "IELTS" | "English Communication">("all");
+  const [courseFilter, setCourseFilter] = useState<"all" | "IELTS" | "English Communication" | "AI App Development & Digital Marketing">("all");
   const approved = (students ?? []).filter((s) => s.status === "approved" && (courseFilter === "all" || s.course === courseFilter));
 
   const setStatus = async (studentId: string, status: Attendance["status"]) => {
@@ -572,6 +572,7 @@ function AttendanceTab() {
                 <TabsTrigger value="all">All</TabsTrigger>
                 <TabsTrigger value="IELTS">IELTS</TabsTrigger>
                 <TabsTrigger value="English Communication">English Comm.</TabsTrigger>
+                <TabsTrigger value="AI App Development & Digital Marketing">AI & DM</TabsTrigger>
               </TabsList>
             </Tabs>
             <div className="flex items-center gap-2">
@@ -709,6 +710,7 @@ function MarksTab() {
                 <SelectContent>
                   <SelectItem value="IELTS">IELTS</SelectItem>
                   <SelectItem value="English Communication">English Communication</SelectItem>
+                  <SelectItem value="AI App Development & Digital Marketing">AI App Dev & Digital Marketing</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -853,7 +855,7 @@ function AgencyTab() {
   const { data: students } = useStudents();
   const { data: attendance } = useAttendance();
   const { data: marks } = useMarks();
-  const [courseFilter, setCourseFilter] = useState<"all" | "IELTS" | "English Communication">("all");
+  const [courseFilter, setCourseFilter] = useState<"all" | "IELTS" | "English Communication" | "AI App Development & Digital Marketing">("all");
 
   const rows = (students ?? [])
     .filter((s) => s.status === "approved" && (courseFilter === "all" || s.course === courseFilter))
@@ -890,6 +892,7 @@ function AgencyTab() {
               <TabsTrigger value="all">All</TabsTrigger>
               <TabsTrigger value="IELTS">IELTS</TabsTrigger>
               <TabsTrigger value="English Communication">English Comm.</TabsTrigger>
+              <TabsTrigger value="AI App Development & Digital Marketing">AI & DM</TabsTrigger>
             </TabsList>
           </Tabs>
         </div>
@@ -944,7 +947,7 @@ function AnalyticsTab() {
   const { data: attendance } = useAttendance();
   const { data: marks } = useMarks();
   const { data: tests } = useTests();
-  const [courseFilter, setCourseFilter] = useState<"all" | "IELTS" | "English Communication">("all");
+  const [courseFilter, setCourseFilter] = useState<"all" | "IELTS" | "English Communication" | "AI App Development & Digital Marketing">("all");
   const approved = (students ?? []).filter((s) => s.status === "approved" && (courseFilter === "all" || s.course === courseFilter));
   const [studentId, setStudentId] = useState<string>("");
   const [metric, setMetric] = useState<CompareMetric>("marks");
@@ -987,6 +990,7 @@ function AnalyticsTab() {
                   <SelectItem value="all">All courses</SelectItem>
                   <SelectItem value="IELTS">IELTS</SelectItem>
                   <SelectItem value="English Communication">English Communication</SelectItem>
+                  <SelectItem value="AI App Development & Digital Marketing">AI App Dev & Digital Marketing</SelectItem>
                 </SelectContent>
               </Select>
               <Select value={metric} onValueChange={(v) => setMetric(v as CompareMetric)}>
