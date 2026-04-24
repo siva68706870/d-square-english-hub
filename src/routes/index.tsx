@@ -80,6 +80,35 @@ function Home() {
           </div>
         </section>
 
+        {/* Photo Showcase */}
+        <section className="container mx-auto px-4 pt-14">
+          <div className="relative mx-auto max-w-3xl overflow-hidden rounded-3xl border border-border bg-card shadow-elegant aspect-square md:aspect-[16/10]">
+            {galleryImages.map((src, i) => (
+              <img
+                key={i}
+                src={src}
+                alt={`D Square English Hub students ${i + 1}`}
+                loading={i === 0 ? "eager" : "lazy"}
+                className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ease-in-out ${
+                  i === activeSlide ? "opacity-100" : "opacity-0"
+                }`}
+              />
+            ))}
+            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+              {galleryImages.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setActiveSlide(i)}
+                  aria-label={`Go to slide ${i + 1}`}
+                  className={`h-2 rounded-full transition-all ${
+                    i === activeSlide ? "w-6 bg-gold" : "w-2 bg-primary-foreground/60"
+                  }`}
+                />
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* Stats */}
         <section className="container mx-auto px-4 py-14">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
