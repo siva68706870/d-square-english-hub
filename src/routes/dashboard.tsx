@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Loader2, CheckCircle2, Clock, BookOpen, GraduationCap, IndianRupee } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { useRealtimeInvalidate } from "@/hooks/useRealtimeInvalidate";
 import { useQuery } from "@tanstack/react-query";
 import upiQr from "@/assets/upi-qr.png";
 
@@ -23,6 +24,14 @@ function DashboardPage() {
     if (!loading && !user) router.navigate({ to: "/login" });
     if (!loading && isAdmin) router.navigate({ to: "/admin" });
   }, [loading, user, isAdmin, router]);
+
+  // Live updates: refresh stats automatically when admin enters attendance/marks/payments
+  useRealtimeInvalidate([
+    { table: "attendance", queryKeys: [["student-stats", user?.id]] },
+    { table: "test_marks", queryKeys: [["student-stats", user?.id]] },
+    { table: "monthly_payments", queryKeys: [["student-stats", user?.id]] },
+    { table: "profiles", queryKeys: [["student-stats", user?.id]] },
+  ]);
 
   const { data: stats } = useQuery({
     queryKey: ["student-stats", user?.id],

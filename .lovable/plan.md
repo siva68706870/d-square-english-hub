@@ -1,32 +1,45 @@
+# Live updates in Admin Console (no manual refresh)
 
+## What's happening today
+The admin console already uses TanStack Query and invalidates the cache after admin's *own* mutations. The reason you have to refresh is that when **someone else** changes data — most importantly when a new student submits the admission form, or a payment row is added in another tab/device — your open admin window has no signal that the database changed.
 
-## The problem
+## The fix
+Enable **Supabase Realtime** on the relevant tables and subscribe from the admin page. Whenever a row is inserted/updated/deleted, we invalidate the matching TanStack Query key, which triggers an immediate refetch — your UI updates within ~1 second, no refresh needed.
 
-The admin email `Preciousarun@gmail.com` has never been registered. The trigger that assigns admin role only runs when a *new* user signs up with that email — it doesn't retroactively create the account. So login fails with "Invalid login credentials" because the user simply doesn't exist.
+## Step 1 — Database migration
+Add the affected tables to the `supabase_realtime` publication and set `REPLICA IDENTITY FULL` (so we get full row data on updates/deletes):
 
-The old admin (`arunkumar@dsquare.local` / `Arun2708`) does exist and still works.
+- `profiles` (new admissions, edits, status changes)
+- `monthly_payments`
+- `attendance`
+- `test_marks`
+- `tests`
+- `commissions`
 
-## Two ways to fix — pick one
+## Step 2 — Realtime subscription hook
+Create `src/hooks/useRealtimeInvalidate.ts`. Given a table name and a query key, it:
+1. Subscribes to all `postgres_changes` on that table
+2. On any event, calls `queryClient.invalidateQueries({ queryKey })`
+3. Cleans up the channel on unmount
 
-**Option A — Just sign up Preciousarun@gmail.com via the Admission tab (no code needed)**
-1. Go to the Admission tab on the login page.
-2. Sign up with email `Preciousarun@gmail.com` and any password you want (the trigger will auto-assign admin role + auto-approve because the email matches the admin list).
-3. Fill the other required fields with anything (full name "Arun Kumar", course IELTS, mobile, parent name — they're required by the form but don't matter for an admin).
-4. Sign in with that email + the password you just chose.
+## Step 3 — Wire it into the admin tabs
+In `src/routes/admin.tsx`, call the hook once per tab (or once at the top of `AdminPage`):
+- `profiles` → `["students"]`
+- `monthly_payments` → `["monthly_payments"]` (invalidate the parent key so all student-scoped variants refetch)
+- `attendance` → `["attendance"]`
+- `test_marks` → `["marks"]`
+- `tests` → `["tests"]`
+- `commissions` → `["commissions_history"]` and `["commissions", dateStr]`
 
-This is fastest and needs no migration.
+Also wire it into `src/routes/dashboard.tsx` so a student sees their own marks/attendance/payments update live when the admin enters them.
 
-**Option B — Seed Preciousarun@gmail.com directly into the database via migration**
+## Result
+- New student signs up via admission → appears in your Students tab automatically
+- You mark a payment / attendance / mark on one device → other open tabs and the student's dashboard update on their own
+- No page refresh needed anywhere
 
-Create a one-time SQL migration that:
-1. Inserts a new auth user with email `Preciousarun@gmail.com`, password `Arun2708`, email pre-confirmed.
-2. The existing `handle_new_user` trigger fires automatically and creates the profile + admin role.
-
-After approval I'll run this migration. Result: you can immediately log in with `Preciousarun@gmail.com` / `Arun2708` without manually signing up.
-
-## My recommendation
-
-**Option B** — since you specifically want those exact credentials. Option A would still work but you'd have to choose a different password during signup (and also fill placeholder fields).
-
-Tell me **A** or **B** and I'll proceed.
-
+## Files touched
+- New: `supabase/migrations/<timestamp>_enable_realtime.sql`
+- New: `src/hooks/useRealtimeInvalidate.ts`
+- Edit: `src/routes/admin.tsx` (add hook calls)
+- Edit: `src/routes/dashboard.tsx` (add hook calls for the student view)
