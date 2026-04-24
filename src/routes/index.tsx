@@ -3,6 +3,13 @@ import { AppHeader } from "@/components/AppHeader";
 import { Button } from "@/components/ui/button";
 import { GraduationCap, Trophy, Users, BookOpen, ArrowRight, Sparkles } from "lucide-react";
 import { useAuth } from "@/auth/AuthProvider";
+import { useEffect, useState } from "react";
+import gallery1 from "@/assets/gallery-1.jpg";
+import gallery2 from "@/assets/gallery-2.jpg";
+import gallery3 from "@/assets/gallery-3.jpg";
+import gallery4 from "@/assets/gallery-4.jpg";
+
+const galleryImages = [gallery1, gallery2, gallery3, gallery4];
 
 export const Route = createFileRoute("/")({
   component: Home,
@@ -10,6 +17,14 @@ export const Route = createFileRoute("/")({
 
 function Home() {
   const { user, isAdmin } = useAuth();
+  const [activeSlide, setActiveSlide] = useState(0);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setActiveSlide((s) => (s + 1) % galleryImages.length);
+    }, 2000);
+    return () => clearInterval(id);
+  }, []);
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -61,6 +76,35 @@ function Home() {
                   </>
                 )}
               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Photo Showcase */}
+        <section className="container mx-auto px-4 pt-14">
+          <div className="relative mx-auto max-w-3xl overflow-hidden rounded-3xl border border-border bg-card shadow-elegant aspect-square md:aspect-[16/10]">
+            {galleryImages.map((src, i) => (
+              <img
+                key={i}
+                src={src}
+                alt={`D Square English Hub students ${i + 1}`}
+                loading={i === 0 ? "eager" : "lazy"}
+                className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ease-in-out ${
+                  i === activeSlide ? "opacity-100" : "opacity-0"
+                }`}
+              />
+            ))}
+            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+              {galleryImages.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setActiveSlide(i)}
+                  aria-label={`Go to slide ${i + 1}`}
+                  className={`h-2 rounded-full transition-all ${
+                    i === activeSlide ? "w-6 bg-gold" : "w-2 bg-primary-foreground/60"
+                  }`}
+                />
+              ))}
             </div>
           </div>
         </section>
