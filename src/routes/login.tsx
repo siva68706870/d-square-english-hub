@@ -124,7 +124,7 @@ function LoginPage() {
           <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gold/20 backdrop-blur">
             <GraduationCap className="h-5 w-5 text-gold" />
           </div>
-          <span className="font-display text-xl font-bold">D<span className="text-gold">Square</span> English Hub</span>
+          <span className="font-display text-xl font-bold">D <span className="text-gold">Square</span> English Hub</span>
         </Link>
         <div className="relative">
           <h2 className="font-display text-5xl font-bold text-primary-foreground leading-tight">
@@ -147,7 +147,7 @@ function LoginPage() {
               <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-hero">
                 <GraduationCap className="h-5 w-5 text-gold" />
               </div>
-              <span className="font-display text-xl font-bold">D<span className="text-gold">Square</span> English Hub</span>
+              <span className="font-display text-xl font-bold">D <span className="text-gold">Square</span> English Hub</span>
             </Link>
           </div>
 

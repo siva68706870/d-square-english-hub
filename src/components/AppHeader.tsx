@@ -21,10 +21,7 @@ export function AppHeader() {
           </div>
           <div className="leading-tight">
             <div className="font-display text-lg font-bold tracking-tight">
-              D<span className="text-gold">Square</span> English Hub
-            </div>
-            <div className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
-              IELTS · Communication
+              D <span className="text-gold">Square</span> English Hub
             </div>
           </div>
         </Link>
