@@ -3,6 +3,13 @@ import { AppHeader } from "@/components/AppHeader";
 import { Button } from "@/components/ui/button";
 import { GraduationCap, Trophy, Users, BookOpen, ArrowRight, Sparkles } from "lucide-react";
 import { useAuth } from "@/auth/AuthProvider";
+import { useEffect, useState } from "react";
+import gallery1 from "@/assets/gallery-1.jpg";
+import gallery2 from "@/assets/gallery-2.jpg";
+import gallery3 from "@/assets/gallery-3.jpg";
+import gallery4 from "@/assets/gallery-4.jpg";
+
+const galleryImages = [gallery1, gallery2, gallery3, gallery4];
 
 export const Route = createFileRoute("/")({
   component: Home,
@@ -10,6 +17,14 @@ export const Route = createFileRoute("/")({
 
 function Home() {
   const { user, isAdmin } = useAuth();
+  const [activeSlide, setActiveSlide] = useState(0);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setActiveSlide((s) => (s + 1) % galleryImages.length);
+    }, 2000);
+    return () => clearInterval(id);
+  }, []);
 
   return (
     <div className="min-h-screen flex flex-col">
