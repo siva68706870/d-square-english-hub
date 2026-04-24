@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Loader2, CheckCircle2, Clock, BookOpen, GraduationCap, IndianRupee } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { useRealtimeInvalidate } from "@/hooks/useRealtimeInvalidate";
 import { useQuery } from "@tanstack/react-query";
 import upiQr from "@/assets/upi-qr.png";
 
