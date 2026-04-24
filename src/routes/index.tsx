@@ -153,7 +153,7 @@ function Home() {
                   Ready to begin?
                 </h2>
                 <p className="mt-2 text-primary-foreground/80 max-w-md">
-                  Join D² and get a learning plan crafted for your goals — IELTS or career English.
+                  Join D Square and get a learning plan crafted for your goals — IELTS or career English.
                 </p>
               </div>
               {!user && (
