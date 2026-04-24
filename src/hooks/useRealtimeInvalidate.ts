@@ -21,8 +21,7 @@ export function useRealtimeInvalidate(subscriptions: Subscription[]) {
     );
 
     for (const sub of subscriptions) {
-      channel.on(
-        // @ts-expect-error - postgres_changes typing is permissive
+      (channel as unknown as { on: (...args: unknown[]) => unknown }).on(
         "postgres_changes",
         { event: "*", schema: "public", table: sub.table },
         () => {
