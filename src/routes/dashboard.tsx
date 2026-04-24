@@ -25,6 +25,14 @@ function DashboardPage() {
     if (!loading && isAdmin) router.navigate({ to: "/admin" });
   }, [loading, user, isAdmin, router]);
 
+  // Live updates: refresh stats automatically when admin enters attendance/marks/payments
+  useRealtimeInvalidate([
+    { table: "attendance", queryKeys: [["student-stats", user?.id]] },
+    { table: "test_marks", queryKeys: [["student-stats", user?.id]] },
+    { table: "monthly_payments", queryKeys: [["student-stats", user?.id]] },
+    { table: "profiles", queryKeys: [["student-stats", user?.id]] },
+  ]);
+
   const { data: stats } = useQuery({
     queryKey: ["student-stats", user?.id],
     enabled: !!user?.id && profile?.status === "approved",
