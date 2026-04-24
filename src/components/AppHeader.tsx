@@ -21,7 +21,8 @@ export function AppHeader() {
           </div>
           <div className="leading-tight">
             <div className="font-display text-lg font-bold tracking-tight">
-              D <span className="text-gold">Square</span> English Hub
+              <span className="block sm:inline">D <span className="text-gold">Square</span></span>{" "}
+              <span className="block sm:inline">English Hub</span>
             </div>
           </div>
         </Link>
