@@ -185,31 +185,34 @@ function Home() {
         {/* Features */}
         <section className="container mx-auto px-4 py-20">
           <div className="mb-10 text-center">
-            <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-xs text-muted-foreground">
+            <div className="inline-flex items-center gap-2 rounded-full border border-border glass px-3 py-1 text-xs text-muted-foreground">
               <Star className="h-3.5 w-3.5 text-gold" /> Programs that move the needle
             </div>
-            <h2 className="mt-4 font-display text-3xl md:text-5xl font-bold">Built for ambitious learners</h2>
+            <h2 className="mt-4 font-display text-3xl md:text-5xl font-bold">
+              Built for <span className="text-gradient-neon">ambitious</span> learners
+            </h2>
           </div>
 
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
             {[
-              { icon: GraduationCap, title: "IELTS Mastery", desc: "Band-by-band coaching with weekly mock tests and detailed feedback." },
-              { icon: BookOpen, title: "English Communication", desc: "Conversational fluency, grammar precision, and confidence on demand." },
-              { icon: Cpu, title: "AI App Development", desc: "Build with modern AI tools — from idea to a working product." },
-              { icon: Megaphone, title: "Digital Marketing", desc: "Grow brands online with content, ads, SEO and analytics." },
+              { icon: GraduationCap, title: "IELTS Mastery", desc: "Band-by-band coaching with weekly mock tests and detailed feedback.", color: "from-neon to-primary" },
+              { icon: BookOpen, title: "English Communication", desc: "Conversational fluency, grammar precision, and confidence on demand.", color: "from-primary to-magenta" },
+              { icon: Cpu, title: "AI App Development", desc: "Build with modern AI tools — from idea to a working product.", color: "from-magenta to-gold" },
+              { icon: Megaphone, title: "Digital Marketing", desc: "Grow brands online with content, ads, SEO and analytics.", color: "from-gold to-neon" },
             ].map((f, i) => (
               <div
                 key={i}
-                className="group relative overflow-hidden rounded-2xl border border-border bg-card p-7 shadow-card transition-all duration-300 hover:shadow-elegant hover:-translate-y-2"
-                style={{ animation: `fade-in 0.6s ease-out ${i * 0.08}s both` }}
+                className="group relative overflow-hidden rounded-2xl border border-border glass p-7 shadow-card transition-all duration-500 hover:shadow-neon hover:-translate-y-2 hover:border-neon/50"
+                style={{ animation: `slide-up 0.7s cubic-bezier(0.22,1,0.36,1) ${i * 0.1}s both` }}
               >
-                <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-gold/10 blur-2xl opacity-0 group-hover:opacity-100 transition-opacity" />
-                <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-hero transition-transform group-hover:scale-110 group-hover:rotate-6">
-                  <f.icon className="h-5 w-5 text-gold" />
+                <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-neon/20 blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <div className="absolute -left-10 -bottom-10 h-32 w-32 rounded-full bg-magenta/20 blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <div className={`relative flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br ${f.color} shadow-glow transition-transform group-hover:scale-110 group-hover:rotate-6`}>
+                  <f.icon className="h-5 w-5 text-primary-foreground" />
                 </div>
-                <h3 className="mt-5 font-display text-xl font-semibold">{f.title}</h3>
-                <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{f.desc}</p>
-                <div className="mt-4 h-px w-full bg-gradient-to-r from-transparent via-gold/40 to-transparent scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-500" />
+                <h3 className="relative mt-5 font-display text-xl font-semibold">{f.title}</h3>
+                <p className="relative mt-2 text-sm text-muted-foreground leading-relaxed">{f.desc}</p>
+                <div className="relative mt-4 h-px w-full bg-gradient-to-r from-transparent via-neon to-transparent scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-700" />
               </div>
             ))}
           </div>
@@ -217,22 +220,23 @@ function Home() {
 
         {/* CTA strip */}
         <section className="container mx-auto px-4 pb-20">
-          <div className="rounded-3xl bg-hero p-10 md:p-14 shadow-elegant relative overflow-hidden">
-            <div className="absolute -right-10 -top-10 h-48 w-48 rounded-full bg-gold/20 blur-3xl animate-pulse" />
-            <div className="absolute -left-16 bottom-0 h-56 w-56 rounded-full bg-primary/40 blur-3xl" />
+          <div className="rounded-3xl bg-hero p-10 md:p-14 shadow-elegant relative overflow-hidden border border-neon/20">
+            <div className="absolute inset-0 bg-aurora opacity-20 animate-spin-slow" />
+            <div className="absolute -right-10 -top-10 h-48 w-48 rounded-full bg-neon/30 blur-3xl animate-glow-pulse" />
+            <div className="absolute -left-16 bottom-0 h-56 w-56 rounded-full bg-magenta/30 blur-3xl animate-float" />
             <div className="relative flex flex-col md:flex-row md:items-center md:justify-between gap-6">
               <div>
                 <h2 className="font-display text-3xl md:text-4xl font-bold text-primary-foreground">
-                  Ready to begin?
+                  Ready to <span className="text-gradient-neon">begin?</span>
                 </h2>
-                <p className="mt-2 text-primary-foreground/80 max-w-md">
+                <p className="mt-2 text-primary-foreground/85 max-w-md">
                   Join D Square and get a learning plan crafted for your goals — IELTS, career English, or AI &
                   Digital Marketing.
                 </p>
               </div>
               {!user && (
                 <Link to="/login" search={{ mode: "signup" }}>
-                  <Button size="lg" className="group bg-gold text-gold-foreground hover:bg-gold/90">
+                  <Button size="lg" className="group bg-neon-gradient text-primary-foreground hover:opacity-90 shadow-neon">
                     Create your account{" "}
                     <Users className="ml-2 h-4 w-4 transition-transform group-hover:scale-110" />
                   </Button>
