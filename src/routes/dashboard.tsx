@@ -163,7 +163,8 @@ function DashboardPage() {
 
 function StatCard({ label, value, sub, icon: Icon }: { label: string; value: string; sub: string; icon: React.ComponentType<{ className?: string }> }) {
   return (
-    <Card>
+    <Card className="group relative overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-elegant">
+      <div className="absolute inset-x-0 -top-px h-px bg-gradient-to-r from-transparent via-gold/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
       <CardContent className="p-5">
         <div className="flex items-center justify-between">
           <div>
@@ -171,7 +172,7 @@ function StatCard({ label, value, sub, icon: Icon }: { label: string; value: str
             <div className="font-display text-3xl font-bold mt-1">{value}</div>
             <div className="text-xs text-muted-foreground mt-1">{sub}</div>
           </div>
-          <div className="h-10 w-10 rounded-lg bg-hero flex items-center justify-center">
+          <div className="h-10 w-10 rounded-lg bg-hero flex items-center justify-center transition-transform group-hover:scale-110 group-hover:rotate-3">
             <Icon className="h-5 w-5 text-gold" />
           </div>
         </div>
