@@ -271,16 +271,17 @@ function CountCard({ value, label, delay }: { value: string; label: string; dela
   return (
     <div
       ref={ref}
-      className={`group relative overflow-hidden rounded-2xl border border-border bg-card p-8 shadow-card transition-all duration-700 hover:shadow-elegant hover:-translate-y-1 ${
+      className={`group relative overflow-hidden rounded-2xl border border-border glass p-8 shadow-card transition-all duration-700 hover:shadow-neon hover:-translate-y-2 hover:border-neon/50 ${
         visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
       }`}
       style={{ transitionDelay: `${delay}ms` }}
     >
-      <div className="absolute inset-x-0 -top-px h-px bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
-      <div className="font-display text-4xl md:text-5xl font-bold bg-gradient-to-br from-gold to-warning bg-clip-text text-transparent">
+      <div className="absolute inset-x-0 -top-px h-px bg-gradient-to-r from-transparent via-neon to-transparent" />
+      <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-neon/15 blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+      <div className="relative font-display text-4xl md:text-5xl font-bold text-gradient-neon">
         {value}
       </div>
-      <p className="mt-2 text-muted-foreground text-sm">{label}</p>
+      <p className="relative mt-2 text-muted-foreground text-sm">{label}</p>
     </div>
   );
 }
