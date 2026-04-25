@@ -53,7 +53,7 @@ function DashboardPage() {
     },
   });
 
-  if (loading || !profile) {
+  if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
@@ -61,17 +61,24 @@ function DashboardPage() {
     );
   }
 
+  // Graceful fallback if the profile row hasn't synced yet
+  const safeProfile = profile ?? {
+    full_name: user?.email?.split("@")[0] ?? "Student",
+    course: null as null | string,
+    status: "pending" as const,
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       <AppHeader />
-      <main className="flex-1 container mx-auto px-4 py-10 max-w-5xl">
+      <main className="flex-1 container mx-auto px-4 py-10 max-w-5xl animate-fade-in">
         <div className="mb-8">
-          <h1 className="font-display text-4xl font-bold">Hi, {profile.full_name.split(" ")[0]} 👋</h1>
-          <p className="text-muted-foreground mt-1">{profile.course ?? "No course selected"}</p>
+          <h1 className="font-display text-4xl font-bold">Hi, {safeProfile.full_name.split(" ")[0]} 👋</h1>
+          <p className="text-muted-foreground mt-1">{safeProfile.course ?? "No course selected"}</p>
         </div>
 
-        {profile.status === "pending" && (
-          <Card className="border-warning/40 bg-warning/5 mb-8">
+        {safeProfile.status === "pending" && (
+          <Card className="border-warning/40 bg-warning/5 mb-8 animate-scale-in">
             <CardHeader>
               <div className="flex items-center gap-2">
                 <Clock className="h-5 w-5 text-warning-foreground" />
@@ -94,7 +101,7 @@ function DashboardPage() {
           </Card>
         )}
 
-        {profile.status === "rejected" && (
+        {safeProfile.status === "rejected" && (
           <Card className="border-destructive/40 bg-destructive/5 mb-8">
             <CardHeader><CardTitle>Account not approved</CardTitle></CardHeader>
             <CardContent>
@@ -103,16 +110,16 @@ function DashboardPage() {
           </Card>
         )}
 
-        {profile.status === "approved" && (
+        {safeProfile.status === "approved" && (
           <>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
               <StatCard label="Attendance" value={`${stats?.attendancePct ?? 0}%`} sub={`${stats?.present ?? 0}/${stats?.total ?? 0} sessions`} icon={CheckCircle2} />
               <StatCard label="Average Score" value={`${stats?.avgPct ?? 0}%`} sub={`${stats?.marks.length ?? 0} tests`} icon={GraduationCap} />
-              <StatCard label="Course" value={profile.course ?? "—"} sub="Enrolled" icon={BookOpen} />
+              <StatCard label="Course" value={safeProfile.course ?? "—"} sub="Enrolled" icon={BookOpen} />
               <StatCard
                 label="Fee Remaining"
-                value={`₹${Math.max(Number((profile as any).total_amount ?? 0) - (stats?.totalPaid ?? 0), 0).toLocaleString()}`}
-                sub={`Paid ₹${(stats?.totalPaid ?? 0).toLocaleString()} of ₹${Number((profile as any).total_amount ?? 0).toLocaleString()}`}
+                value={`₹${Math.max(Number((profile as any)?.total_amount ?? 0) - (stats?.totalPaid ?? 0), 0).toLocaleString()}`}
+                sub={`Paid ₹${(stats?.totalPaid ?? 0).toLocaleString()} of ₹${Number((profile as any)?.total_amount ?? 0).toLocaleString()}`}
                 icon={IndianRupee}
               />
             </div>
@@ -156,7 +163,8 @@ function DashboardPage() {
 
 function StatCard({ label, value, sub, icon: Icon }: { label: string; value: string; sub: string; icon: React.ComponentType<{ className?: string }> }) {
   return (
-    <Card>
+    <Card className="group relative overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-elegant">
+      <div className="absolute inset-x-0 -top-px h-px bg-gradient-to-r from-transparent via-gold/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
       <CardContent className="p-5">
         <div className="flex items-center justify-between">
           <div>
@@ -164,7 +172,7 @@ function StatCard({ label, value, sub, icon: Icon }: { label: string; value: str
             <div className="font-display text-3xl font-bold mt-1">{value}</div>
             <div className="text-xs text-muted-foreground mt-1">{sub}</div>
           </div>
-          <div className="h-10 w-10 rounded-lg bg-hero flex items-center justify-center">
+          <div className="h-10 w-10 rounded-lg bg-hero flex items-center justify-center transition-transform group-hover:scale-110 group-hover:rotate-3">
             <Icon className="h-5 w-5 text-gold" />
           </div>
         </div>

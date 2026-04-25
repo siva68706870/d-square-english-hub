@@ -1,45 +1,36 @@
-# Live updates in Admin Console (no manual refresh)
+## Plan
 
-## What's happening today
-The admin console already uses TanStack Query and invalidates the cache after admin's *own* mutations. The reason you have to refresh is that when **someone else** changes data — most importantly when a new student submits the admission form, or a payment row is added in another tab/device — your open admin window has no signal that the database changed.
+### 1. Fix the account refresh failure at the source
+- Add a backend migration that safely restores the user bootstrap flow so every new signup gets both a role and a profile automatically.
+- Recreate the missing database triggers for profile/timestamp handling if they are absent.
+- Backfill profile rows for existing users who currently have a role but no profile, so current admin and student accounts start working after refresh.
 
-## The fix
-Enable **Supabase Realtime** on the relevant tables and subscribe from the admin page. Whenever a row is inserted/updated/deleted, we invalidate the matching TanStack Query key, which triggers an immediate refetch — your UI updates within ~1 second, no refresh needed.
+### 2. Make auth/profile loading resilient in the app
+- Update `AuthProvider` so a missing profile does not leave the app stuck in a spinner forever.
+- Return a clear fallback state for users whose account exists but whose profile is still missing or incomplete.
+- Refresh role/profile data more reliably after sign-in and after page reload.
 
-## Step 1 — Database migration
-Add the affected tables to the `supabase_realtime` publication and set `REPLICA IDENTITY FULL` (so we get full row data on updates/deletes):
+### 3. Fix protected-page refresh behavior for both admin and students
+- Update `admin.tsx` and `dashboard.tsx` so they handle loading, missing-profile, and permission states cleanly.
+- Prevent false redirects/spinners during the brief auth restore window after refresh.
+- Keep realtime updates, but separate them from the core refresh/auth fix so the screens remain usable even before realtime fires.
 
-- `profiles` (new admissions, edits, status changes)
-- `monthly_payments`
-- `attendance`
-- `test_marks`
-- `tests`
-- `commissions`
+### 4. Upgrade the UI to feel more interactive and premium
+- Enhance the landing page hero with layered motion, animated highlights, stronger image presentation, and more engaging CTA sections.
+- Add richer hover/focus/entrance effects using the existing animation utilities and Tailwind styling patterns.
+- Improve cards, stats, and key surfaces in the public, admin, and student views with more visual depth, gradients, and motion feedback.
 
-## Step 2 — Realtime subscription hook
-Create `src/hooks/useRealtimeInvalidate.ts`. Given a table name and a query key, it:
-1. Subscribes to all `postgres_changes` on that table
-2. On any event, calls `queryClient.invalidateQueries({ queryKey })`
-3. Cleans up the channel on unmount
+### 5. Polish mobile experience and copy consistency
+- Keep the current mobile title behavior (`D Square` / `English Hub`) while improving spacing and hierarchy.
+- Refresh key text so the homepage better reflects the broader offering, including AI App Development & Digital Marketing where appropriate.
+- Preserve the uploaded gallery rotation timing while making the gallery controls feel more intentional.
 
-## Step 3 — Wire it into the admin tabs
-In `src/routes/admin.tsx`, call the hook once per tab (or once at the top of `AdminPage`):
-- `profiles` → `["students"]`
-- `monthly_payments` → `["monthly_payments"]` (invalidate the parent key so all student-scoped variants refetch)
-- `attendance` → `["attendance"]`
-- `test_marks` → `["marks"]`
-- `tests` → `["tests"]`
-- `commissions` → `["commissions_history"]` and `["commissions", dateStr]`
+## Expected result
+- Refreshing the page will no longer break admin or student accounts.
+- Existing affected users will regain access without needing to create new accounts.
+- The app will look more modern, animated, and interactive instead of plain/static.
 
-Also wire it into `src/routes/dashboard.tsx` so a student sees their own marks/attendance/payments update live when the admin enters them.
-
-## Result
-- New student signs up via admission → appears in your Students tab automatically
-- You mark a payment / attendance / mark on one device → other open tabs and the student's dashboard update on their own
-- No page refresh needed anywhere
-
-## Files touched
-- New: `supabase/migrations/<timestamp>_enable_realtime.sql`
-- New: `src/hooks/useRealtimeInvalidate.ts`
-- Edit: `src/routes/admin.tsx` (add hook calls)
-- Edit: `src/routes/dashboard.tsx` (add hook calls for the student view)
+## Technical details
+- Files likely updated: `src/auth/AuthProvider.tsx`, `src/routes/admin.tsx`, `src/routes/dashboard.tsx`, `src/routes/index.tsx`, `src/components/AppHeader.tsx`, `src/styles.css`.
+- Backend work: one new migration to restore triggers/functions and backfill missing `profiles` rows.
+- Root cause found: the backend currently has users with `user_roles` rows but no matching `profiles` rows, and the app currently treats missing profiles as a permanent loading/blocking state.
