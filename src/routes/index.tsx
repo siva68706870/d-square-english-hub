@@ -40,33 +40,35 @@ function Home() {
             setMouse({ x: (e.clientX - r.left) / r.width, y: (e.clientY - r.top) / r.height });
           }}
         >
-          <div className="absolute inset-0 bg-hero opacity-[0.97]" />
+          <div className="absolute inset-0 bg-hero opacity-90" />
           <div
             className="absolute inset-0 transition-[background] duration-300"
             style={{
-              background: `radial-gradient(600px circle at ${mouse.x * 100}% ${mouse.y * 100}%, oklch(0.78 0.13 75 / 0.25), transparent 60%)`,
+              background: `radial-gradient(700px circle at ${mouse.x * 100}% ${mouse.y * 100}%, oklch(0.82 0.18 195 / 0.35), transparent 60%)`,
             }}
           />
+          {/* Aurora orb */}
+          <div className="absolute -top-32 left-1/2 -translate-x-1/2 h-[500px] w-[500px] rounded-full bg-aurora opacity-30 blur-3xl animate-spin-slow" />
           {/* Floating orbs */}
-          <div className="absolute -top-24 -left-24 h-72 w-72 rounded-full bg-gold/20 blur-3xl animate-pulse" />
+          <div className="absolute -top-24 -left-24 h-72 w-72 rounded-full bg-magenta/30 blur-3xl animate-float" />
           <div
-            className="absolute bottom-0 right-10 h-80 w-80 rounded-full bg-primary/40 blur-3xl"
-            style={{ animation: "pulse 6s ease-in-out infinite" }}
+            className="absolute bottom-0 right-10 h-80 w-80 rounded-full bg-neon/30 blur-3xl animate-glow-pulse"
           />
+          <div className="absolute top-1/3 right-1/4 h-40 w-40 rounded-full bg-gold/20 blur-3xl animate-float" style={{ animationDelay: "1s" }} />
           {/* Animated grid overlay */}
           <div
-            className="absolute inset-0 opacity-[0.08]"
+            className="absolute inset-0 opacity-[0.12]"
             style={{
               backgroundImage:
-                "linear-gradient(oklch(0.78 0.13 75 / 0.6) 1px, transparent 1px), linear-gradient(90deg, oklch(0.78 0.13 75 / 0.6) 1px, transparent 1px)",
-              backgroundSize: "48px 48px",
+                "linear-gradient(oklch(0.82 0.18 195 / 0.5) 1px, transparent 1px), linear-gradient(90deg, oklch(0.82 0.18 195 / 0.5) 1px, transparent 1px)",
+              backgroundSize: "56px 56px",
               maskImage: "radial-gradient(ellipse at center, black, transparent 70%)",
             }}
           />
 
           <div className="container relative mx-auto px-4 py-20 md:py-28">
             <div className="max-w-3xl animate-fade-in">
-              <div className="inline-flex items-center gap-2 rounded-full border border-gold/40 bg-gold/10 px-3 py-1.5 text-xs font-medium text-gold backdrop-blur hover-scale">
+              <div className="inline-flex items-center gap-2 rounded-full border border-neon/40 glass px-3 py-1.5 text-xs font-medium text-neon backdrop-blur hover-scale shadow-glow">
                 <Sparkles className="h-3.5 w-3.5 animate-pulse" />
                 Trusted English coaching since day one
               </div>
@@ -74,12 +76,12 @@ function Home() {
               <h1 className="mt-6 font-display text-5xl md:text-7xl font-bold leading-[1.05] text-primary-foreground">
                 Speak fluently.
                 <br />
-                <span className="bg-gradient-to-r from-gold via-warning to-gold bg-clip-text text-transparent bg-[length:200%_auto] animate-[gradient_4s_linear_infinite]">
+                <span className="bg-gradient-to-r from-neon via-magenta to-gold bg-clip-text text-transparent bg-[length:200%_auto] animate-[gradient_4s_linear_infinite]">
                   Score globally.
                 </span>
               </h1>
 
-              <p className="mt-6 max-w-xl text-lg text-primary-foreground/80 leading-relaxed">
+              <p className="mt-6 max-w-xl text-lg text-primary-foreground/85 leading-relaxed">
                 D Square English Hub prepares you for IELTS, English communication, and modern AI &
                 Digital Marketing skills — with structured tests, attendance tracking, and personal mentorship.
               </p>
@@ -87,7 +89,7 @@ function Home() {
               <div className="mt-10 flex flex-wrap gap-3">
                 {user ? (
                   <Link to={isAdmin ? "/admin" : "/dashboard"}>
-                    <Button size="lg" className="group bg-gold text-gold-foreground hover:bg-gold/90 shadow-elegant">
+                    <Button size="lg" className="group bg-neon-gradient text-primary-foreground hover:opacity-90 shadow-neon">
                       Open {isAdmin ? "admin" : "dashboard"}{" "}
                       <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                     </Button>
@@ -95,7 +97,7 @@ function Home() {
                 ) : (
                   <>
                     <Link to="/login" search={{ mode: "signup" }}>
-                      <Button size="lg" className="group bg-gold text-gold-foreground hover:bg-gold/90 shadow-elegant">
+                      <Button size="lg" className="group bg-neon-gradient text-primary-foreground hover:opacity-90 shadow-neon animate-glow-pulse">
                         Enroll now{" "}
                         <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                       </Button>
@@ -104,7 +106,7 @@ function Home() {
                       <Button
                         size="lg"
                         variant="outline"
-                        className="border-primary-foreground/30 bg-transparent text-primary-foreground hover:bg-primary-foreground/10"
+                        className="border-neon/40 bg-transparent text-primary-foreground hover:bg-neon/10 hover:border-neon hover:shadow-glow"
                       >
                         Member sign in
                       </Button>
@@ -118,7 +120,7 @@ function Home() {
                 {["TEFL Certified", "IELTS · 9 Bands", "AI · Digital Marketing", "Live Mentorship"].map((c, i) => (
                   <span
                     key={c}
-                    className="rounded-full border border-primary-foreground/20 bg-primary-foreground/5 px-3 py-1 text-xs text-primary-foreground/80 backdrop-blur"
+                    className="rounded-full border border-primary-foreground/20 glass px-3 py-1 text-xs text-primary-foreground/85 backdrop-blur transition-all hover:border-neon/60 hover:text-neon hover:shadow-glow"
                     style={{ animation: `fade-in 0.6s ease-out ${i * 0.1}s both` }}
                   >
                     {c}
