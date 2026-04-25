@@ -71,14 +71,14 @@ function DashboardPage() {
   return (
     <div className="min-h-screen flex flex-col">
       <AppHeader />
-      <main className="flex-1 container mx-auto px-4 py-10 max-w-5xl">
+      <main className="flex-1 container mx-auto px-4 py-10 max-w-5xl animate-fade-in">
         <div className="mb-8">
-          <h1 className="font-display text-4xl font-bold">Hi, {profile.full_name.split(" ")[0]} 👋</h1>
-          <p className="text-muted-foreground mt-1">{profile.course ?? "No course selected"}</p>
+          <h1 className="font-display text-4xl font-bold">Hi, {safeProfile.full_name.split(" ")[0]} 👋</h1>
+          <p className="text-muted-foreground mt-1">{safeProfile.course ?? "No course selected"}</p>
         </div>
 
-        {profile.status === "pending" && (
-          <Card className="border-warning/40 bg-warning/5 mb-8">
+        {safeProfile.status === "pending" && (
+          <Card className="border-warning/40 bg-warning/5 mb-8 animate-scale-in">
             <CardHeader>
               <div className="flex items-center gap-2">
                 <Clock className="h-5 w-5 text-warning-foreground" />
@@ -101,7 +101,7 @@ function DashboardPage() {
           </Card>
         )}
 
-        {profile.status === "rejected" && (
+        {safeProfile.status === "rejected" && (
           <Card className="border-destructive/40 bg-destructive/5 mb-8">
             <CardHeader><CardTitle>Account not approved</CardTitle></CardHeader>
             <CardContent>
@@ -110,16 +110,16 @@ function DashboardPage() {
           </Card>
         )}
 
-        {profile.status === "approved" && (
+        {safeProfile.status === "approved" && (
           <>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
               <StatCard label="Attendance" value={`${stats?.attendancePct ?? 0}%`} sub={`${stats?.present ?? 0}/${stats?.total ?? 0} sessions`} icon={CheckCircle2} />
               <StatCard label="Average Score" value={`${stats?.avgPct ?? 0}%`} sub={`${stats?.marks.length ?? 0} tests`} icon={GraduationCap} />
-              <StatCard label="Course" value={profile.course ?? "—"} sub="Enrolled" icon={BookOpen} />
+              <StatCard label="Course" value={safeProfile.course ?? "—"} sub="Enrolled" icon={BookOpen} />
               <StatCard
                 label="Fee Remaining"
-                value={`₹${Math.max(Number((profile as any).total_amount ?? 0) - (stats?.totalPaid ?? 0), 0).toLocaleString()}`}
-                sub={`Paid ₹${(stats?.totalPaid ?? 0).toLocaleString()} of ₹${Number((profile as any).total_amount ?? 0).toLocaleString()}`}
+                value={`₹${Math.max(Number((profile as any)?.total_amount ?? 0) - (stats?.totalPaid ?? 0), 0).toLocaleString()}`}
+                sub={`Paid ₹${(stats?.totalPaid ?? 0).toLocaleString()} of ₹${Number((profile as any)?.total_amount ?? 0).toLocaleString()}`}
                 icon={IndianRupee}
               />
             </div>
