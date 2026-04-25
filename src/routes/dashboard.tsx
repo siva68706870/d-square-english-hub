@@ -53,13 +53,20 @@ function DashboardPage() {
     },
   });
 
-  if (loading || !profile) {
+  if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
       </div>
     );
   }
+
+  // Graceful fallback if the profile row hasn't synced yet
+  const safeProfile = profile ?? {
+    full_name: user?.email?.split("@")[0] ?? "Student",
+    course: null as null | string,
+    status: "pending" as const,
+  };
 
   return (
     <div className="min-h-screen flex flex-col">
