@@ -137,14 +137,14 @@ function Home() {
 
         {/* Photo Showcase */}
         <section className="container mx-auto px-4 pt-14">
-          <div className="relative mx-auto max-w-3xl overflow-hidden rounded-3xl border border-border bg-card shadow-elegant aspect-square md:aspect-[16/10] group">
+          <div className="relative mx-auto max-w-3xl overflow-hidden rounded-3xl border border-border bg-black shadow-elegant aspect-square md:aspect-[16/10] group">
             {galleryImages.map((src, i) => (
               <img
                 key={i}
                 src={src}
                 alt={`D Square English Hub students ${i + 1}`}
                 loading={i === 0 ? "eager" : "lazy"}
-                className={`absolute inset-0 h-full w-full object-cover transition-all duration-1000 ease-out ${
+                className={`absolute inset-0 h-full w-full object-contain transition-all duration-1000 ease-out ${
                   i === activeSlide ? "opacity-100 scale-100" : "opacity-0 scale-105"
                 }`}
               />
