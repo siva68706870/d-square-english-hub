@@ -6,7 +6,7 @@ import { PaymentQR } from "@/components/PaymentQR";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, CheckCircle2, Clock, BookOpen, GraduationCap, IndianRupee } from "lucide-react";
+import { Loader2, CheckCircle2, Clock, BookOpen, GraduationCap, IndianRupee, ScanLine, Trophy } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useRealtimeInvalidate } from "@/hooks/useRealtimeInvalidate";
 import { useQuery } from "@tanstack/react-query";
