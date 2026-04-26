@@ -71,6 +71,9 @@ function Home() {
             }}
           />
 
+          {/* Cinematic airplane animation */}
+          <AirplaneAnimation />
+
           <div className="container relative mx-auto px-4 py-20 md:py-28">
             <div className="max-w-3xl animate-fade-in">
               <div className="inline-flex items-center gap-2 rounded-full border border-neon/40 glass px-3 py-1.5 text-xs font-medium text-neon backdrop-blur hover-scale shadow-glow">
