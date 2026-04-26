@@ -80,6 +80,51 @@ export type Database = {
         }
         Relationships: []
       }
+      mock_test_attempts: {
+        Row: {
+          answers: Json
+          band_score: number
+          completed: boolean
+          created_at: string
+          id: string
+          score: number
+          student_id: string
+          test_number: number
+          test_title: string
+          time_spent_seconds: number
+          total_questions: number
+          updated_at: string
+        }
+        Insert: {
+          answers?: Json
+          band_score?: number
+          completed?: boolean
+          created_at?: string
+          id?: string
+          score?: number
+          student_id: string
+          test_number: number
+          test_title: string
+          time_spent_seconds?: number
+          total_questions?: number
+          updated_at?: string
+        }
+        Update: {
+          answers?: Json
+          band_score?: number
+          completed?: boolean
+          created_at?: string
+          id?: string
+          score?: number
+          student_id?: string
+          test_number?: number
+          test_title?: string
+          time_spent_seconds?: number
+          total_questions?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       monthly_payments: {
         Row: {
           amount: number
