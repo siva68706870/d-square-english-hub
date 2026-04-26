@@ -152,9 +152,9 @@ function Home() {
             {/* Vignette */}
             <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
             {/* Caption */}
-            <div className="absolute left-6 bottom-6 right-24 text-primary-foreground">
-              <div className="text-xs uppercase tracking-widest text-gold/90">Our students</div>
-              <div className="font-display text-2xl md:text-3xl font-bold drop-shadow">
+            <div className="absolute left-6 bottom-6 right-24 text-white">
+              <div className="text-xs uppercase tracking-widest text-white">Our students</div>
+              <div className="font-display text-2xl md:text-3xl font-bold drop-shadow text-white">
                 Real classrooms. Real progress.
               </div>
             </div>
