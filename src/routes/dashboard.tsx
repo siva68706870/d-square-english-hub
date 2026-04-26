@@ -6,7 +6,7 @@ import { PaymentQR } from "@/components/PaymentQR";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, CheckCircle2, Clock, BookOpen, GraduationCap, IndianRupee } from "lucide-react";
+import { Loader2, CheckCircle2, Clock, BookOpen, GraduationCap, IndianRupee, ScanLine, Trophy } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useRealtimeInvalidate } from "@/hooks/useRealtimeInvalidate";
 import { useQuery } from "@tanstack/react-query";
@@ -31,16 +31,18 @@ function DashboardPage() {
     { table: "test_marks", queryKeys: [["student-stats", user?.id]] },
     { table: "monthly_payments", queryKeys: [["student-stats", user?.id]] },
     { table: "profiles", queryKeys: [["student-stats", user?.id]] },
+    { table: "mock_test_attempts", queryKeys: [["student-stats", user?.id]] },
   ]);
 
   const { data: stats } = useQuery({
     queryKey: ["student-stats", user?.id],
     enabled: !!user?.id && profile?.status === "approved",
     queryFn: async () => {
-      const [att, marks, payRes] = await Promise.all([
+      const [att, marks, payRes, mockRes] = await Promise.all([
         supabase.from("attendance").select("status").eq("student_id", user!.id),
         supabase.from("test_marks").select("score, max_score, test_name, test_date").eq("student_id", user!.id).order("test_date", { ascending: false }),
         supabase.from("monthly_payments").select("amount, status").eq("student_id", user!.id),
+        supabase.from("mock_test_attempts").select("band_score, test_number").eq("student_id", user!.id),
       ]);
       const total = att.data?.length ?? 0;
       const present = att.data?.filter((a) => a.status === "present").length ?? 0;
@@ -49,7 +51,11 @@ function DashboardPage() {
         ? Math.round((marks.data.reduce((s, m) => s + (Number(m.score) / Number(m.max_score)) * 100, 0) / marks.data.length))
         : 0;
       const totalPaid = (payRes.data ?? []).filter((p) => p.status === "paid").reduce((s, p) => s + Number(p.amount || 0), 0);
-      return { attendancePct, avgPct, total, present, marks: marks.data ?? [], totalPaid };
+      const mockAttended = mockRes.data?.length ?? 0;
+      const bestBand = mockRes.data?.length
+        ? Math.max(...mockRes.data.map((m) => Number(m.band_score)))
+        : 0;
+      return { attendancePct, avgPct, total, present, marks: marks.data ?? [], totalPaid, mockAttended, bestBand };
     },
   });
 
@@ -124,6 +130,43 @@ function DashboardPage() {
               />
             </div>
 
+            {safeProfile.course === "IELTS" && (
+              <Card className="mb-8 overflow-hidden border-neon/30">
+                <div className="bg-hero p-5 flex items-center gap-3">
+                  <div className="h-10 w-10 rounded-lg bg-background/20 backdrop-blur flex items-center justify-center">
+                    <ScanLine className="h-5 w-5 text-gold" />
+                  </div>
+                  <div className="flex-1">
+                    <CardTitle className="text-primary-foreground">IELTS Mock Tests</CardTitle>
+                    <p className="text-xs text-primary-foreground/80 mt-0.5">CBT mode · Auto band scoring</p>
+                  </div>
+                  <Link to="/mocktest">
+                    <Button size="sm" className="bg-neon-gradient text-primary-foreground">
+                      Take a test
+                    </Button>
+                  </Link>
+                </div>
+                <CardContent className="p-5 grid sm:grid-cols-2 gap-4">
+                  <div className="flex items-center gap-3 rounded-lg border border-border p-3">
+                    <ScanLine className="h-6 w-6 text-neon" />
+                    <div>
+                      <div className="text-xs uppercase tracking-widest text-muted-foreground">Mock tests attended</div>
+                      <div className="font-display text-2xl font-bold">{stats?.mockAttended ?? 0}</div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3 rounded-lg border border-border p-3">
+                    <Trophy className="h-6 w-6 text-gold" />
+                    <div>
+                      <div className="text-xs uppercase tracking-widest text-muted-foreground">Best band score</div>
+                      <div className="font-display text-2xl font-bold text-gradient-neon">
+                        {stats?.bestBand ? stats.bestBand.toFixed(1) : "—"}
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
             <Card>
               <CardHeader>
                 <CardTitle>Recent test marks</CardTitle>
@@ -148,12 +191,6 @@ function DashboardPage() {
                 )}
               </CardContent>
             </Card>
-
-            <div className="mt-6 text-center">
-              <Link to="/mocktest">
-                <Button variant="outline">Open Mock Test channel</Button>
-              </Link>
-            </div>
           </>
         )}
       </main>
