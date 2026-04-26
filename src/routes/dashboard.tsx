@@ -31,16 +31,18 @@ function DashboardPage() {
     { table: "test_marks", queryKeys: [["student-stats", user?.id]] },
     { table: "monthly_payments", queryKeys: [["student-stats", user?.id]] },
     { table: "profiles", queryKeys: [["student-stats", user?.id]] },
+    { table: "mock_test_attempts", queryKeys: [["student-stats", user?.id]] },
   ]);
 
   const { data: stats } = useQuery({
     queryKey: ["student-stats", user?.id],
     enabled: !!user?.id && profile?.status === "approved",
     queryFn: async () => {
-      const [att, marks, payRes] = await Promise.all([
+      const [att, marks, payRes, mockRes] = await Promise.all([
         supabase.from("attendance").select("status").eq("student_id", user!.id),
         supabase.from("test_marks").select("score, max_score, test_name, test_date").eq("student_id", user!.id).order("test_date", { ascending: false }),
         supabase.from("monthly_payments").select("amount, status").eq("student_id", user!.id),
+        supabase.from("mock_test_attempts").select("band_score, test_number").eq("student_id", user!.id),
       ]);
       const total = att.data?.length ?? 0;
       const present = att.data?.filter((a) => a.status === "present").length ?? 0;
@@ -49,7 +51,11 @@ function DashboardPage() {
         ? Math.round((marks.data.reduce((s, m) => s + (Number(m.score) / Number(m.max_score)) * 100, 0) / marks.data.length))
         : 0;
       const totalPaid = (payRes.data ?? []).filter((p) => p.status === "paid").reduce((s, p) => s + Number(p.amount || 0), 0);
-      return { attendancePct, avgPct, total, present, marks: marks.data ?? [], totalPaid };
+      const mockAttended = mockRes.data?.length ?? 0;
+      const bestBand = mockRes.data?.length
+        ? Math.max(...mockRes.data.map((m) => Number(m.band_score)))
+        : 0;
+      return { attendancePct, avgPct, total, present, marks: marks.data ?? [], totalPaid, mockAttended, bestBand };
     },
   });
 
