@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { AppHeader } from "@/components/AppHeader";
+import { AirplaneAnimation } from "@/components/AirplaneAnimation";
 import { Button } from "@/components/ui/button";
 import { GraduationCap, Trophy, Users, BookOpen, ArrowRight, Sparkles, Cpu, Megaphone, Star } from "lucide-react";
 import { useAuth } from "@/auth/AuthProvider";
