@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
-import { Loader2, Clock, AlertCircle, ArrowLeft, ArrowRight, Send, Trophy } from "lucide-react";
+import { Loader2, Clock, AlertCircle, ArrowLeft, ArrowRight, Send, Trophy, BookOpen, ListChecks } from "lucide-react";
 import {
   getTestById,
   rawScoreToBand,
