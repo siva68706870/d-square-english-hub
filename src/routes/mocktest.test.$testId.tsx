@@ -289,26 +289,77 @@ function TestRunner() {
           ))}
         </div>
 
-        {/* Two-pane layout */}
+        {/* Mobile pager toggle (hidden on lg+) */}
+        <div className="lg:hidden mt-4 grid grid-cols-2 gap-2 rounded-md border border-border p-1">
+          <button
+            onClick={() => setMobileView("passage")}
+            className={`flex items-center justify-center gap-2 py-2 rounded text-xs font-medium transition-colors ${
+              mobileView === "passage" ? "bg-neon-gradient text-primary-foreground" : "text-muted-foreground"
+            }`}
+          >
+            <BookOpen className="h-3.5 w-3.5" /> Passage
+          </button>
+          <button
+            onClick={() => setMobileView("questions")}
+            className={`flex items-center justify-center gap-2 py-2 rounded text-xs font-medium transition-colors ${
+              mobileView === "questions" ? "bg-neon-gradient text-primary-foreground" : "text-muted-foreground"
+            }`}
+          >
+            <ListChecks className="h-3.5 w-3.5" /> Questions
+          </button>
+        </div>
+
+        {/* Split-screen layout: desktop = side-by-side, mobile = single pane */}
         <div className="grid lg:grid-cols-2 gap-6 mt-4">
-          {/* Passage */}
-          <Card className="lg:sticky lg:top-32 lg:self-start lg:max-h-[calc(100vh-10rem)] overflow-auto">
+          {/* Passage — left on desktop, page 1 on mobile */}
+          <Card
+            className={`lg:sticky lg:top-32 lg:self-start lg:max-h-[calc(100vh-10rem)] overflow-auto ${
+              mobileView === "passage" ? "block" : "hidden lg:block"
+            }`}
+          >
             <CardHeader>
-              <CardTitle className="text-base">{section.passage.title}</CardTitle>
+              <CardTitle className="text-base flex items-center gap-2">
+                <BookOpen className="h-4 w-4 text-neon" />
+                {section.passage.title}
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="prose prose-sm max-w-none text-sm leading-relaxed whitespace-pre-wrap text-foreground/90">
                 {section.passage.body}
               </div>
+              {/* Mobile-only: jump to questions */}
+              <div className="lg:hidden mt-6 pt-4 border-t border-border">
+                <Button
+                  className="w-full bg-neon-gradient text-primary-foreground"
+                  onClick={() => setMobileView("questions")}
+                >
+                  Go to Questions <ArrowRight className="h-4 w-4" />
+                </Button>
+              </div>
             </CardContent>
           </Card>
 
-          {/* Questions */}
-          <Card>
+          {/* Questions — right on desktop, page 2 on mobile */}
+          <Card className={mobileView === "questions" ? "block" : "hidden lg:block"}>
             <CardHeader>
-              <CardTitle className="text-base">Questions</CardTitle>
+              <CardTitle className="text-base flex items-center gap-2">
+                <ListChecks className="h-4 w-4 text-gold" />
+                Questions {section.questions[0].number}–{section.questions[section.questions.length - 1].number}
+              </CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
+              {/* Mobile-only: back to passage */}
+              <div className="lg:hidden">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full"
+                  onClick={() => setMobileView("passage")}
+                >
+                  <ArrowLeft className="h-4 w-4" /> Back to Passage
+                </Button>
+              </div>
+
               {section.questions.map((q) => (
                 <QuestionInput
                   key={q.number}
@@ -322,14 +373,20 @@ function TestRunner() {
                   variant="outline"
                   size="sm"
                   disabled={activeSection === 0}
-                  onClick={() => setActiveSection((s) => Math.max(0, s - 1))}
+                  onClick={() => {
+                    setActiveSection((s) => Math.max(0, s - 1));
+                    setMobileView("passage");
+                  }}
                 >
                   <ArrowLeft className="h-4 w-4" /> Previous section
                 </Button>
                 {activeSection < test.sections.length - 1 ? (
                   <Button
                     size="sm"
-                    onClick={() => setActiveSection((s) => Math.min(test.sections.length - 1, s + 1))}
+                    onClick={() => {
+                      setActiveSection((s) => Math.min(test.sections.length - 1, s + 1));
+                      setMobileView("passage");
+                    }}
                   >
                     Next section <ArrowRight className="h-4 w-4" />
                   </Button>
