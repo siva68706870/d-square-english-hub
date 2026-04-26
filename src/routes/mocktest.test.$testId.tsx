@@ -42,6 +42,7 @@ function TestRunner() {
     timeSpent: number;
   }>(null);
   const [activeSection, setActiveSection] = useState(0);
+  const [mobileView, setMobileView] = useState<"passage" | "questions">("passage");
   const startedAtRef = useRef<number>(Date.now());
 
   // Auth gate: must be logged-in approved IELTS student
