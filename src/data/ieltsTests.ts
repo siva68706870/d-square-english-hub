@@ -1025,16 +1025,15 @@ Across disciplines, resilience highlights adaptability rather than invulnerabili
   ],
 };
 
-// =============== TEST 9 ===============
-// (PDF was truncated at 50 pages — content based on the start of Test 9 from PDF.)
-const ENERGY_HEADINGS = [
-  { key: "A", label: "Economic disruption" },
-  { key: "B", label: "Storage challenges" },
-  { key: "C", label: "Long-term benefits" },
-  { key: "D", label: "Cost reduction" },
-  { key: "E", label: "Historical context" },
-  { key: "F", label: "Policy considerations" },
-  { key: "G", label: "Environmental imperative" },
+// =============== TEST 9 (extracted from PDF pages 50–55) ===============
+const LANG_HEADINGS = [
+  { key: "A", label: "Causes of decline" },
+  { key: "B", label: "Technology and revitalization" },
+  { key: "C", label: "Cultural significance" },
+  { key: "D", label: "Educational strategies" },
+  { key: "E", label: "Documentation efforts" },
+  { key: "F", label: "Limits of preservation" },
+  { key: "G", label: "Community engagement" },
 ];
 
 const TEST_9: IeltsTest = {
@@ -1057,134 +1056,134 @@ Energy storage remains a critical issue. Since renewable sources such as solar a
 Economists argue that long-term benefits include energy security, reduced health costs from pollution, and resilience against volatile fossil fuel markets.`,
       },
       questions: [
-        T(1, "Renewable energy investments are increasing.", "TRUE"),
-        T(2, "Fossil fuels were historically expensive to extract.", "FALSE"),
-        T(3, "Solar and wind are now competitive with conventional energy in some regions.", "TRUE"),
-        T(4, "Coal industries are unaffected by the energy transition.", "FALSE"),
-        T(5, "Battery technology is important for reliable renewable supply.", "TRUE"),
-        T(6, "Long-term benefits include reduced health costs.", "TRUE"),
-        T(7, "Renewables eliminate all economic disruption.", "FALSE"),
-        F(8, "Nations seek to reduce [___] emissions.", "carbon"),
-        F(9, "Fossil fuels had established [___].", "infrastructure"),
-        F(10, "New industries generate [___] in manufacturing.", "employment"),
-        F(11, "Renewable sources are often [___].", "intermittent"),
-        F(12, "Energy [___] is a long-term benefit.", "security"),
-        F(13, "The transition must be managed [___].", "equitably"),
-        M(14, "Paragraph 1", ENERGY_HEADINGS, "G"),
-        M(15, "Paragraph 2", ENERGY_HEADINGS, "D"),
-        M(16, "Paragraph 3", ENERGY_HEADINGS, "A"),
-        M(17, "Paragraph 4", ENERGY_HEADINGS, "B"),
-        M(18, "Paragraph 5", ENERGY_HEADINGS, "C"),
-        M(19, "Falling renewable costs", ENERGY_HEADINGS, "D"),
-        M(20, "Storage limitations", ENERGY_HEADINGS, "B"),
+        T(1, "Renewable energy transition is solely an environmental issue.", "FALSE"),
+        T(2, "Fossil fuels historically benefited from established infrastructure.", "TRUE"),
+        T(3, "Renewable generation costs have decreased.", "TRUE"),
+        T(4, "Coal and oil sectors are unaffected by the transition.", "FALSE"),
+        T(5, "Battery technology is important for renewable reliability.", "TRUE"),
+        T(6, "Pollution-related health costs may decline.", "TRUE"),
+        T(7, "Renewable energy eliminates all market volatility.", "FALSE"),
+        F(8, "Investments in [___] technologies have accelerated.", "low-carbon"),
+        F(9, "Renewable energy benefits from [___] of scale.", "economies"),
+        F(10, "Policymakers must manage the transition [___].", "equitably"),
+        F(11, "Solar and wind are considered [___] sources.", "intermittent"),
+        F(12, "Advances in [___] technology are essential.", "battery"),
+        F(13, "Long-term benefits include greater [___] security.", "energy"),
       ],
     },
     {
       number: 2,
       passage: {
-        title: "Education in the Digital Era",
-        body: `Digital technologies have profoundly reshaped contemporary education. Online platforms, interactive applications, and artificial intelligence systems have expanded access to learning while transforming pedagogical approaches.
+        title: "The Linguistics of Language Preservation",
+        body: `Thousands of languages are spoken worldwide, yet many face extinction within the coming century. Linguists warn that language loss represents not only the disappearance of words, but also the erosion of cultural identity and knowledge systems.
 
-The benefits are significant. Geographic barriers have diminished as students can access courses from institutions worldwide. Personalized learning algorithms adapt content to individual needs, helping learners progress at appropriate paces.
+Minority languages often decline under pressure from dominant national or global languages. Economic incentives, migration, and educational policies may encourage younger generations to adopt majority tongues.
 
-However, challenges accompany these advances. The digital divide—unequal access to technology and reliable internet—threatens to exclude disadvantaged populations. Reduced face-to-face interaction may also affect the development of social skills and collaborative learning.
+Preservation efforts include documentation, community-based education, and digital revitalization projects. Recording oral traditions and developing written resources are central strategies.
 
-Educators emphasize that technology should complement rather than replace human teaching. The most effective models combine digital tools with skilled instruction, balancing efficiency with the relational dimensions of education.
+Technology has created new possibilities for language maintenance. Mobile applications, online dictionaries, and social media platforms allow communities to engage with endangered languages in innovative ways.
 
-Looking ahead, lifelong learning is likely to become essential. Rapid technological change demands continuous skill renewal, making education an ongoing process rather than a finite stage of life.`,
+However, preservation depends ultimately on intergenerational transmission. Without active use in daily life, revitalization efforts may remain symbolic rather than transformative.`,
       },
       questions: [
-        T(21, "Online platforms have expanded access to education.", "TRUE"),
-        T(22, "The digital divide affects all populations equally.", "FALSE"),
-        T(23, "Technology is intended to replace human teachers entirely.", "FALSE"),
-        T(24, "Lifelong learning may become essential.", "TRUE"),
-        F(25, "Personalized algorithms adapt to individual [___].", "needs"),
-        F(26, "The digital divide affects [___] populations.", "disadvantaged"),
-        F(27, "Effective models combine technology with human [___].", "instruction"),
+        M(14, "Paragraph 1", LANG_HEADINGS, "C"),
+        M(15, "Paragraph 2", LANG_HEADINGS, "A"),
+        M(16, "Paragraph 3", LANG_HEADINGS, "E"),
+        M(17, "Paragraph 4", LANG_HEADINGS, "B"),
+        M(18, "Paragraph 5", LANG_HEADINGS, "F"),
+        M(19, "Oral tradition recording", LANG_HEADINGS, "E"),
+        M(20, "Daily language use", LANG_HEADINGS, "F"),
+        T(21, "Language loss affects cultural identity.", "TRUE"),
+        T(22, "Economic incentives may encourage language shift.", "TRUE"),
+        T(23, "Social media has no role in preservation.", "FALSE"),
+        T(24, "Daily use is essential for revitalization.", "TRUE"),
+        F(25, "Many languages face possible [___].", "extinction"),
+        F(26, "Younger generations may adopt [___] tongues.", "majority"),
+        F(27, "Preservation relies on [___] transmission.", "intergenerational"),
       ],
     },
     {
       number: 3,
       passage: {
-        title: "The Anthropology of Food",
-        body: `Food is far more than nutrition; it is a medium of cultural expression, social bonding, and identity. Anthropologists examine food practices to understand how societies organize themselves and communicate values.
+        title: "The Neuroscience of Creativity",
+        body: `Creativity has long been associated with artistic talent, yet neuroscientists view it as a broader cognitive capacity involving the generation of novel and useful ideas.
 
-Shared meals reinforce kinship and community ties. Festivals, religious observances, and ceremonies frequently center on specific foods, embedding meaning in everyday consumption. Such traditions persist across generations, even as societies modernize.
+Research suggests that creativity emerges from interactions among multiple brain networks. The default mode network supports spontaneous thought and imagination, while executive control systems evaluate and refine ideas. Effective creativity depends on balancing these processes.
 
-Globalization has both expanded culinary exchange and challenged traditional foodways. Migration introduces new ingredients and techniques, while industrial food systems homogenize diets across regions. Critics warn that local food cultures may erode under global pressures.
+Contrary to popular belief, creativity is not purely innate. Training, exposure to diverse experiences, and deliberate practice can strengthen creative abilities over time.
 
-At the same time, food serves as a form of resistance and identity preservation. Diaspora communities maintain traditional dishes as connections to homeland, while movements promoting local and seasonal eating challenge industrial food norms.
+Environmental conditions also matter. Psychological safety, collaboration, and opportunities for experimentation foster innovation. Conversely, excessive pressure or rigid structures may inhibit original thinking.
 
-Thus, food is simultaneously universal and culturally specific—a daily necessity and a profound expression of who we are.`,
+Recent studies indicate that creativity plays a role in problem-solving across disciplines, from engineering to medicine. It is therefore increasingly recognized as essential in education and professional development.`,
       },
       questions: [
-        F(28, "Food is a medium of cultural [___].", "expression"),
-        F(29, "Shared meals reinforce [___] ties.", "community"),
-        F(30, "Industrial systems can [___] diets across regions.", "homogenize"),
-        F(31, "Diaspora communities use food as connection to [___].", "homeland"),
-        F(32, "Local food movements challenge [___] food norms.", "industrial"),
-        M(33, "Shared meals", [
-          { key: "A", label: "Reinforce community ties" },
-          { key: "B", label: "Industrial homogenization" },
-          { key: "C", label: "Identity preservation" },
-          { key: "D", label: "Culinary exchange" },
-        ], "A"),
-        M(34, "Globalization", [
-          { key: "A", label: "Reinforce community ties" },
-          { key: "B", label: "Industrial homogenization" },
-          { key: "C", label: "Identity preservation" },
-          { key: "D", label: "Culinary exchange" },
+        F(28, "Creativity involves producing [___] and useful ideas.", "novel"),
+        F(29, "It depends on interactions among multiple [___] networks.", "brain"),
+        F(30, "The default mode network supports [___] thought.", "spontaneous"),
+        F(31, "Creativity can be improved through [___] practice.", "deliberate"),
+        F(32, "Rigid structures may [___] original thinking.", "inhibit"),
+        M(33, "Default mode network", [
+          { key: "A", label: "Refinement of ideas" },
+          { key: "B", label: "Encourages experimentation" },
+          { key: "C", label: "Structured improvement" },
+          { key: "D", label: "Supports imagination" },
         ], "D"),
-        M(35, "Diaspora cuisine", [
-          { key: "A", label: "Reinforce community ties" },
-          { key: "B", label: "Industrial homogenization" },
-          { key: "C", label: "Identity preservation" },
-          { key: "D", label: "Culinary exchange" },
-        ], "C"),
-        M(36, "Industrial food systems", [
-          { key: "A", label: "Reinforce community ties" },
-          { key: "B", label: "Industrial homogenization" },
-          { key: "C", label: "Identity preservation" },
-          { key: "D", label: "Culinary exchange" },
-        ], "B"),
-        M(37, "Festival foods", [
-          { key: "A", label: "Daily necessity" },
-          { key: "B", label: "Symbolic ceremony" },
-          { key: "C", label: "Cultural resistance" },
-          { key: "D", label: "Global homogenization" },
-        ], "B"),
-        M(38, "Local eating movements", [
-          { key: "A", label: "Daily necessity" },
-          { key: "B", label: "Symbolic ceremony" },
-          { key: "C", label: "Cultural resistance" },
-          { key: "D", label: "Global homogenization" },
-        ], "C"),
-        M(39, "Everyday meals", [
-          { key: "A", label: "Daily necessity" },
-          { key: "B", label: "Symbolic ceremony" },
-          { key: "C", label: "Cultural resistance" },
-          { key: "D", label: "Global homogenization" },
+        M(34, "Executive control", [
+          { key: "A", label: "Refinement of ideas" },
+          { key: "B", label: "Encourages experimentation" },
+          { key: "C", label: "Structured improvement" },
+          { key: "D", label: "Supports imagination" },
         ], "A"),
-        M(40, "Industrial diets", [
-          { key: "A", label: "Daily necessity" },
-          { key: "B", label: "Symbolic ceremony" },
-          { key: "C", label: "Cultural resistance" },
-          { key: "D", label: "Global homogenization" },
+        M(35, "Psychological safety", [
+          { key: "A", label: "Refinement of ideas" },
+          { key: "B", label: "Encourages experimentation" },
+          { key: "C", label: "Structured improvement" },
+          { key: "D", label: "Supports imagination" },
+        ], "B"),
+        M(36, "Deliberate practice", [
+          { key: "A", label: "Refinement of ideas" },
+          { key: "B", label: "Encourages experimentation" },
+          { key: "C", label: "Structured improvement" },
+          { key: "D", label: "Supports imagination" },
+        ], "C"),
+        M(37, "Engineering", [
+          { key: "A", label: "Broadening perspective" },
+          { key: "B", label: "Barrier to innovation" },
+          { key: "C", label: "Discipline requiring creativity" },
+          { key: "D", label: "Supportive condition" },
+        ], "C"),
+        M(38, "Collaboration", [
+          { key: "A", label: "Broadening perspective" },
+          { key: "B", label: "Barrier to innovation" },
+          { key: "C", label: "Discipline requiring creativity" },
+          { key: "D", label: "Supportive condition" },
         ], "D"),
+        M(39, "Diverse experiences", [
+          { key: "A", label: "Broadening perspective" },
+          { key: "B", label: "Barrier to innovation" },
+          { key: "C", label: "Discipline requiring creativity" },
+          { key: "D", label: "Supportive condition" },
+        ], "A"),
+        M(40, "Excessive pressure", [
+          { key: "A", label: "Broadening perspective" },
+          { key: "B", label: "Barrier to innovation" },
+          { key: "C", label: "Discipline requiring creativity" },
+          { key: "D", label: "Supportive condition" },
+        ], "B"),
       ],
     },
   ],
 };
 
-// =============== TEST 10 ===============
+// =============== TEST 10 (extracted from PDF pages 56–62) ===============
 const URBAN_HEADINGS = [
-  { key: "A", label: "Health benefits" },
-  { key: "B", label: "Definition and growth" },
-  { key: "C", label: "Climate adaptation" },
-  { key: "D", label: "Implementation barriers" },
-  { key: "E", label: "Community engagement" },
-  { key: "F", label: "Biodiversity support" },
-  { key: "G", label: "Future urban vision" },
+  { key: "A", label: "Public interaction zones" },
+  { key: "B", label: "Power and planning" },
+  { key: "C", label: "Migration and diversity" },
+  { key: "D", label: "Cities as cultural systems" },
+  { key: "E", label: "Conflict over belonging" },
+  { key: "F", label: "Informal governance" },
+  { key: "G", label: "Dynamic urban processes" },
 ];
 
 const TEST_10: IeltsTest = {
@@ -1195,132 +1194,132 @@ const TEST_10: IeltsTest = {
     {
       number: 1,
       passage: {
-        title: "Urban Green Spaces and Wellbeing",
-        body: `Urban green spaces—parks, gardens, and tree-lined streets—are increasingly recognized as essential components of healthy cities. As urbanization accelerates, planners are reconsidering the role of nature within densely populated environments.
+        title: "The Rise of Circular Economies",
+        body: `Traditional economic systems have largely followed a linear model: resources are extracted, transformed into products, consumed, and ultimately discarded as waste. This approach has generated significant environmental pressures, including resource depletion and pollution.
 
-Research demonstrates that exposure to green spaces reduces stress, improves mood, and enhances cognitive function. Even brief encounters with nature can lower cortisol levels and promote psychological wellbeing. For children, access to natural environments supports physical activity and emotional development.
+In response, the concept of the circular economy has gained prominence. Rather than emphasizing disposal, circular systems prioritize reuse, repair, remanufacturing, and recycling. The objective is to maintain the value of materials for as long as possible.
 
-Beyond individual benefits, green spaces play important ecological roles. They moderate urban temperatures, support biodiversity, manage stormwater, and improve air quality. Such functions become increasingly valuable as cities confront the impacts of climate change.
+Businesses adopting circular strategies often redesign products to improve durability and ease of disassembly. Such innovations reduce waste generation while creating new economic opportunities in service-based models.
 
-However, implementation faces challenges. Land scarcity, competing development priorities, and uneven distribution of green spaces across neighborhoods raise concerns about equity. Wealthier districts often enjoy greater access while disadvantaged areas remain underserved.
+However, transitioning to circularity requires systemic change. Consumer behavior, regulatory frameworks, and supply chain coordination all influence success. Without supportive policies and market incentives, implementation may remain limited.
 
-Innovative approaches are emerging. Vertical gardens, rooftop parks, and community-led greening projects expand possibilities even in dense settings. The future of urban living may depend on integrating nature throughout the built environment.`,
+Advocates argue that circular economies can enhance sustainability, strengthen resilience, and reduce dependence on finite resources.`,
       },
       questions: [
-        T(1, "Urban green spaces are seen as essential to healthy cities.", "TRUE"),
-        T(2, "Exposure to nature can reduce stress.", "TRUE"),
-        T(3, "Green spaces have no role in stormwater management.", "FALSE"),
-        T(4, "Disadvantaged areas often have less access to green spaces.", "TRUE"),
-        T(5, "Vertical gardens are an innovative response to land scarcity.", "TRUE"),
-        T(6, "All cities have implemented green-space plans equally.", "FALSE"),
-        T(7, "Green spaces help cities adapt to climate change.", "TRUE"),
-        F(8, "Brief nature contact lowers [___] levels.", "cortisol"),
-        F(9, "Green spaces moderate urban [___].", "temperatures"),
-        F(10, "They also support [___].", "biodiversity"),
-        F(11, "Implementation is hampered by land [___].", "scarcity"),
-        F(12, "Greening projects can be [___] led.", "community"),
-        F(13, "Innovation includes [___] parks.", "rooftop"),
-        M(14, "Paragraph 1", URBAN_HEADINGS, "B"),
-        M(15, "Paragraph 2", URBAN_HEADINGS, "A"),
-        M(16, "Paragraph 3", URBAN_HEADINGS, "C"),
-        M(17, "Paragraph 4", URBAN_HEADINGS, "D"),
-        M(18, "Paragraph 5", URBAN_HEADINGS, "G"),
-        M(19, "Ecosystem services", URBAN_HEADINGS, "F"),
-        M(20, "Equity concerns", URBAN_HEADINGS, "D"),
+        T(1, "Linear economies prioritize repair over disposal.", "FALSE"),
+        T(2, "Circular economies seek to preserve material value.", "TRUE"),
+        T(3, "Product redesign can improve durability.", "TRUE"),
+        T(4, "Circular systems eliminate the need for regulation.", "FALSE"),
+        T(5, "Consumer behavior affects implementation success.", "TRUE"),
+        T(6, "Circularity can reduce dependence on finite resources.", "TRUE"),
+        T(7, "Recycling is excluded from circular strategies.", "FALSE"),
+        F(8, "Linear systems result in resource [___] and pollution.", "depletion"),
+        F(9, "Circular systems prioritize [___] and repair.", "reuse"),
+        F(10, "Businesses redesign products for easier [___].", "disassembly"),
+        F(11, "Success depends on [___] chain coordination.", "supply"),
+        F(12, "Supportive policies and market [___] are needed.", "incentives"),
+        F(13, "Circularity may improve long-term [___].", "resilience"),
       ],
     },
     {
       number: 2,
       passage: {
-        title: "The Rise of Citizen Science",
-        body: `Citizen science—the participation of non-professionals in scientific research—has emerged as a significant force in contemporary inquiry. Enabled by digital tools and motivated by curiosity, ordinary people now contribute meaningful data to projects ranging from astronomy to ecology.
+        title: "The Anthropology of Urban Space",
+        body: `Cities are not merely physical environments; they are cultural landscapes shaped by social interaction, historical memory, and symbolic meaning. Anthropologists study urban spaces to understand how people construct identities and communities within them.
 
-The scale of participation can be remarkable. Bird surveys, water-quality monitoring, and wildlife tracking initiatives gather observations from thousands of volunteers across vast geographic areas. Such datasets would be prohibitively expensive for traditional research teams to collect alone.
+Public spaces such as markets, parks, and transit hubs function as arenas of exchange and negotiation. These sites reveal patterns of inclusion, exclusion, and informal governance.
 
-Scientific benefits extend beyond data quantity. Citizen scientists often notice local patterns that distant researchers might overlook. Their involvement also broadens public understanding of scientific methods and fosters environmental stewardship.
+Urban development often reflects power relations. Decisions about zoning, architecture, and infrastructure can privilege certain groups while marginalizing others. Consequently, cities become contested spaces where competing visions of progress emerge.
 
-Yet challenges remain. Data quality requires careful protocols and validation, as untrained observers may introduce errors. Researchers must design projects that balance accessibility with scientific rigor, providing clear instructions and feedback mechanisms.
+Migration further transforms urban life. New populations introduce cultural practices, languages, and networks that reshape neighborhoods. Such diversity may foster innovation, but it can also generate tensions over belonging and access.
 
-The future of citizen science appears promising. As technology lowers participation barriers and global challenges demand large-scale evidence, the partnership between professionals and the public is likely to deepen.`,
+Anthropological perspectives highlight that cities are dynamic social processes rather than static built environments.`,
       },
       questions: [
-        T(21, "Citizen science involves non-professionals in research.", "TRUE"),
-        T(22, "Volunteer-collected datasets are always inferior to professional data.", "FALSE"),
-        T(23, "Citizen scientists may identify patterns researchers miss.", "TRUE"),
-        T(24, "Data quality is a non-issue in citizen science.", "FALSE"),
-        F(25, "Volunteers contribute to projects in astronomy and [___].", "ecology"),
-        F(26, "Citizen science fosters environmental [___].", "stewardship"),
-        F(27, "Projects need clear instructions and [___] mechanisms.", "feedback"),
+        M(14, "Paragraph 1", URBAN_HEADINGS, "D"),
+        M(15, "Paragraph 2", URBAN_HEADINGS, "A"),
+        M(16, "Paragraph 3", URBAN_HEADINGS, "B"),
+        M(17, "Paragraph 4", URBAN_HEADINGS, "C"),
+        M(18, "Paragraph 5", URBAN_HEADINGS, "G"),
+        M(19, "Social negotiation sites", URBAN_HEADINGS, "A"),
+        M(20, "Urban transformation", URBAN_HEADINGS, "G"),
+        T(21, "Anthropologists see cities only as physical structures.", "FALSE"),
+        T(22, "Public spaces can reveal exclusion patterns.", "TRUE"),
+        T(23, "Infrastructure decisions may marginalize groups.", "TRUE"),
+        T(24, "Migration has no impact on neighborhoods.", "FALSE"),
+        F(25, "Cities are shaped by historical [___].", "memory"),
+        F(26, "Urban development reflects [___] relations.", "power"),
+        F(27, "Diversity may encourage [___].", "innovation"),
       ],
     },
     {
       number: 3,
       passage: {
-        title: "The Philosophy of Time Perception",
-        body: `Time may appear to flow uniformly, yet psychological research reveals that human perception of time is highly malleable. Subjective time depends on attention, emotion, novelty, and cultural framing.
+        title: "Decision-Making Under Uncertainty",
+        body: `Human decision-making is frequently challenged by uncertainty. Whether in finance, medicine, or everyday life, individuals must often act without complete information.
 
-Studies show that engaging activities make time appear to pass quickly, while boredom prolongs perceived duration. Strong emotions—both positive and negative—often distort temporal judgment, making moments feel either compressed or extended.
+Classical economic theory assumes rational actors who maximize utility through logical evaluation. Behavioral research, however, demonstrates that real decisions are influenced by heuristics—mental shortcuts that simplify complexity.
 
-Novelty also affects perception. New experiences generate richer memories, which in retrospect make time feel longer. Routine activities, by contrast, leave fewer markers, causing periods to seem shorter when recalled.
+While heuristics can be efficient, they may also produce systematic biases. For example, availability bias leads individuals to overestimate the likelihood of events that are easily recalled, while confirmation bias reinforces existing beliefs.
 
-Cultural perspectives further shape time experience. Some societies emphasize linear progression and punctuality, while others adopt cyclical or event-based orientations. These frameworks influence everything from work patterns to social rituals.
+Experts in high-stakes environments develop strategies to mitigate uncertainty. Scenario planning, probabilistic reasoning, and structured reflection can improve judgment under pressure.
 
-Understanding time perception has practical implications. Designers of education, healthcare, and entertainment increasingly account for temporal psychology when shaping experiences. Time, ultimately, is not just measured—it is felt.`,
+Importantly, uncertainty cannot be eliminated entirely. Effective decision-making depends not on certainty, but on adaptability and awareness of cognitive limitations.`,
       },
       questions: [
-        F(28, "Subjective time depends on attention and [___].", "emotion"),
-        F(29, "Engaging activities make time pass [___].", "quickly"),
-        F(30, "Novelty creates richer [___].", "memories"),
-        F(31, "Some societies adopt [___] orientations to time.", "cyclical"),
-        F(32, "Time is not only measured but also [___].", "felt"),
-        M(33, "Engagement", [
-          { key: "A", label: "Compresses perceived time" },
-          { key: "B", label: "Extends perceived duration" },
-          { key: "C", label: "Generates rich memories" },
-          { key: "D", label: "Shapes social rhythm" },
-        ], "A"),
-        M(34, "Boredom", [
-          { key: "A", label: "Compresses perceived time" },
-          { key: "B", label: "Extends perceived duration" },
-          { key: "C", label: "Generates rich memories" },
-          { key: "D", label: "Shapes social rhythm" },
-        ], "B"),
-        M(35, "Novelty", [
-          { key: "A", label: "Compresses perceived time" },
-          { key: "B", label: "Extends perceived duration" },
-          { key: "C", label: "Generates rich memories" },
-          { key: "D", label: "Shapes social rhythm" },
+        F(28, "Decision-making often occurs without [___] information.", "complete"),
+        F(29, "Behavioral research highlights the role of [___] shortcuts.", "mental"),
+        F(30, "These can create systematic [___].", "biases"),
+        F(31, "Experts use [___] planning to improve judgment.", "scenario"),
+        F(32, "Effective decisions require awareness of [___] limitations.", "cognitive"),
+        M(33, "Heuristics", [
+          { key: "A", label: "Estimating likelihood through recall" },
+          { key: "B", label: "Structured thinking with uncertainty" },
+          { key: "C", label: "Simplified decision shortcuts" },
+          { key: "D", label: "Preference for supporting beliefs" },
         ], "C"),
-        M(36, "Cultural framing", [
-          { key: "A", label: "Compresses perceived time" },
-          { key: "B", label: "Extends perceived duration" },
-          { key: "C", label: "Generates rich memories" },
-          { key: "D", label: "Shapes social rhythm" },
-        ], "D"),
-        M(37, "Punctual cultures", [
-          { key: "A", label: "Linear progression focus" },
-          { key: "B", label: "Cyclical orientation" },
-          { key: "C", label: "Event-based perception" },
-          { key: "D", label: "Memory-driven recall" },
+        M(34, "Availability bias", [
+          { key: "A", label: "Estimating likelihood through recall" },
+          { key: "B", label: "Structured thinking with uncertainty" },
+          { key: "C", label: "Simplified decision shortcuts" },
+          { key: "D", label: "Preference for supporting beliefs" },
         ], "A"),
-        M(38, "Cyclical cultures", [
-          { key: "A", label: "Linear progression focus" },
-          { key: "B", label: "Cyclical orientation" },
-          { key: "C", label: "Event-based perception" },
-          { key: "D", label: "Memory-driven recall" },
-        ], "B"),
-        M(39, "Event-based time", [
-          { key: "A", label: "Linear progression focus" },
-          { key: "B", label: "Cyclical orientation" },
-          { key: "C", label: "Event-based perception" },
-          { key: "D", label: "Memory-driven recall" },
-        ], "C"),
-        M(40, "Retrospective duration", [
-          { key: "A", label: "Linear progression focus" },
-          { key: "B", label: "Cyclical orientation" },
-          { key: "C", label: "Event-based perception" },
-          { key: "D", label: "Memory-driven recall" },
+        M(35, "Confirmation bias", [
+          { key: "A", label: "Estimating likelihood through recall" },
+          { key: "B", label: "Structured thinking with uncertainty" },
+          { key: "C", label: "Simplified decision shortcuts" },
+          { key: "D", label: "Preference for supporting beliefs" },
         ], "D"),
+        M(36, "Probabilistic reasoning", [
+          { key: "A", label: "Estimating likelihood through recall" },
+          { key: "B", label: "Structured thinking with uncertainty" },
+          { key: "C", label: "Simplified decision shortcuts" },
+          { key: "D", label: "Preference for supporting beliefs" },
+        ], "B"),
+        M(37, "Finance", [
+          { key: "A", label: "Strategy for uncertainty" },
+          { key: "B", label: "Field requiring judgment" },
+          { key: "C", label: "Essential quality" },
+          { key: "D", label: "Domain of incomplete information" },
+        ], "D"),
+        M(38, "Medicine", [
+          { key: "A", label: "Strategy for uncertainty" },
+          { key: "B", label: "Field requiring judgment" },
+          { key: "C", label: "Essential quality" },
+          { key: "D", label: "Domain of incomplete information" },
+        ], "B"),
+        M(39, "Scenario planning", [
+          { key: "A", label: "Strategy for uncertainty" },
+          { key: "B", label: "Field requiring judgment" },
+          { key: "C", label: "Essential quality" },
+          { key: "D", label: "Domain of incomplete information" },
+        ], "A"),
+        M(40, "Adaptability", [
+          { key: "A", label: "Strategy for uncertainty" },
+          { key: "B", label: "Field requiring judgment" },
+          { key: "C", label: "Essential quality" },
+          { key: "D", label: "Domain of incomplete information" },
+        ], "C"),
       ],
     },
   ],
