@@ -166,10 +166,12 @@ function MockTestPage() {
                           Best score: <span className="text-foreground font-medium">{best.score}/{best.total}</span>
                         </div>
                       )}
-                      <Button asChild size="sm" className="mt-4 w-full bg-neon-gradient text-primary-foreground">
-                        <Link to="/mocktest/test/$testId" params={{ testId: String(t.id) }}>
-                          {best ? "Retake test" : "Start test"}
-                        </Link>
+                      <Button
+                        size="sm"
+                        className="mt-4 w-full bg-neon-gradient text-primary-foreground"
+                        onClick={() => router.navigate({ to: "/mocktest/test/$testId", params: { testId: String(t.id) } })}
+                      >
+                        {best ? "Retake test" : "Start test"}
                       </Button>
                     </CardContent>
                   </Card>
