@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
-import { Loader2, Clock, AlertCircle, ArrowLeft, ArrowRight, Send, Trophy, BookOpen, ListChecks } from "lucide-react";
+import { Loader2, Clock, AlertCircle, ArrowLeft, ArrowRight, Send, Trophy, BookOpen, ListChecks, FileText, ShieldCheck, MonitorSmartphone, Play } from "lucide-react";
 import {
   getTestById,
   rawScoreToBand,
@@ -35,6 +35,8 @@ function TestRunner() {
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const [secondsLeft, setSecondsLeft] = useState((test?.durationMinutes ?? 60) * 60);
   const [submitting, setSubmitting] = useState(false);
+  const [started, setStarted] = useState(false);
+  const [acknowledged, setAcknowledged] = useState(false);
   const [result, setResult] = useState<null | {
     score: number;
     total: number;
@@ -55,9 +57,9 @@ function TestRunner() {
     }
   }, [loading, user, profile, router]);
 
-  // Countdown timer
+  // Countdown timer — only runs once the user explicitly starts the test
   useEffect(() => {
-    if (result || !test) return;
+    if (!started || result || !test) return;
     const id = setInterval(() => {
       setSecondsLeft((s) => {
         if (s <= 1) {
@@ -70,7 +72,7 @@ function TestRunner() {
     }, 1000);
     return () => clearInterval(id);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [result, test]);
+  }, [started, result, test]);
 
   if (loading) {
     return (
@@ -98,6 +100,108 @@ function TestRunner() {
   const allQuestions: Question[] = test.sections.flatMap((s) => s.questions);
   const answeredCount = allQuestions.filter((q) => (answers[q.number] ?? "").trim() !== "").length;
   const section = test.sections[activeSection];
+
+  // Confirmation screen: show IELTS reading rules and require explicit start
+  if (!started && !result) {
+    const totalQuestions = allQuestions.length;
+    const handleStart = () => {
+      if (!acknowledged) {
+        toast.error("Please confirm the IELTS rules before starting");
+        return;
+      }
+      startedAtRef.current = Date.now();
+      setSecondsLeft(test.durationMinutes * 60);
+      setStarted(true);
+    };
+    return (
+      <div className="min-h-screen flex flex-col">
+        <AppHeader />
+        <main className="flex-1 container mx-auto max-w-3xl px-4 py-12">
+          <div className="mb-6 flex flex-wrap items-center gap-2">
+            <Badge variant="secondary" className="font-mono">Test {test.id}</Badge>
+            <Badge variant="secondary" className="font-mono">
+              <Clock className="h-3 w-3" /> {test.durationMinutes} minutes
+            </Badge>
+            <Badge variant="secondary" className="font-mono">
+              <FileText className="h-3 w-3" /> {totalQuestions} questions
+            </Badge>
+          </div>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="font-display text-2xl">Confirm IELTS reading rules</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-5">
+              <p className="text-sm text-muted-foreground">
+                Please read the rules below. The {test.durationMinutes}-minute timer starts only when you press <strong>Start test</strong>.
+              </p>
+              <ul className="grid gap-3 sm:grid-cols-2">
+                <li className="rounded-lg border border-border p-4 text-sm">
+                  <div className="flex items-center gap-2 font-medium">
+                    <Clock className="h-4 w-4 text-gold" /> {test.durationMinutes}-minute timer
+                  </div>
+                  <p className="mt-2 text-muted-foreground">
+                    One continuous session for all 3 passages. The test auto-submits when time runs out.
+                  </p>
+                </li>
+                <li className="rounded-lg border border-border p-4 text-sm">
+                  <div className="flex items-center gap-2 font-medium">
+                    <FileText className="h-4 w-4 text-neon" /> {totalQuestions} questions
+                  </div>
+                  <p className="mt-2 text-muted-foreground">
+                    True/False/Not Given, fill-in-the-blank, and matching, scored automatically.
+                  </p>
+                </li>
+                <li className="rounded-lg border border-border p-4 text-sm">
+                  <div className="flex items-center gap-2 font-medium">
+                    <MonitorSmartphone className="h-4 w-4 text-gold" /> Layout
+                  </div>
+                  <p className="mt-2 text-muted-foreground">
+                    Laptop / PC: passage left, questions right. Mobile: switch with the left and right buttons.
+                  </p>
+                </li>
+                <li className="rounded-lg border border-border p-4 text-sm">
+                  <div className="flex items-center gap-2 font-medium">
+                    <ShieldCheck className="h-4 w-4 text-neon" /> Scoring
+                  </div>
+                  <p className="mt-2 text-muted-foreground">
+                    Your score, band, time, and attempt count are saved on submit.
+                  </p>
+                </li>
+              </ul>
+
+              <label className="flex items-start gap-3 rounded-lg border border-border p-4 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={acknowledged}
+                  onChange={(e) => setAcknowledged(e.target.checked)}
+                  className="mt-1 h-4 w-4 accent-primary"
+                />
+                <span className="text-sm">
+                  I understand the IELTS rules and want to start the {test.durationMinutes}-minute timer for this {totalQuestions}-question test.
+                </span>
+              </label>
+
+              <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
+                <Button asChild variant="outline">
+                  <Link to="/mocktest">
+                    <ArrowLeft className="h-4 w-4" /> Back to mock tests
+                  </Link>
+                </Button>
+                <Button
+                  className="bg-neon-gradient text-primary-foreground"
+                  onClick={handleStart}
+                  disabled={!acknowledged}
+                >
+                  <Play className="h-4 w-4" /> Start test
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </main>
+      </div>
+    );
+  }
 
   const fmt = (s: number) => {
     const m = Math.floor(s / 60).toString().padStart(2, "0");
