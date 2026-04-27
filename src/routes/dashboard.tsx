@@ -142,12 +142,8 @@ function DashboardPage() {
                     <CardTitle className="text-primary-foreground">IELTS Mock Tests</CardTitle>
                     <p className="text-xs text-primary-foreground/80 mt-0.5">CBT mode · Auto band scoring</p>
                   </div>
-                  <Button
-                    size="sm"
-                    className="bg-neon-gradient text-primary-foreground"
-                    onClick={() => router.navigate({ to: "/mocktest" })}
-                  >
-                    Take a test
+                  <Button asChild size="sm" className="bg-neon-gradient text-primary-foreground">
+                    <Link to="/mocktest">Take a test</Link>
                   </Button>
                 </div>
                 <CardContent className="p-5 grid sm:grid-cols-2 gap-4">
