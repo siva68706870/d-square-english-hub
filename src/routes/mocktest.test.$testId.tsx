@@ -277,7 +277,10 @@ function TestRunner() {
           {test.sections.map((s, i) => (
             <button
               key={s.number}
-              onClick={() => setActiveSection(i)}
+              onClick={() => {
+                setActiveSection(i);
+                setMobileView("passage");
+              }}
               className={`px-3 py-1.5 rounded-md text-xs border transition-colors ${
                 i === activeSection
                   ? "bg-neon-gradient text-primary-foreground border-transparent"
@@ -290,13 +293,14 @@ function TestRunner() {
         </div>
 
         {/* Mobile pager: left = passage, right = questions (hidden on lg+) */}
-        <div className="lg:hidden mt-4 flex items-center gap-2">
+        <div className="lg:hidden mt-4 grid grid-cols-2 gap-2">
           <Button
             variant={mobileView === "passage" ? "default" : "outline"}
             size="sm"
-            className={`flex-1 ${mobileView === "passage" ? "bg-neon-gradient text-primary-foreground" : ""}`}
+            className={`w-full justify-center ${mobileView === "passage" ? "bg-neon-gradient text-primary-foreground" : ""}`}
             onClick={() => setMobileView("passage")}
             aria-label="Show passage"
+            aria-pressed={mobileView === "passage"}
           >
             <ArrowLeft className="h-4 w-4" />
             <BookOpen className="h-3.5 w-3.5" />
@@ -305,9 +309,10 @@ function TestRunner() {
           <Button
             variant={mobileView === "questions" ? "default" : "outline"}
             size="sm"
-            className={`flex-1 ${mobileView === "questions" ? "bg-neon-gradient text-primary-foreground" : ""}`}
+            className={`w-full justify-center ${mobileView === "questions" ? "bg-neon-gradient text-primary-foreground" : ""}`}
             onClick={() => setMobileView("questions")}
             aria-label="Show questions"
+            aria-pressed={mobileView === "questions"}
           >
             Questions
             <ListChecks className="h-3.5 w-3.5" />
@@ -316,11 +321,11 @@ function TestRunner() {
         </div>
 
         {/* Split-screen layout: desktop = side-by-side, mobile = single pane */}
-        <div className="grid lg:grid-cols-2 gap-6 mt-4">
+        <div className="mt-4 grid gap-6 lg:grid-cols-2 lg:items-start">
           {/* Passage — left on desktop, page 1 on mobile */}
           <Card
-            className={`lg:sticky lg:top-32 lg:self-start lg:max-h-[calc(100vh-10rem)] overflow-auto ${
-              mobileView === "passage" ? "block" : "hidden lg:block"
+            className={`overflow-auto lg:sticky lg:top-32 lg:self-start lg:block lg:max-h-[calc(100vh-10rem)] ${
+              mobileView === "passage" ? "block" : "hidden"
             }`}
           >
             <CardHeader>
@@ -346,7 +351,7 @@ function TestRunner() {
           </Card>
 
           {/* Questions — right on desktop, page 2 on mobile */}
-          <Card className={mobileView === "questions" ? "block" : "hidden lg:block"}>
+          <Card className={`lg:block ${mobileView === "questions" ? "block" : "hidden"}`}>
             <CardHeader>
               <CardTitle className="text-base flex items-center gap-2">
                 <ListChecks className="h-4 w-4 text-gold" />
