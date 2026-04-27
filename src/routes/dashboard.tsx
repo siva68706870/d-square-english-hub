@@ -122,12 +122,14 @@ function DashboardPage() {
               <StatCard label="Attendance" value={`${stats?.attendancePct ?? 0}%`} sub={`${stats?.present ?? 0}/${stats?.total ?? 0} sessions`} icon={CheckCircle2} />
               <StatCard label="Average Score" value={`${stats?.avgPct ?? 0}%`} sub={`${stats?.marks.length ?? 0} tests`} icon={GraduationCap} />
               <StatCard label="Course" value={safeProfile.course ?? "—"} sub="Enrolled" icon={BookOpen} />
-              <StatCard
-                label="Fee Remaining"
-                value={`₹${Math.max(Number((profile as any)?.total_amount ?? 0) - (stats?.totalPaid ?? 0), 0).toLocaleString()}`}
-                sub={`Paid ₹${(stats?.totalPaid ?? 0).toLocaleString()} of ₹${Number((profile as any)?.total_amount ?? 0).toLocaleString()}`}
-                icon={IndianRupee}
-              />
+              {profile?.payment_plan !== "full" && (
+                <StatCard
+                  label="Fee Remaining"
+                  value={`₹${Math.max(Number(profile?.total_amount ?? 0) - (stats?.totalPaid ?? 0), 0).toLocaleString()}`}
+                  sub={`Paid ₹${(stats?.totalPaid ?? 0).toLocaleString()} of ₹${Number(profile?.total_amount ?? 0).toLocaleString()}`}
+                  icon={IndianRupee}
+                />
+              )}
             </div>
 
             {safeProfile.course === "IELTS" && (
@@ -140,8 +142,12 @@ function DashboardPage() {
                     <CardTitle className="text-primary-foreground">IELTS Mock Tests</CardTitle>
                     <p className="text-xs text-primary-foreground/80 mt-0.5">CBT mode · Auto band scoring</p>
                   </div>
-                  <Button asChild size="sm" className="bg-neon-gradient text-primary-foreground">
-                    <Link to="/mocktest">Take a test</Link>
+                  <Button
+                    size="sm"
+                    className="bg-neon-gradient text-primary-foreground"
+                    onClick={() => router.navigate({ to: "/mocktest" })}
+                  >
+                    Take a test
                   </Button>
                 </div>
                 <CardContent className="p-5 grid sm:grid-cols-2 gap-4">
