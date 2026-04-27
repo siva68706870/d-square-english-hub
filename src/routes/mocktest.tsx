@@ -166,15 +166,11 @@ function MockTestPage() {
                           Best score: <span className="text-foreground font-medium">{best.score}/{best.total}</span>
                         </div>
                       )}
-                      <Link
-                        to="/mocktest/test/$testId"
-                        params={{ testId: String(t.id) }}
-                        className="block mt-4"
-                      >
-                        <Button size="sm" className="w-full bg-neon-gradient text-primary-foreground">
+                      <Button asChild size="sm" className="mt-4 w-full bg-neon-gradient text-primary-foreground">
+                        <Link to="/mocktest/test/$testId" params={{ testId: String(t.id) }}>
                           {best ? "Retake test" : "Start test"}
-                        </Button>
-                      </Link>
+                        </Link>
+                      </Button>
                     </CardContent>
                   </Card>
                 );
