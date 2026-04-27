@@ -15,6 +15,7 @@ import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as MocktestTestTestIdRouteImport } from './routes/mocktest.test.$testId'
+import { Route as MocktestTestTestIdStartRouteImport } from './routes/mocktest.test.$testId.start'
 
 const MocktestRoute = MocktestRouteImport.update({
   id: '/mocktest',
@@ -46,6 +47,11 @@ const MocktestTestTestIdRoute = MocktestTestTestIdRouteImport.update({
   path: '/test/$testId',
   getParentRoute: () => MocktestRoute,
 } as any)
+const MocktestTestTestIdStartRoute = MocktestTestTestIdStartRouteImport.update({
+  id: '/start',
+  path: '/start',
+  getParentRoute: () => MocktestTestTestIdRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -53,7 +59,8 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof DashboardRoute
   '/login': typeof LoginRoute
   '/mocktest': typeof MocktestRouteWithChildren
-  '/mocktest/test/$testId': typeof MocktestTestTestIdRoute
+  '/mocktest/test/$testId': typeof MocktestTestTestIdRouteWithChildren
+  '/mocktest/test/$testId/start': typeof MocktestTestTestIdStartRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -61,7 +68,8 @@ export interface FileRoutesByTo {
   '/dashboard': typeof DashboardRoute
   '/login': typeof LoginRoute
   '/mocktest': typeof MocktestRouteWithChildren
-  '/mocktest/test/$testId': typeof MocktestTestTestIdRoute
+  '/mocktest/test/$testId': typeof MocktestTestTestIdRouteWithChildren
+  '/mocktest/test/$testId/start': typeof MocktestTestTestIdStartRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -70,7 +78,8 @@ export interface FileRoutesById {
   '/dashboard': typeof DashboardRoute
   '/login': typeof LoginRoute
   '/mocktest': typeof MocktestRouteWithChildren
-  '/mocktest/test/$testId': typeof MocktestTestTestIdRoute
+  '/mocktest/test/$testId': typeof MocktestTestTestIdRouteWithChildren
+  '/mocktest/test/$testId/start': typeof MocktestTestTestIdStartRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -81,6 +90,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/mocktest'
     | '/mocktest/test/$testId'
+    | '/mocktest/test/$testId/start'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -89,6 +99,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/mocktest'
     | '/mocktest/test/$testId'
+    | '/mocktest/test/$testId/start'
   id:
     | '__root__'
     | '/'
@@ -97,6 +108,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/mocktest'
     | '/mocktest/test/$testId'
+    | '/mocktest/test/$testId/start'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -151,15 +163,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MocktestTestTestIdRouteImport
       parentRoute: typeof MocktestRoute
     }
+    '/mocktest/test/$testId/start': {
+      id: '/mocktest/test/$testId/start'
+      path: '/start'
+      fullPath: '/mocktest/test/$testId/start'
+      preLoaderRoute: typeof MocktestTestTestIdStartRouteImport
+      parentRoute: typeof MocktestTestTestIdRoute
+    }
   }
 }
 
+interface MocktestTestTestIdRouteChildren {
+  MocktestTestTestIdStartRoute: typeof MocktestTestTestIdStartRoute
+}
+
+const MocktestTestTestIdRouteChildren: MocktestTestTestIdRouteChildren = {
+  MocktestTestTestIdStartRoute: MocktestTestTestIdStartRoute,
+}
+
+const MocktestTestTestIdRouteWithChildren =
+  MocktestTestTestIdRoute._addFileChildren(MocktestTestTestIdRouteChildren)
+
 interface MocktestRouteChildren {
-  MocktestTestTestIdRoute: typeof MocktestTestTestIdRoute
+  MocktestTestTestIdRoute: typeof MocktestTestTestIdRouteWithChildren
 }
 
 const MocktestRouteChildren: MocktestRouteChildren = {
-  MocktestTestTestIdRoute: MocktestTestTestIdRoute,
+  MocktestTestTestIdRoute: MocktestTestTestIdRouteWithChildren,
 }
 
 const MocktestRouteWithChildren = MocktestRoute._addFileChildren(
