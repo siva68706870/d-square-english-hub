@@ -289,24 +289,30 @@ function TestRunner() {
           ))}
         </div>
 
-        {/* Mobile pager toggle (hidden on lg+) */}
-        <div className="lg:hidden mt-4 grid grid-cols-2 gap-2 rounded-md border border-border p-1">
-          <button
+        {/* Mobile pager: left = passage, right = questions (hidden on lg+) */}
+        <div className="lg:hidden mt-4 flex items-center gap-2">
+          <Button
+            variant={mobileView === "passage" ? "default" : "outline"}
+            size="sm"
+            className={`flex-1 ${mobileView === "passage" ? "bg-neon-gradient text-primary-foreground" : ""}`}
             onClick={() => setMobileView("passage")}
-            className={`flex items-center justify-center gap-2 py-2 rounded text-xs font-medium transition-colors ${
-              mobileView === "passage" ? "bg-neon-gradient text-primary-foreground" : "text-muted-foreground"
-            }`}
+            aria-label="Show passage"
           >
-            <BookOpen className="h-3.5 w-3.5" /> Passage
-          </button>
-          <button
+            <ArrowLeft className="h-4 w-4" />
+            <BookOpen className="h-3.5 w-3.5" />
+            Passage
+          </Button>
+          <Button
+            variant={mobileView === "questions" ? "default" : "outline"}
+            size="sm"
+            className={`flex-1 ${mobileView === "questions" ? "bg-neon-gradient text-primary-foreground" : ""}`}
             onClick={() => setMobileView("questions")}
-            className={`flex items-center justify-center gap-2 py-2 rounded text-xs font-medium transition-colors ${
-              mobileView === "questions" ? "bg-neon-gradient text-primary-foreground" : "text-muted-foreground"
-            }`}
+            aria-label="Show questions"
           >
-            <ListChecks className="h-3.5 w-3.5" /> Questions
-          </button>
+            Questions
+            <ListChecks className="h-3.5 w-3.5" />
+            <ArrowRight className="h-4 w-4" />
+          </Button>
         </div>
 
         {/* Split-screen layout: desktop = side-by-side, mobile = single pane */}
