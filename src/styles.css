@@ -441,20 +441,19 @@
 .animate-plane-fly { animation: plane-fly 14s linear infinite; }
 .animate-plane-fly-slow { animation: plane-fly-slow 22s linear infinite; }
 .animate-plane-takeoff {
-  animation: plane-takeoff 11s linear infinite;
+  animation: plane-takeoff 12s cubic-bezier(0.45, 0, 0.55, 1) infinite;
 }
 
 @keyframes plane-takeoff {
-  0%   { transform: translateX(-25%) translateY(0) rotate(0deg) scale(1); opacity: 0; }
-  6%   { opacity: 1; }
+  0%   { transform: translateX(-20%) translateY(0) rotate(0deg) scale(1); opacity: 0; }
+  8%   { opacity: 1; }
   /* Straight, level flight for the first half of the screen */
   45%  { transform: translateX(45%) translateY(0) rotate(0deg) scale(1); opacity: 1; }
   /* Begin to bank upward like a real takeoff */
   65%  { transform: translateX(70%) translateY(-60px) rotate(-12deg) scale(0.92); opacity: 1; }
   /* Climb away into the distance */
-  88%  { transform: translateX(110%) translateY(-220px) rotate(-22deg) scale(0.55); opacity: 0.5; }
-  98%  { transform: translateX(130%) translateY(-320px) rotate(-26deg) scale(0.35); opacity: 0; }
-  100% { transform: translateX(-25%) translateY(0) rotate(0deg) scale(1); opacity: 0; }
+  90%  { transform: translateX(110%) translateY(-220px) rotate(-22deg) scale(0.55); opacity: 0.6; }
+  100% { transform: translateX(130%) translateY(-320px) rotate(-26deg) scale(0.35); opacity: 0; }
 }
 .animate-cloud-drift { animation: cloud-drift 30s linear infinite; }
 .animate-cloud-drift-slow { animation: cloud-drift 45s linear infinite; }
