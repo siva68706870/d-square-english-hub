@@ -13,16 +13,16 @@ export function AppHeader() {
   };
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-border/60 glass">
+    <header className="sticky top-0 z-40 w-full border-b border-neon/20 glass shadow-[0_2px_30px_-10px_oklch(0.82_0.18_195/0.4)]">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <Link to="/" className="flex items-center gap-2.5 group">
-          <div className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-neon-gradient shadow-glow transition-transform group-hover:scale-110 group-hover:rotate-6">
-            <div className="absolute inset-0 rounded-xl bg-aurora opacity-40 blur-md group-hover:opacity-70 transition-opacity" />
+          <div className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-neon-gradient shadow-glow transition-transform group-hover:scale-110 group-hover:rotate-6 animate-glow-pulse">
+            <div className="absolute inset-0 rounded-xl bg-aurora opacity-40 blur-md group-hover:opacity-80 transition-opacity" />
             <GraduationCap className="relative h-5 w-5 text-primary-foreground" />
           </div>
           <div className="leading-tight">
             <div className="font-display text-lg font-bold tracking-tight">
-              <span className="block sm:inline">D <span className="text-gradient-neon">Square</span></span>{" "}
+              <span className="block sm:inline">D <span className="text-shimmer">Square</span></span>{" "}
               <span className="block sm:inline">English Hub</span>
             </div>
           </div>
@@ -32,15 +32,15 @@ export function AppHeader() {
           <div className="flex items-center gap-3">
             {isAdmin ? (
               <Link to="/admin">
-                <Button variant="ghost" size="sm" className="hover:text-neon transition-colors">Admin</Button>
+                <Button variant="ghost" size="sm" className="neon-link">Admin</Button>
               </Link>
             ) : (
               <Link to="/dashboard">
-                <Button variant="ghost" size="sm" className="hover:text-neon transition-colors">Dashboard</Button>
+                <Button variant="ghost" size="sm" className="neon-link">Dashboard</Button>
               </Link>
             )}
             <Link to="/mocktest">
-              <Button variant="ghost" size="sm" className="hover:text-neon transition-colors">Mock Test</Button>
+              <Button variant="ghost" size="sm" className="neon-link">Mock Test</Button>
             </Link>
             <div className="hidden md:block text-right text-xs leading-tight">
               <div className="font-medium">{profile?.full_name ?? "Member"}</div>
@@ -52,9 +52,9 @@ export function AppHeader() {
           </div>
         ) : (
           <div className="flex items-center gap-2">
-            <Link to="/login"><Button variant="ghost" size="sm" className="hover:text-neon">Sign in</Button></Link>
+            <Link to="/login"><Button variant="ghost" size="sm" className="neon-link">Sign in</Button></Link>
             <Link to="/login" search={{ mode: "signup" }}>
-              <Button size="sm" className="bg-neon-gradient text-primary-foreground hover:opacity-90 shadow-glow">
+              <Button size="sm" className="bg-neon-gradient text-primary-foreground hover:opacity-90 shadow-glow animate-glow-pulse">
                 Admission
               </Button>
             </Link>
