@@ -203,16 +203,21 @@ function Home() {
 
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
             {[
-              { icon: GraduationCap, title: "IELTS Mastery", desc: "Band-by-band coaching with weekly mock tests and detailed feedback.", color: "from-neon to-primary" },
-              { icon: BookOpen, title: "English Communication", desc: "Conversational fluency, grammar precision, and confidence on demand.", color: "from-primary to-magenta" },
-              { icon: Cpu, title: "AI App Development", desc: "Build with modern AI tools — from idea to a working product.", color: "from-magenta to-gold" },
-              { icon: Megaphone, title: "Digital Marketing", desc: "Grow brands online with content, ads, SEO and analytics.", color: "from-gold to-neon" },
+              { icon: GraduationCap, title: "IELTS Mastery", desc: "Band-by-band coaching with weekly mock tests and detailed feedback.", color: "from-neon to-primary", upcoming: false },
+              { icon: BookOpen, title: "English Communication", desc: "Conversational fluency, grammar precision, and confidence on demand.", color: "from-primary to-magenta", upcoming: false },
+              { icon: Cpu, title: "AI App Development", desc: "Build with modern AI tools — from idea to a working product.", color: "from-magenta to-gold", upcoming: true },
+              { icon: Megaphone, title: "Digital Marketing", desc: "Grow brands online with content, ads, SEO and analytics.", color: "from-gold to-neon", upcoming: true },
             ].map((f, i) => (
               <div
                 key={i}
                 className="group relative overflow-hidden rounded-2xl border border-border glass p-7 shadow-card transition-all duration-500 hover:shadow-neon hover:-translate-y-2 hover:border-neon/50"
                 style={{ animation: `slide-up 0.7s cubic-bezier(0.22,1,0.36,1) ${i * 0.1}s both` }}
               >
+                {f.upcoming && (
+                  <span className="absolute right-3 top-3 z-10 rounded-full border border-gold/50 bg-gold/10 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-gold backdrop-blur">
+                    Upcoming
+                  </span>
+                )}
                 <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-neon/20 blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 <div className="absolute -left-10 -bottom-10 h-32 w-32 rounded-full bg-magenta/20 blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 <div className={`relative flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br ${f.color} shadow-glow transition-transform group-hover:scale-110 group-hover:rotate-6`}>
