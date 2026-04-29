@@ -2,9 +2,8 @@ import planeImg from "@/assets/plane.png";
 
 /**
  * Cinematic single airplane:
- * - Enters from the left
- * - Flies straight for the first half of the screen
- * - Then banks upward and flies away into the distance
+ * - Enters from the left, flies straight, then banks upward and away.
+ * - No contrail. Smooth, medium-paced, looping motion.
  */
 export function AirplaneAnimation() {
   return (
@@ -20,21 +19,16 @@ export function AirplaneAnimation() {
         style={{ animationDelay: "12s" }}
       />
 
-      {/* Single cinematic plane */}
+      {/* Single cinematic plane (no trail) */}
       <div className="absolute top-[42%] left-0 w-full">
         <div className="relative animate-plane-takeoff will-change-transform">
-          {/* Long contrail behind plane */}
-          <div className="absolute top-1/2 right-full -translate-y-1/2 h-[3px] w-[360px] bg-gradient-to-l from-neon via-neon/50 to-transparent blur-[1px] rounded-full" />
-          <div className="absolute top-1/2 right-full -translate-y-1/2 h-[1px] w-[520px] bg-gradient-to-l from-white/70 to-transparent" />
-
-          {/* Plane image */}
           <img
             src={planeImg}
             alt=""
             aria-hidden="true"
             width={1024}
             height={512}
-            className="h-20 md:h-28 w-auto drop-shadow-[0_0_24px_rgba(56,189,248,0.55)]"
+            className="h-20 md:h-28 w-auto drop-shadow-[0_0_28px_rgba(168,85,247,0.55)]"
           />
         </div>
       </div>
