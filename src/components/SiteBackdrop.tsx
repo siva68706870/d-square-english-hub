@@ -1,8 +1,7 @@
 /**
  * SiteBackdrop — global cyberpunk-neon ambient layer.
- * Mounted once in __root.tsx, sits behind all content (z = 0, body content is z = 1).
- * Subtle and cinematic: animated grid floor, floating aurora orbs, gentle scanlines.
- * pointer-events: none so it never interferes with the UI.
+ * Cinematic VFX: animated grid, aurora orbs, scanlines, drifting light beams,
+ * floating particles, vignette. pointer-events: none.
  */
 export function SiteBackdrop() {
   return (
@@ -11,30 +10,33 @@ export function SiteBackdrop() {
       className="pointer-events-none fixed inset-0 z-0 overflow-hidden"
     >
       {/* Animated neon grid floor */}
-      <div className="absolute inset-0 cyber-grid opacity-60" />
+      <div className="absolute inset-0 cyber-grid opacity-70" />
 
-      {/* Floating aurora orbs */}
+      {/* Aurora conic sweep */}
+      <div className="absolute -inset-[20%] bg-aurora opacity-[0.08] blur-3xl animate-spin-slow" />
+
+      {/* Floating aurora orbs — vibrant cinematic palette */}
       <div
         className="cyber-orb"
         style={{
           top: "-10%",
           left: "-5%",
-          width: "520px",
-          height: "520px",
+          width: "560px",
+          height: "560px",
           background:
-            "radial-gradient(circle, oklch(0.65 0.24 295 / 0.7), transparent 70%)",
+            "radial-gradient(circle, oklch(0.65 0.28 295 / 0.85), transparent 70%)",
           animationDelay: "0s",
         }}
       />
       <div
         className="cyber-orb"
         style={{
-          top: "30%",
+          top: "25%",
           right: "-8%",
-          width: "460px",
-          height: "460px",
+          width: "500px",
+          height: "500px",
           background:
-            "radial-gradient(circle, oklch(0.82 0.18 195 / 0.55), transparent 70%)",
+            "radial-gradient(circle, oklch(0.82 0.2 195 / 0.7), transparent 70%)",
           animationDelay: "-6s",
         }}
       />
@@ -42,24 +44,43 @@ export function SiteBackdrop() {
         className="cyber-orb"
         style={{
           bottom: "-12%",
-          left: "30%",
-          width: "560px",
-          height: "560px",
+          left: "28%",
+          width: "620px",
+          height: "620px",
           background:
-            "radial-gradient(circle, oklch(0.7 0.27 340 / 0.5), transparent 70%)",
+            "radial-gradient(circle, oklch(0.7 0.3 340 / 0.65), transparent 70%)",
           animationDelay: "-12s",
         }}
       />
+      <div
+        className="cyber-orb"
+        style={{
+          top: "55%",
+          left: "-10%",
+          width: "420px",
+          height: "420px",
+          background:
+            "radial-gradient(circle, oklch(0.78 0.22 145 / 0.5), transparent 70%)",
+          animationDelay: "-9s",
+        }}
+      />
 
-      {/* Soft CRT scanlines on top */}
-      <div className="absolute inset-0 cyber-scanlines opacity-40" />
+      {/* Cinematic light beams sweeping across */}
+      <div className="cyber-beam cyber-beam-1" />
+      <div className="cyber-beam cyber-beam-2" />
 
-      {/* Vignette */}
+      {/* Floating particles */}
+      <div className="cyber-particles" />
+
+      {/* Soft CRT scanlines */}
+      <div className="absolute inset-0 cyber-scanlines opacity-30" />
+
+      {/* Cinematic vignette */}
       <div
         className="absolute inset-0"
         style={{
           background:
-            "radial-gradient(ellipse at center, transparent 50%, oklch(0.08 0.02 270 / 0.6) 100%)",
+            "radial-gradient(ellipse at center, transparent 45%, oklch(0.06 0.03 270 / 0.75) 100%)",
         }}
       />
     </div>
