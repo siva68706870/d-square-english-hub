@@ -121,7 +121,7 @@ function DashboardPage() {
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
               <StatCard label="Attendance" value={`${stats?.attendancePct ?? 0}%`} sub={`${stats?.present ?? 0}/${stats?.total ?? 0} sessions`} icon={CheckCircle2} />
               <StatCard label="Average Score" value={`${stats?.avgPct ?? 0}%`} sub={`${stats?.marks.length ?? 0} tests`} icon={GraduationCap} />
-              <StatCard label="Course" value={safeProfile.course ?? "—"} sub="Enrolled" icon={BookOpen} />
+              <StatCard label="Course" value={safeProfile.course === "English Communication" ? "Spoken English" : safeProfile.course ?? "—"} sub="Enrolled" icon={BookOpen} />
               {profile?.payment_plan !== "full" && (
                 <StatCard
                   label="Fee Remaining"
