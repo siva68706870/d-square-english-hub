@@ -80,7 +80,7 @@ function DashboardPage() {
       <main className="flex-1 container mx-auto px-4 py-10 max-w-5xl animate-fade-in">
         <div className="mb-8">
           <h1 className="font-display text-4xl font-bold">Hi, {safeProfile.full_name.split(" ")[0]} 👋</h1>
-          <p className="text-muted-foreground mt-1">{safeProfile.course ?? "No course selected"}</p>
+          <p className="text-muted-foreground mt-1">{safeProfile.course === "English Communication" ? "Spoken English" : safeProfile.course ?? "No course selected"}</p>
         </div>
 
         {safeProfile.status === "pending" && (
