@@ -204,7 +204,7 @@ function Home() {
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
             {[
               { icon: GraduationCap, title: "IELTS Mastery", desc: "Band-by-band coaching with weekly mock tests and detailed feedback.", color: "from-neon to-primary", upcoming: false },
-              { icon: BookOpen, title: "English Communication", desc: "Conversational fluency, grammar precision, and confidence on demand.", color: "from-primary to-magenta", upcoming: false },
+              { icon: BookOpen, title: "Spoken English", desc: "Conversational fluency, grammar precision, and confidence on demand.", color: "from-primary to-magenta", upcoming: false },
               { icon: Cpu, title: "AI App Development", desc: "Build with modern AI tools — from idea to a working product.", color: "from-magenta to-gold", upcoming: true },
               { icon: Megaphone, title: "Digital Marketing", desc: "Grow brands online with content, ads, SEO and analytics.", color: "from-gold to-neon", upcoming: true },
             ].map((f, i) => (

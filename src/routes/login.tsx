@@ -212,7 +212,7 @@ function LoginPage() {
                   <SelectTrigger id="course"><SelectValue placeholder="Choose a course" /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="IELTS">IELTS</SelectItem>
-                    <SelectItem value="English Communication">English Communication</SelectItem>
+                    <SelectItem value="English Communication">Spoken English</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

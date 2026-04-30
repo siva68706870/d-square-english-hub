@@ -80,7 +80,7 @@ function DashboardPage() {
       <main className="flex-1 container mx-auto px-4 py-10 max-w-5xl animate-fade-in">
         <div className="mb-8">
           <h1 className="font-display text-4xl font-bold">Hi, {safeProfile.full_name.split(" ")[0]} 👋</h1>
-          <p className="text-muted-foreground mt-1">{safeProfile.course ?? "No course selected"}</p>
+          <p className="text-muted-foreground mt-1">{safeProfile.course === "English Communication" ? "Spoken English" : safeProfile.course ?? "No course selected"}</p>
         </div>
 
         {safeProfile.status === "pending" && (
@@ -121,7 +121,7 @@ function DashboardPage() {
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
               <StatCard label="Attendance" value={`${stats?.attendancePct ?? 0}%`} sub={`${stats?.present ?? 0}/${stats?.total ?? 0} sessions`} icon={CheckCircle2} />
               <StatCard label="Average Score" value={`${stats?.avgPct ?? 0}%`} sub={`${stats?.marks.length ?? 0} tests`} icon={GraduationCap} />
-              <StatCard label="Course" value={safeProfile.course ?? "—"} sub="Enrolled" icon={BookOpen} />
+              <StatCard label="Course" value={safeProfile.course === "English Communication" ? "Spoken English" : safeProfile.course ?? "—"} sub="Enrolled" icon={BookOpen} />
               {profile?.payment_plan !== "full" && (
                 <StatCard
                   label="Fee Remaining"
@@ -164,6 +164,30 @@ function DashboardPage() {
                     </div>
                   </div>
                 </CardContent>
+              </Card>
+            )}
+
+            {safeProfile.course === "English Communication" && (
+              <Card className="mb-8 overflow-hidden border-neon/30">
+                <a
+                  href="https://drive.google.com/drive/folders/1P-gbNO7umdTZA_dmprLTD3Off_dPun05?usp=drive_link"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block group"
+                >
+                  <div className="bg-hero p-5 flex items-center gap-3 transition-transform group-hover:scale-[1.01]">
+                    <div className="h-10 w-10 rounded-lg bg-background/20 backdrop-blur flex items-center justify-center">
+                      <BookOpen className="h-5 w-5 text-gold" />
+                    </div>
+                    <div className="flex-1">
+                      <CardTitle className="text-primary-foreground">Spoken English — Course Materials</CardTitle>
+                      <p className="text-xs text-primary-foreground/80 mt-0.5">Tap to open your Drive folder</p>
+                    </div>
+                    <Button size="sm" className="bg-neon-gradient text-primary-foreground pointer-events-none">
+                      Open Drive
+                    </Button>
+                  </div>
+                </a>
               </Card>
             )}
 
