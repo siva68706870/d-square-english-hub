@@ -167,6 +167,30 @@ function DashboardPage() {
               </Card>
             )}
 
+            {safeProfile.course === "English Communication" && (
+              <Card className="mb-8 overflow-hidden border-neon/30">
+                <a
+                  href="https://drive.google.com/drive/folders/1P-gbNO7umdTZA_dmprLTD3Off_dPun05?usp=drive_link"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block group"
+                >
+                  <div className="bg-hero p-5 flex items-center gap-3 transition-transform group-hover:scale-[1.01]">
+                    <div className="h-10 w-10 rounded-lg bg-background/20 backdrop-blur flex items-center justify-center">
+                      <BookOpen className="h-5 w-5 text-gold" />
+                    </div>
+                    <div className="flex-1">
+                      <CardTitle className="text-primary-foreground">Spoken English — Course Materials</CardTitle>
+                      <p className="text-xs text-primary-foreground/80 mt-0.5">Tap to open your Drive folder</p>
+                    </div>
+                    <Button size="sm" className="bg-neon-gradient text-primary-foreground pointer-events-none">
+                      Open Drive
+                    </Button>
+                  </div>
+                </a>
+              </Card>
+            )}
+
             <Card>
               <CardHeader>
                 <CardTitle>Recent test marks</CardTitle>
