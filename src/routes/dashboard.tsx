@@ -133,38 +133,62 @@ function DashboardPage() {
             </div>
 
             {safeProfile.course === "IELTS" && (
-              <Card className="mb-8 overflow-hidden border-neon/30">
-                <div className="bg-hero p-5 flex items-center gap-3">
-                  <div className="h-10 w-10 rounded-lg bg-background/20 backdrop-blur flex items-center justify-center">
-                    <ScanLine className="h-5 w-5 text-gold" />
-                  </div>
-                  <div className="flex-1">
-                    <CardTitle className="text-primary-foreground">IELTS Mock Tests</CardTitle>
-                    <p className="text-xs text-primary-foreground/80 mt-0.5">CBT mode · Auto band scoring</p>
-                  </div>
-                  <Button asChild size="sm" className="bg-neon-gradient text-primary-foreground">
-                    <Link to="/mocktest">Take a test</Link>
-                  </Button>
-                </div>
-                <CardContent className="p-5 grid sm:grid-cols-2 gap-4">
-                  <div className="flex items-center gap-3 rounded-lg border border-border p-3">
-                    <ScanLine className="h-6 w-6 text-neon" />
-                    <div>
-                      <div className="text-xs uppercase tracking-widest text-muted-foreground">Mock tests attended</div>
-                      <div className="font-display text-2xl font-bold">{stats?.mockAttended ?? 0}</div>
+              <>
+                <Card className="mb-8 overflow-hidden border-neon/30">
+                  <a
+                    href="https://drive.google.com/drive/folders/1etGYMJKp1Lr5-wBeXx_fJgi_Bo4wn8DH?usp=drive_link"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block group"
+                  >
+                    <div className="bg-hero p-5 flex items-center gap-3 transition-transform group-hover:scale-[1.01]">
+                      <div className="h-10 w-10 rounded-lg bg-background/20 backdrop-blur flex items-center justify-center">
+                        <BookOpen className="h-5 w-5 text-gold" />
+                      </div>
+                      <div className="flex-1">
+                        <CardTitle className="text-primary-foreground">IELTS — Course Materials</CardTitle>
+                        <p className="text-xs text-primary-foreground/80 mt-0.5">Tap to open your Drive folder</p>
+                      </div>
+                      <Button size="sm" className="bg-neon-gradient text-primary-foreground pointer-events-none">
+                        Open Drive
+                      </Button>
                     </div>
+                  </a>
+                </Card>
+
+                <Card className="mb-8 overflow-hidden border-neon/30">
+                  <div className="bg-hero p-5 flex items-center gap-3">
+                    <div className="h-10 w-10 rounded-lg bg-background/20 backdrop-blur flex items-center justify-center">
+                      <ScanLine className="h-5 w-5 text-gold" />
+                    </div>
+                    <div className="flex-1">
+                      <CardTitle className="text-primary-foreground">IELTS Mock Tests</CardTitle>
+                      <p className="text-xs text-primary-foreground/80 mt-0.5">CBT mode · Auto band scoring</p>
+                    </div>
+                    <Button asChild size="sm" className="bg-neon-gradient text-primary-foreground">
+                      <Link to="/mocktest">Open Channel</Link>
+                    </Button>
                   </div>
-                  <div className="flex items-center gap-3 rounded-lg border border-border p-3">
-                    <Trophy className="h-6 w-6 text-gold" />
-                    <div>
-                      <div className="text-xs uppercase tracking-widest text-muted-foreground">Best band score</div>
-                      <div className="font-display text-2xl font-bold text-gradient-neon">
-                        {stats?.bestBand ? stats.bestBand.toFixed(1) : "—"}
+                  <CardContent className="p-5 grid sm:grid-cols-2 gap-4">
+                    <div className="flex items-center gap-3 rounded-lg border border-border p-3">
+                      <ScanLine className="h-6 w-6 text-neon" />
+                      <div>
+                        <div className="text-xs uppercase tracking-widest text-muted-foreground">Mock tests attended</div>
+                        <div className="font-display text-2xl font-bold">{stats?.mockAttended ?? 0}</div>
                       </div>
                     </div>
-                  </div>
-                </CardContent>
-              </Card>
+                    <div className="flex items-center gap-3 rounded-lg border border-border p-3">
+                      <Trophy className="h-6 w-6 text-gold" />
+                      <div>
+                        <div className="text-xs uppercase tracking-widest text-muted-foreground">Best band score</div>
+                        <div className="font-display text-2xl font-bold text-gradient-neon">
+                          {stats?.bestBand ? stats.bestBand.toFixed(1) : "—"}
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </>
             )}
 
             {safeProfile.course === "English Communication" && (
