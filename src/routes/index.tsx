@@ -76,47 +76,49 @@ function Home() {
           <AirplaneAnimation />
 
           <div className="container relative mx-auto px-4 py-20 md:py-28">
-            <div className="max-w-3xl animate-fade-in">
+            <div className="max-w-5xl animate-fade-in">
               <div className="inline-flex items-center gap-2 rounded-full border border-neon/40 glass px-3 py-1.5 text-xs font-medium text-neon backdrop-blur hover-scale shadow-glow">
                 <Sparkles className="h-3.5 w-3.5 animate-pulse" />
                 Trusted English coaching since day one
               </div>
 
-              <h1 className="mt-6 font-display text-5xl md:text-7xl font-bold leading-[1.05] text-primary-foreground">
-                Speak fluently.
-                <br />
-                <span className="bg-gradient-to-r from-neon via-magenta to-gold bg-clip-text text-transparent bg-[length:200%_auto] animate-[gradient_4s_linear_infinite]">
-                  Score globally.
-                </span>
-              </h1>
+              <div className="mt-6 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+                <h1 className="font-display text-5xl md:text-7xl font-bold leading-[1.05] text-primary-foreground">
+                  Speak fluently.
+                  <br />
+                  <span className="bg-gradient-to-r from-neon via-magenta to-gold bg-clip-text text-transparent bg-[length:200%_auto] animate-[gradient_4s_linear_infinite]">
+                    Score globally.
+                  </span>
+                </h1>
 
-              {/* Contact chips: location + copyable phone numbers */}
-              <div className="mt-6 flex flex-wrap items-center gap-2">
-                <a
-                  href="https://maps.app.goo.gl/3bt7YHVy6F8CbFYTA"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group inline-flex items-center gap-2 rounded-full border border-neon/40 glass px-3 py-1.5 text-xs font-medium text-primary-foreground backdrop-blur transition-all hover:border-neon hover:text-neon hover:shadow-glow"
-                >
-                  <MapPin className="h-3.5 w-3.5 text-neon" />
-                  Visit us
-                </a>
-                {["+91 87542 45615", "+91 90805 28278"].map((num) => (
-                  <button
-                    key={num}
-                    type="button"
-                    onClick={() => {
-                      navigator.clipboard.writeText(num);
-                      toast.success(`Copied ${num}`);
-                    }}
-                    className="group inline-flex items-center gap-2 rounded-full border border-neon/40 glass px-3 py-1.5 text-xs font-medium text-primary-foreground backdrop-blur transition-all hover:border-gold hover:text-gold hover:shadow-glow"
-                    aria-label={`Copy phone number ${num}`}
+                {/* Contact chips: location + copyable phone numbers (right of headline) */}
+                <div className="flex flex-col items-start md:items-end gap-2 shrink-0">
+                  <a
+                    href="https://maps.app.goo.gl/3bt7YHVy6F8CbFYTA"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group inline-flex items-center gap-2 rounded-full border border-neon/40 glass px-3 py-1.5 text-xs font-medium text-primary-foreground backdrop-blur transition-all hover:border-neon hover:text-neon hover:shadow-glow"
                   >
-                    <Phone className="h-3.5 w-3.5 text-gold" />
-                    {num}
-                    <Copy className="h-3 w-3 opacity-60 transition-opacity group-hover:opacity-100" />
-                  </button>
-                ))}
+                    <MapPin className="h-3.5 w-3.5 text-neon" />
+                    Visit us
+                  </a>
+                  {["+91 87542 45615", "+91 90805 28278"].map((num) => (
+                    <button
+                      key={num}
+                      type="button"
+                      onClick={() => {
+                        navigator.clipboard.writeText(num);
+                        toast.success(`Copied ${num}`);
+                      }}
+                      className="group inline-flex items-center gap-2 rounded-full border border-neon/40 glass px-3 py-1.5 text-xs font-medium text-primary-foreground backdrop-blur transition-all hover:border-gold hover:text-gold hover:shadow-glow"
+                      aria-label={`Copy phone number ${num}`}
+                    >
+                      <Phone className="h-3.5 w-3.5 text-gold" />
+                      {num}
+                      <Copy className="h-3 w-3 opacity-60 transition-opacity group-hover:opacity-100" />
+                    </button>
+                  ))}
+                </div>
               </div>
 
               <p className="mt-6 max-w-xl text-lg text-primary-foreground/85 leading-relaxed">
