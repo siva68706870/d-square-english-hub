@@ -9,12 +9,13 @@ import { ScanLine, Lock, Clock, Trophy, Loader2, FileText } from "lucide-react";
 import { ieltsTests } from "@/data/ieltsTests";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
+import { PaymentQR } from "@/components/PaymentQR";
 
 export const Route = createFileRoute("/mocktest")({
   head: () => ({
     meta: [
-      { title: "IELTS Mock Tests — D Square English Hub" },
-      { name: "description", content: "10 timed IELTS Academic Reading mock tests in real CBT mode with auto band scoring." },
+      { title: "Channel — D Square English Hub" },
+      { name: "description", content: "Join the D Square English Hub channel and access IELTS mock tests in real CBT mode." },
     ],
   }),
   component: MockTestPage,
@@ -74,10 +75,19 @@ function MockTestPage() {
           <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-hero mb-4 shadow-glow">
             <ScanLine className="h-7 w-7 text-gold" />
           </div>
-          <h1 className="font-display text-4xl md:text-5xl font-bold">IELTS Mock Tests</h1>
+          <h1 className="font-display text-4xl md:text-5xl font-bold">Channel</h1>
           <p className="mt-3 text-muted-foreground max-w-xl mx-auto">
-            Real CBT mode · 60-minute timer · Auto band score · 10 Academic Reading tests.
+            Scan the QR to join our channel. Approved IELTS students can also take mock tests below.
           </p>
+        </div>
+
+        <div className="flex justify-center mb-12">
+          <PaymentQR
+            value="https://d-square-english-hub.lovable.app"
+            size={220}
+            caption="Scan to join the D Square English Hub channel"
+            badge="Channel"
+          />
         </div>
 
         {!isApprovedIelts ? (
