@@ -9,12 +9,13 @@ import { ScanLine, Lock, Clock, Trophy, Loader2, FileText } from "lucide-react";
 import { ieltsTests } from "@/data/ieltsTests";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
+import { PaymentQR } from "@/components/PaymentQR";
 
 export const Route = createFileRoute("/mocktest")({
   head: () => ({
     meta: [
-      { title: "IELTS Mock Tests — D Square English Hub" },
-      { name: "description", content: "10 timed IELTS Academic Reading mock tests in real CBT mode with auto band scoring." },
+      { title: "Channel — D Square English Hub" },
+      { name: "description", content: "Join the D Square English Hub channel and access IELTS mock tests in real CBT mode." },
     ],
   }),
   component: MockTestPage,
