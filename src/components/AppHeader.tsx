@@ -39,9 +39,6 @@ export function AppHeader() {
                 <Button variant="ghost" size="sm" className="neon-link">Dashboard</Button>
               </Link>
             )}
-            <Link to="/mocktest">
-              <Button variant="ghost" size="sm" className="neon-link">Channel</Button>
-            </Link>
             <div className="hidden md:block text-right text-xs leading-tight">
               <div className="font-medium">{profile?.full_name ?? "Member"}</div>
               <div className="text-muted-foreground">{isAdmin ? "Admin" : profile?.course ?? "Student"}</div>
