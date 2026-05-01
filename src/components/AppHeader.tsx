@@ -40,7 +40,7 @@ export function AppHeader() {
               </Link>
             )}
             <Link to="/mocktest">
-              <Button variant="ghost" size="sm" className="neon-link">Mock Test</Button>
+              <Button variant="ghost" size="sm" className="neon-link">Channel</Button>
             </Link>
             <div className="hidden md:block text-right text-xs leading-tight">
               <div className="font-medium">{profile?.full_name ?? "Member"}</div>
