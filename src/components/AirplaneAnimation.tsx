@@ -19,16 +19,36 @@ export function AirplaneAnimation() {
         style={{ animationDelay: "12s" }}
       />
 
-      {/* Single cinematic plane (no trail) */}
+      {/* Single cinematic plane with glowing light trail */}
       <div className="absolute top-[42%] left-0 w-full">
         <div className="relative animate-plane-takeoff will-change-transform">
+          {/* Light trail behind the plane */}
+          <div
+            aria-hidden="true"
+            className="absolute right-full top-1/2 -translate-y-1/2 mr-2 h-1 w-40 md:w-64 rounded-full"
+            style={{
+              background:
+                "linear-gradient(to left, rgba(225,29,116,0.55), rgba(108,43,217,0.25), transparent)",
+              filter: "blur(6px)",
+            }}
+          />
+          <div
+            aria-hidden="true"
+            className="absolute right-full top-1/2 -translate-y-1/2 mr-2 h-[2px] w-28 md:w-44 rounded-full"
+            style={{
+              background:
+                "linear-gradient(to left, rgba(255,255,255,0.85), rgba(225,29,116,0.4), transparent)",
+              filter: "blur(1.5px)",
+            }}
+          />
           <img
             src={planeImg}
             alt=""
             aria-hidden="true"
             width={1024}
             height={512}
-            className="h-20 md:h-28 w-auto drop-shadow-[0_0_28px_rgba(168,85,247,0.55)]"
+            className="relative h-20 md:h-28 w-auto drop-shadow-[0_0_24px_rgba(225,29,116,0.45)]"
+            style={{ filter: "drop-shadow(0 8px 18px rgba(0,0,0,0.5))" }}
           />
         </div>
       </div>

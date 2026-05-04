@@ -13,17 +13,21 @@ export function AppHeader() {
   };
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-neon/20 glass shadow-[0_2px_30px_-10px_oklch(0.82_0.18_195/0.4)]">
+    <header className="sticky top-0 z-40 w-full border-b border-white/5 bg-[#050507]/70 backdrop-blur-xl">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <Link to="/" className="flex items-center gap-2.5 group">
-          <div className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-neon-gradient shadow-glow transition-transform group-hover:scale-110 group-hover:rotate-6 animate-glow-pulse">
-            <div className="absolute inset-0 rounded-xl bg-aurora opacity-40 blur-md group-hover:opacity-80 transition-opacity" />
-            <GraduationCap className="relative h-5 w-5 text-primary-foreground" />
+          <div
+            className="relative flex h-10 w-10 items-center justify-center rounded-xl transition-transform group-hover:scale-105"
+            style={{
+              background: "linear-gradient(135deg, #6C2BD9 0%, #E11D74 100%)",
+              boxShadow: "0 0 20px rgba(225, 29, 116, 0.25)",
+            }}
+          >
+            <GraduationCap className="relative h-5 w-5 text-white" />
           </div>
           <div className="leading-tight">
-            <div className="font-display text-lg font-bold tracking-tight">
-              <span className="block sm:inline">D <span className="text-shimmer">Square</span></span>{" "}
-              <span className="block sm:inline">English Hub</span>
+            <div className="font-display text-lg font-bold tracking-tight text-white">
+              D <span className="text-gradient-neon">Square</span> English Hub
             </div>
           </div>
         </Link>
@@ -56,7 +60,11 @@ export function AppHeader() {
           <div className="flex items-center gap-2">
             <Link to="/login"><Button variant="ghost" size="sm" className="neon-link">Sign in</Button></Link>
             <Link to="/login" search={{ mode: "signup" }}>
-              <Button size="sm" className="bg-neon-gradient text-primary-foreground hover:opacity-90 shadow-glow animate-glow-pulse">
+              <Button
+                size="sm"
+                className="rounded-lg bg-[#E11D74] text-white hover:bg-[#BE185D] transition-all hover:scale-[1.03]"
+                style={{ boxShadow: "0 0 20px rgba(225, 29, 116, 0.25)" }}
+              >
                 Admission
               </Button>
             </Link>
