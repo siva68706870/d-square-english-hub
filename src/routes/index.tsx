@@ -303,7 +303,11 @@ function Home() {
               </div>
               {!user && (
                 <Link to="/login" search={{ mode: "signup" }}>
-                  <Button size="lg" className="group bg-neon-gradient text-primary-foreground hover:opacity-90 shadow-neon">
+                  <Button
+                    size="lg"
+                    className="group rounded-xl bg-[#E11D74] text-white hover:bg-[#BE185D] transition-all duration-300 hover:scale-[1.03]"
+                    style={{ boxShadow: "0 0 25px rgba(225, 29, 116, 0.25)" }}
+                  >
                     Create your account{" "}
                     <Users className="ml-2 h-4 w-4 transition-transform group-hover:scale-110" />
                   </Button>
