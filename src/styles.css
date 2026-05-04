@@ -54,90 +54,86 @@
   --color-chart-5: var(--chart-5);
 }
 
-/* DEFAULT = DARK CYBER THEME */
+/* DEFAULT = PREMIUM CINEMATIC THEME
+   Brand palette (hex → oklch reference):
+   #0B0B0F deep luxury black, #121826 midnight blue,
+   #6C2BD9 royal purple, #E11D74 premium pink,
+   #F5C451 soft gold, #F8FAFC text, #9CA3AF muted text */
 :root {
-  --radius: 0.85rem;
+  --radius: 0.9rem;
 
-  /* Deep void / obsidian background */
-  --background: oklch(0.09 0.03 275);
-  --foreground: oklch(0.98 0.015 200);
+  /* #0B0B0F */
+  --background: oklch(0.13 0.012 280);
+  /* #F8FAFC */
+  --foreground: oklch(0.98 0.005 240);
 
-  --card: oklch(0.15 0.045 275);
-  --card-foreground: oklch(0.98 0.015 200);
-  --popover: oklch(0.14 0.045 275);
-  --popover-foreground: oklch(0.98 0.015 200);
+  /* #121826 cards on midnight blue */
+  --card: oklch(0.19 0.025 265);
+  --card-foreground: oklch(0.98 0.005 240);
+  --popover: oklch(0.18 0.025 265);
+  --popover-foreground: oklch(0.98 0.005 240);
 
-  /* Electric ultraviolet primary */
-  --primary: oklch(0.68 0.30 300);
-  --primary-foreground: oklch(0.99 0.005 90);
+  /* Royal purple #6C2BD9 */
+  --primary: oklch(0.48 0.24 295);
+  --primary-foreground: oklch(0.99 0.005 240);
 
-  --secondary: oklch(0.22 0.06 275);
-  --secondary-foreground: oklch(0.98 0.015 200);
+  /* Midnight blue #121826 */
+  --secondary: oklch(0.22 0.03 265);
+  --secondary-foreground: oklch(0.98 0.005 240);
 
-  --muted: oklch(0.19 0.04 275);
-  --muted-foreground: oklch(0.74 0.04 220);
+  --muted: oklch(0.22 0.025 265);
+  /* #9CA3AF muted text */
+  --muted-foreground: oklch(0.72 0.018 250);
 
-  --accent: oklch(0.32 0.14 295);
-  --accent-foreground: oklch(0.99 0.012 90);
+  --accent: oklch(0.32 0.16 295);
+  --accent-foreground: oklch(0.99 0.005 240);
 
-  /* Liquid gold */
-  --gold: oklch(0.86 0.18 82);
-  --gold-foreground: oklch(0.16 0.05 75);
+  /* Soft gold #F5C451 (limited use) */
+  --gold: oklch(0.85 0.14 85);
+  --gold-foreground: oklch(0.20 0.04 80);
 
-  /* Hyper cyan */
-  --neon: oklch(0.88 0.22 195);
-  --neon-foreground: oklch(0.12 0.05 200);
+  /* "neon" alias retained for utilities — premium pink #E11D74 */
+  --neon: oklch(0.62 0.24 5);
+  --neon-foreground: oklch(0.99 0.005 0);
 
-  /* Plasma magenta */
-  --magenta: oklch(0.72 0.32 340);
-  --magenta-foreground: oklch(0.99 0.005 340);
+  /* Premium pink (magenta alias) */
+  --magenta: oklch(0.62 0.24 5);
+  --magenta-foreground: oklch(0.99 0.005 0);
 
-  --destructive: oklch(0.66 0.28 25);
+  --destructive: oklch(0.62 0.24 25);
   --destructive-foreground: oklch(0.99 0 0);
-  --success: oklch(0.78 0.22 158);
-  --success-foreground: oklch(0.10 0.04 158);
-  --warning: oklch(0.86 0.18 82);
-  --warning-foreground: oklch(0.16 0.05 75);
+  --success: oklch(0.74 0.16 160);
+  --success-foreground: oklch(0.12 0.03 160);
+  --warning: oklch(0.85 0.14 85);
+  --warning-foreground: oklch(0.20 0.04 80);
 
-  --border: oklch(1 0 0 / 12%);
-  --input: oklch(1 0 0 / 14%);
-  --ring: oklch(0.68 0.30 300);
+  --border: oklch(1 0 0 / 8%);
+  --input: oklch(1 0 0 / 10%);
+  --ring: oklch(0.48 0.24 295);
 
-  --chart-1: oklch(0.68 0.30 300);
-  --chart-2: oklch(0.88 0.22 195);
-  --chart-3: oklch(0.72 0.32 340);
-  --chart-4: oklch(0.86 0.18 82);
-  --chart-5: oklch(0.78 0.22 158);
+  --chart-1: oklch(0.48 0.24 295);
+  --chart-2: oklch(0.62 0.24 5);
+  --chart-3: oklch(0.85 0.14 85);
+  --chart-4: oklch(0.74 0.16 160);
+  --chart-5: oklch(0.55 0.18 250);
 
-  /* Cinematic gradients */
+  /* Cinematic hero gradient — matches user spec exactly */
   --gradient-hero: linear-gradient(135deg,
-    oklch(0.12 0.05 280) 0%,
-    oklch(0.30 0.22 300) 32%,
-    oklch(0.48 0.28 325) 60%,
-    oklch(0.62 0.24 200) 100%);
-  --gradient-gold: linear-gradient(135deg, oklch(0.90 0.18 85) 0%, oklch(0.74 0.20 50) 100%);
-  --gradient-neon: linear-gradient(135deg,
-    oklch(0.72 0.32 340) 0%,
-    oklch(0.68 0.30 300) 50%,
-    oklch(0.88 0.22 195) 100%);
-  --gradient-aurora: conic-gradient(from 90deg at 50% 50%,
-    oklch(0.68 0.30 300),
-    oklch(0.88 0.22 195),
-    oklch(0.72 0.32 340),
-    oklch(0.86 0.18 82),
-    oklch(0.78 0.22 158),
-    oklch(0.68 0.30 300));
+    #0B0B0F 0%,
+    #121826 40%,
+    #3B1E7A 70%,
+    #E11D74 100%);
+  --gradient-gold: linear-gradient(135deg, #F5C451 0%, #C99A2E 100%);
+  --gradient-neon: linear-gradient(135deg, #E11D74 0%, #6C2BD9 100%);
+  --gradient-aurora: conic-gradient(from 120deg at 50% 50%,
+    #6C2BD9, #E11D74, #F5C451, #6C2BD9);
 
-  /* VFX shadows / bloom */
-  --shadow-elegant: 0 24px 70px -18px oklch(0.68 0.30 300 / 0.55);
-  --shadow-card: 0 6px 28px -8px oklch(0 0 0 / 0.6);
-  --shadow-neon:
-    0 0 18px oklch(0.88 0.22 195 / 0.65),
-    0 0 42px oklch(0.68 0.30 300 / 0.45),
-    0 0 90px oklch(0.72 0.32 340 / 0.25);
-  --shadow-glow:
-    0 0 28px oklch(0.68 0.30 300 / 0.55),
-    0 0 70px oklch(0.88 0.22 195 / 0.25);
+  /* Refined shadows — elegant, restrained */
+  --shadow-elegant: 0 30px 80px -25px oklch(0 0 0 / 0.7);
+  --shadow-card: 0 10px 30px -12px oklch(0 0 0 / 0.55);
+  /* Premium pink glow */
+  --shadow-neon: 0 0 25px oklch(0.62 0.24 5 / 0.25);
+  --shadow-glow: 0 0 40px oklch(0.48 0.24 295 / 0.30);
 }
 
 /* Light mode kept as graceful fallback (rarely used now) */
@@ -176,10 +172,12 @@
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     background-image:
-      radial-gradient(ellipse 1100px 600px at 0% 0%, oklch(0.68 0.30 300 / 0.28), transparent 60%),
-      radial-gradient(ellipse 900px 600px at 100% 0%, oklch(0.88 0.22 195 / 0.20), transparent 60%),
-      radial-gradient(ellipse 800px 500px at 50% 100%, oklch(0.72 0.32 340 / 0.22), transparent 65%),
-      radial-gradient(ellipse 600px 400px at 80% 60%, oklch(0.78 0.22 158 / 0.10), transparent 70%);
+      /* Royal purple glow top-left */
+      radial-gradient(ellipse 1000px 700px at 0% 0%, oklch(0.48 0.24 295 / 0.22), transparent 65%),
+      /* Premium pink glow bottom-right */
+      radial-gradient(ellipse 900px 700px at 100% 100%, oklch(0.62 0.24 5 / 0.18), transparent 65%),
+      /* Midnight blue depth */
+      radial-gradient(ellipse 800px 500px at 50% 40%, #121826 0%, transparent 70%);
     background-attachment: fixed;
     position: relative;
   }
