@@ -62,8 +62,8 @@
 :root {
   --radius: 0.9rem;
 
-  /* #0B0B0F */
-  --background: oklch(0.13 0.012 280);
+  /* #050507 ultra-deep base */
+  --background: oklch(0.08 0.005 270);
   /* #F8FAFC */
   --foreground: oklch(0.98 0.005 240);
 
@@ -117,11 +117,12 @@
   --chart-4: oklch(0.74 0.16 160);
   --chart-5: oklch(0.55 0.18 250);
 
-  /* Cinematic hero gradient — matches user spec exactly */
+  /* Cinematic multi-stop hero gradient — spec exact */
   --gradient-hero: linear-gradient(135deg,
-    #0B0B0F 0%,
-    #121826 40%,
-    #3B1E7A 70%,
+    #050507 0%,
+    #0B0B0F 30%,
+    #121826 60%,
+    #2A1458 80%,
     #E11D74 100%);
   --gradient-gold: linear-gradient(135deg, #F5C451 0%, #C99A2E 100%);
   --gradient-neon: linear-gradient(135deg, #E11D74 0%, #6C2BD9 100%);
