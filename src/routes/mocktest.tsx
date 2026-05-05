@@ -4,6 +4,7 @@ import { useAuth } from "@/auth/AuthProvider";
 import { AppHeader } from "@/components/AppHeader";
 import { ScanLine, Loader2 } from "lucide-react";
 import { PaymentQR } from "@/components/PaymentQR";
+import channelQr from "@/assets/channel-qr.jpeg";
 
 export const Route = createFileRoute("/mocktest")({
   head: () => ({
@@ -47,7 +48,7 @@ function ChannelPage() {
 
         <div className="flex justify-center">
           <PaymentQR
-            value="https://d-square-english-hub.lovable.app"
+            imageSrc={channelQr}
             size={240}
             caption="Scan to join the D Square English Hub channel"
             badge="Channel"
