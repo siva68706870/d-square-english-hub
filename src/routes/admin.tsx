@@ -257,7 +257,7 @@ function StudentsTab() {
                     </TableCell>
                     <TableCell>
                       {s.course ? (
-                        <Badge variant="outline" className={s.course === "IELTS" ? "border-primary/40 text-primary" : "border-gold/40 text-gold-foreground"}>
+                        <Badge variant="outline" className="border-primary/40 text-primary">
                           {s.course}
                         </Badge>
                       ) : "—"}
