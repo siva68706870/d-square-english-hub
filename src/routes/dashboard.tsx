@@ -183,30 +183,6 @@ function DashboardPage() {
               </Card>
             )}
 
-            <Card>
-              <CardHeader>
-                <CardTitle>Recent test marks</CardTitle>
-              </CardHeader>
-              <CardContent>
-                {stats?.marks.length ? (
-                  <ul className="divide-y divide-border">
-                    {stats.marks.slice(0, 6).map((m, i) => (
-                      <li key={i} className="flex items-center justify-between py-3">
-                        <div>
-                          <div className="font-medium">{m.test_name}</div>
-                          <div className="text-xs text-muted-foreground">{m.test_date}</div>
-                        </div>
-                        <Badge variant="secondary" className="font-mono">
-                          {m.score}/{m.max_score}
-                        </Badge>
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <p className="text-sm text-muted-foreground">No test marks recorded yet.</p>
-                )}
-              </CardContent>
-            </Card>
           </>
         )}
       </main>
